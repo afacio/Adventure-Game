@@ -23,16 +23,16 @@ public class TileManager {
         tiles = new Tile[50];
         mapTileNumber = new int[gamePanel.maxWorldColumn][gamePanel.maxWorldRow];
         getTileImage();
-        loadMap("src/res/maps/worldV2.txt");
+        loadMap("src/res/maps/world02.txt");
     }
 
     public void getTileImage(){
-        setup(0, "grass00", false);
-        setup(1, "grass00", false);
-        setup(2, "grass00", false);
-        setup(3, "grass00", false);
-        setup(4, "grass00", false);
-        setup(5, "grass00", false);
+        setup(0, "old/grass", false);
+        setup(1, "old/wall", true);
+        setup(2, "old/water", true);
+        setup(3, "old/earth", false);
+        setup(4, "old/tree", true);
+        setup(5, "old/sand", false);
         setup(6, "grass00", false);
         setup(7, "grass00", false);
         setup(8, "grass00", false);

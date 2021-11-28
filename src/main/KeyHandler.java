@@ -36,12 +36,14 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) {
             rightPressed = true;
         }
-        // if (code == KeyEvent.VK_UP) {
-        //     gamePanel.zoomInOut(1);
-        // }
-        // if (code == KeyEvent.VK_DOWN) {
-        //     gamePanel.zoomInOut(-1);
-        // }
+        if (code == KeyEvent.VK_P) {
+            if(gamePanel.gameState == gamePanel.playState){
+                gamePanel.gameState = gamePanel.pauseState;
+            }
+            else if(gamePanel.gameState == gamePanel.pauseState){
+                gamePanel.gameState = gamePanel.playState;
+            }
+        }
 
         // DEBUG
         if (code == KeyEvent.VK_T) {

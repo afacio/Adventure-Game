@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.Utilities;
 
 public class Player extends Entity {
 
@@ -22,7 +21,6 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
-    public int hasKey = 0;
 
     int standCounter = 0;
 
@@ -146,42 +144,6 @@ public class Player extends Entity {
     public void pickUpObject(int index) {
         if (index != 999) {
 
-            String objectName = gamePanel.obj[index].name;
-
-            switch (objectName) {
-            case "Key":
-                gamePanel.playSoundEfect(1);
-                gamePanel.obj[index] = null;
-                hasKey++;
-                gamePanel.ui.showMessage("You got a key!");
-                break;
-            case "Door":
-                if (hasKey > 0) {
-                    gamePanel.playSoundEfect(3);
-                    gamePanel.obj[index] = null;
-                    hasKey--;
-                    gamePanel.ui.showMessage("You opened the door!");
-                } else {
-                    gamePanel.ui.showMessage("You need a key!");
-                }
-                break;
-            case "Chest":
-                gamePanel.playSoundEfect(4);
-                break;
-
-            case "Boots":
-                gamePanel.playSoundEfect(2);
-                speed += 1;
-                gamePanel.obj[index] = null;
-                gamePanel.ui.showMessage("Speed boost!");
-                break;
-
-            case "Trofeum":
-                gamePanel.stopMusic();
-                gamePanel.playSoundEfect(4);
-                gamePanel.ui.gameFinished = true;
-                break;
-            }
         }
     }
 

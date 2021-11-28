@@ -44,6 +44,11 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyHandler);
     public SuperObject obj[] = new SuperObject[10];
 
+    // GAME STATE       
+    public int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
+
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -55,20 +60,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         assetSetter.setObject();
         playMusic(0);
+        gameState = playState;
     }
-
-    // public void zoomInOut(int i) {
-    //     int oldWorldWidth = tileSize * maxWorldColumn;
-    //     tileSize += i;
-    //     int newWorldWidth = tileSize * maxWorldColumn;
-
-    //     double multiplier = (double) newWorldWidth / oldWorldWidth;
-
-    //     player.worldX = player.worldX * multiplier;
-    //     player.worldY = player.worldY * multiplier;
-
-    //     player.speed = player.speed * multiplier;
-    // }
 
     public void startGameThread() {
         gameThread = new Thread(this);
@@ -99,7 +92,10 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
+        if(gameState == playState){
+            player.update();
+        }
+        if(gameState == pauseState){}
     }
 
     public void paintComponent(Graphics g) {

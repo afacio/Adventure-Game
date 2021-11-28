@@ -96,7 +96,7 @@ public class Player extends Entity {
 
             // CHECK TILE COLLISION
             collisionOn = false;
-            gamePanel.collisionChecker.checkTile(this);
+            // gamePanel.collisionChecker.checkTile(this);
 
             // CHECK OBJECTS COLLISION
             int objIndex = gamePanel.collisionChecker.checkObject(this, true);
@@ -182,9 +182,29 @@ public class Player extends Entity {
             }
             break;
         }
-        g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+
+        int x = screenX;
+        int y = screenY;
+
+        if(screenX > worldX){
+            x = (int)worldX;
+        }
+        if(screenY > worldY){
+            y = (int)worldY;
+        }
+        int rightOffset = gamePanel.screenWidth - screenX;
+        if(rightOffset > gamePanel.worldWidth - worldX){
+            x = (int)(gamePanel.screenWidth - (gamePanel.worldWidth - worldX));
+        }
+        int bottomOffset = gamePanel.screenHeight - screenY;
+        if(bottomOffset > gamePanel.worldHeight- worldY){
+            y = (int)(gamePanel.screenHeight - (gamePanel.worldHeight - worldY));
+        }
+
+
+        g2.drawImage(image, x, y, null);
         g2.setColor(Color.red);
-        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+        g2.drawRect(x + solidArea.x, y + solidArea.y, solidArea.width, solidArea.height);
 
     }
 }

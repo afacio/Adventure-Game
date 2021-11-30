@@ -21,7 +21,6 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
-
     int standCounter = 0;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
@@ -33,10 +32,10 @@ public class Player extends Entity {
 
         solidArea = new Rectangle();
 
-        solidArea.x = 11;
+        solidArea.x = 14;
         solidArea.y = 16;
-        solidArea.width = 25;
-        solidArea.height = 25;
+        solidArea.width = 22;
+        solidArea.height = 32;
 
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
@@ -53,14 +52,18 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() {
-        up1 = setup("boy_up_1");
-        up2 = setup("boy_up_2");            
-        down1 = setup("boy_down_1");
-        down2 = setup("boy_down_2");          
-        left1 = setup("boy_left_1");          
-        left2 = setup("boy_left_2");            
-        right1 = setup("boy_right_1");
-        right2 = setup("boy_right_2");
+        up1 = setup("player_up (1)");
+        up2 = setup("player_up (2)");            
+        up3 = setup("player_up (3)");            
+        down1 = setup("player_down (1)");
+        down2 = setup("player_down (2)");          
+        down3 = setup("player_down (3)");          
+        left1 = setup("player_left (1)");          
+        left2 = setup("player_left (2)");            
+        left3 = setup("player_left (3)");            
+        right1 = setup("player_right (1)");
+        right2 = setup("player_right (2)");
+        right3 = setup("player_right (3)");
     }
 
     public BufferedImage setup(String imageName){
@@ -96,7 +99,7 @@ public class Player extends Entity {
 
             // CHECK TILE COLLISION
             collisionOn = false;
-            // gamePanel.collisionChecker.checkTile(this);
+            gamePanel.collisionChecker.checkTile(this);
 
             // CHECK OBJECTS COLLISION
             int objIndex = gamePanel.collisionChecker.checkObject(this, true);
@@ -122,10 +125,12 @@ public class Player extends Entity {
             }
 
             spriteCounter++;
-            if (spriteCounter > 11) {
+            if (spriteCounter > 8) {
                 if (spriteNumber == 1) {
                     spriteNumber = 2;
                 } else if (spriteNumber == 2) {
+                    spriteNumber = 3;
+                } else if (spriteNumber == 3) {
                     spriteNumber = 1;
                 }
                 spriteCounter = 0;
@@ -155,30 +160,38 @@ public class Player extends Entity {
         case "up":
             if (spriteNumber == 1) {
                 image = up1;
-            } else {
+            } else if(spriteNumber == 2) {
                 image = up2;
+            } else {
+                image = up3;
             }
             break;
 
         case "down":
             if (spriteNumber == 1) {
                 image = down1;
-            } else {
+            } else if(spriteNumber == 2) {
                 image = down2;
+            } else {
+                image = down3;
             }
             break;
         case "left":
             if (spriteNumber == 1) {
                 image = left1;
-            } else {
+            } else if(spriteNumber == 2) {
                 image = left2;
+            } else {
+                image = left3;
             }
             break;
         case "right":
             if (spriteNumber == 1) {
                 image = right1;
-            } else {
+            } else if(spriteNumber == 2) {
                 image = right2;
+            } else {
+                image = right3;
             }
             break;
         }

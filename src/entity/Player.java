@@ -1,21 +1,15 @@
 package entity;
 
 import main.KeyHandler;
-import main.UtilityTool;
 import main.GamePanel;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 
 public class Player extends Entity {
 
-    GamePanel gamePanel;
     KeyHandler keyHandler;
 
     public final int screenX;
@@ -24,21 +18,13 @@ public class Player extends Entity {
     int standCounter = 0;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
-        this.gamePanel = gamePanel;
+
+        super(gamePanel, 999L);
+
         this.keyHandler = keyHandler;
 
         screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
         screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
-
-        solidArea = new Rectangle();
-
-        solidArea.x = 14;
-        solidArea.y = 16;
-        solidArea.width = 22;
-        solidArea.height = 32;
-
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
 
         setDefaultValues();
         getPlayerImage();
@@ -52,33 +38,18 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() {
-        up1 = setup("player_up (1)");
-        up2 = setup("player_up (2)");            
-        up3 = setup("player_up (3)");            
-        down1 = setup("player_down (1)");
-        down2 = setup("player_down (2)");          
-        down3 = setup("player_down (3)");          
-        left1 = setup("player_left (1)");          
-        left2 = setup("player_left (2)");            
-        left3 = setup("player_left (3)");            
-        right1 = setup("player_right (1)");
-        right2 = setup("player_right (2)");
-        right3 = setup("player_right (3)");
-    }
-
-    public BufferedImage setup(String imageName){
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-
-            image = ImageIO.read(new File("src/res/player/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gamePanel.tileSize, gamePanel.tileSize);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return image;
+        up1 = setup("/player/player_up (1)");
+        up2 = setup("/player/player_up (2)");            
+        up3 = setup("/player/player_up (3)");            
+        down1 = setup("/player/player_down (1)");
+        down2 = setup("/player/player_down (2)");          
+        down3 = setup("/player/player_down (3)");          
+        left1 = setup("/player/player_left (1)");          
+        left2 = setup("/player/player_left (2)");            
+        left3 = setup("/player/player_left (3)");            
+        right1 = setup("/player/player_right (1)");
+        right2 = setup("/player/player_right (2)");
+        right3 = setup("/player/player_right (3)");
     }
 
     public void update() {
@@ -104,6 +75,10 @@ public class Player extends Entity {
             // CHECK OBJECTS COLLISION
             int objIndex = gamePanel.collisionChecker.checkObject(this, true);
             pickUpObject(objIndex);
+
+            // CHECK NPC COLLISION
+            int npcIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+            interactNPC(npcIndex);
 
             // IF COLLISION IS FALSE, PLAYER CAN MOVE
             if (!collisionOn) {
@@ -152,48 +127,54 @@ public class Player extends Entity {
         }
     }
 
+    public void interactNPC(int index){
+        if (index != 999) {
+            System.out.println("HIT");
+
+        }
+    }
+
     public void draw(Graphics2D g2) {
 
         BufferedImage image = null;
 
         switch (direction) {
-        case "up":
-            if (spriteNumber == 1) {
-                image = up1;
-            } else if(spriteNumber == 2) {
-                image = up2;
-            } else {
-                image = up3;
-            }
-            break;
-
-        case "down":
-            if (spriteNumber == 1) {
-                image = down1;
-            } else if(spriteNumber == 2) {
-                image = down2;
-            } else {
-                image = down3;
-            }
-            break;
-        case "left":
-            if (spriteNumber == 1) {
-                image = left1;
-            } else if(spriteNumber == 2) {
-                image = left2;
-            } else {
-                image = left3;
-            }
-            break;
-        case "right":
-            if (spriteNumber == 1) {
-                image = right1;
-            } else if(spriteNumber == 2) {
-                image = right2;
-            } else {
-                image = right3;
-            }
-            break;
+            case "up":
+                if (spriteNumber == 1) {
+                    image = up1;
+                } else if(spriteNumber == 2) {
+                    image = up2;
+                } else {
+                    image = up3;
+                }
+                break;
+            case "down":
+                if (spriteNumber == 1) {
+                    image = down1;
+                } else if(spriteNumber == 2) {
+                    image = down2;
+                } else {
+                    image = down3;
+                }
+                break;
+            case "left":
+                if (spriteNumber == 1) {
+                    image = left1;
+                } else if(spriteNumber == 2) {
+                    image = left2;
+                } else {
+                    image = left3;
+                }
+                break;
+            case "right":
+                if (spriteNumber == 1) {
+                    image = right1;
+                } else if(spriteNumber == 2) {
+                    image = right2;
+                } else {
+                    image = right3;
+                }
+                break;
         }
 
         int x = screenX;
@@ -216,7 +197,7 @@ public class Player extends Entity {
 
 
         g2.drawImage(image, x, y, null);
-        g2.setColor(Color.red);
+        g2.setColor(Color.green);
         g2.drawRect(x + solidArea.x, y + solidArea.y, solidArea.width, solidArea.height);
 
     }

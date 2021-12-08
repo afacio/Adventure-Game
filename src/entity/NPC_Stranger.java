@@ -13,6 +13,7 @@ public class NPC_Stranger extends Entity {
         speed = 1;
 
         getImage();
+        setDialogue();
     }
 
     public void getImage() {
@@ -52,8 +53,19 @@ public class NPC_Stranger extends Entity {
                 direction = "right";
             }
             actionLockCounter = 0;
-
         }
+    }
 
+    public void setDialogue(){
+        dialogues[0] = "Hello stranger.";
+        dialogues[1] = "So you've come to this island to find the treasure ?";
+        dialogues[2] = "I used to be a great wizard but now... \nI'm a bit too old for taking an adventure.";
+        dialogues[3] = "Well, good luck on you!";
+
+    }
+
+    @Override
+    public void speak(){
+        super.speak();
     }
 }

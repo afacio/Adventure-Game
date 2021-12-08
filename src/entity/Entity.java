@@ -18,6 +18,7 @@ public class Entity { // klasa abstrakcyjna nie mająca żądnej instancji
     GamePanel gamePanel;
 
     public Long id;
+    public boolean frendly = false;
 
     public double worldX, worldY;
     public double speed;
@@ -33,6 +34,9 @@ public class Entity { // klasa abstrakcyjna nie mająca żądnej instancji
 
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
+
+    public String dialogues[] = new String[20];
+    public int dialoguesIntex = 0;
 
     public Entity(GamePanel gamePanel, Long id) {
         this.gamePanel = gamePanel;
@@ -63,7 +67,29 @@ public class Entity { // klasa abstrakcyjna nie mająca żądnej instancji
         return image;
     }
 
-    public void setAction() {
+    public void setAction() { }
+
+    public void speak() {
+        if(dialogues[dialoguesIntex] == null){
+            dialoguesIntex = 0;
+        }
+        gamePanel.ui.currentDialogue = dialogues[dialoguesIntex];
+        dialoguesIntex++;
+
+        switch(gamePanel.player.direction){
+            case "up":
+                    direction = "down";
+                    break;
+                case "down":
+                    direction = "up";
+                    break;
+                case "left":
+                    direction = "right";
+                    break;
+                case "right":
+                    direction = "left";
+                    break;
+        }
     }
 
     public void update() {
@@ -75,7 +101,12 @@ public class Entity { // klasa abstrakcyjna nie mająca żądnej instancji
         gamePanel.collisionChecker.checkPlayerCollision(this);
         gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
 
-        // IF COLLISION IS FALSE, PLAYER CAN MOVE
+        // if(collisionOn && gamePanel.collisionChecker.entityCollisionWithPlayer(this)){
+        //     gamePanel.player.health--;
+        //     System.out.println(gamePanel.player.health);
+        // }
+
+        // IF COLLISION IS FALSE, ENTITY CAN MOVE
         if (!collisionOn) {
 
             switch (direction) {

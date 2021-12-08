@@ -12,6 +12,8 @@ public class Player extends Entity {
 
     KeyHandler keyHandler;
 
+    public int health = 100;
+
     public final int screenX;
     public final int screenY;
 
@@ -20,6 +22,7 @@ public class Player extends Entity {
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
 
         super(gamePanel, 999L);
+        frendly = true;
 
         this.keyHandler = keyHandler;
 
@@ -129,9 +132,12 @@ public class Player extends Entity {
 
     public void interactNPC(int index){
         if (index != 999) {
-            System.out.println("HIT");
-
+            if(gamePanel.keyHandler.enterPressed){
+                gamePanel.gameState = gamePanel.dialogueState;
+                gamePanel.npc[index].speak();
+            }
         }
+        gamePanel.keyHandler.enterPressed = false;
     }
 
     public void draw(Graphics2D g2) {

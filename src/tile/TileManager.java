@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.awt.Graphics2D;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+
 
 import main.GamePanel;
 import main.UtilityTool;
@@ -14,6 +16,7 @@ import main.UtilityTool;
 public class TileManager {
     GamePanel gamePanel;
     public Tile[] tiles;
+    public BufferedImage atlas;
 
     public int mapTileNumber[][];
 
@@ -25,7 +28,7 @@ public class TileManager {
         getTileImage();
         loadMap("src/res/maps/world02.txt");
     }
-
+    
     public void getTileImage(){
         setup(0, "old/grass", false);
         setup(1, "old/wall", true);

@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int FPS = 60;
 
     // SYSTEM
-    KeyHandler keyHandler = new KeyHandler(this);
+    public KeyHandler keyHandler = new KeyHandler(this);
     TileManager tileManager = new TileManager(this);
     Sound music = new Sound();
     Sound soundEfect = new Sound();
@@ -52,6 +52,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -108,7 +109,8 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }      
         }
-        if(gameState == pauseState){}
+        if(gameState == pauseState){
+        }
     }
 
     public void paintComponent(Graphics g) {

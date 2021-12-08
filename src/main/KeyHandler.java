@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
     // DEBUG
     boolean checkDrawTime;
 
@@ -24,31 +24,50 @@ public class KeyHandler implements KeyListener {
 
         int code = e.getKeyCode();
 
-        if (code == KeyEvent.VK_W) {
-            upPressed = true;
-        }
-        if (code == KeyEvent.VK_S) {
-            downPressed = true;
-        }
-        if (code == KeyEvent.VK_A) {
-            leftPressed = true;
-        }
-        if (code == KeyEvent.VK_D) {
-            rightPressed = true;
-        }
-        if (code == KeyEvent.VK_P) {
-            if(gamePanel.gameState == gamePanel.playState){
+        //PLAY STATE
+        if(gamePanel.gameState == gamePanel.playState){
+
+            if (code == KeyEvent.VK_W) {
+                upPressed = true;
+            }
+            if (code == KeyEvent.VK_S) {
+                downPressed = true;
+            }
+            if (code == KeyEvent.VK_A) {
+                leftPressed = true;
+            }
+            if (code == KeyEvent.VK_D) {
+                rightPressed = true;
+            }
+            if (code == KeyEvent.VK_P) {
                 gamePanel.gameState = gamePanel.pauseState;
             }
-            else if(gamePanel.gameState == gamePanel.pauseState){
+
+            if (code == KeyEvent.VK_ENTER) {
+                enterPressed = true;
+            }
+    
+            // DEBUG
+            if (code == KeyEvent.VK_T) {
+                checkDrawTime = !checkDrawTime;
+            }
+        }
+
+        //PAUSE STATE
+        else if(gamePanel.gameState == gamePanel.pauseState){
+            if (code == KeyEvent.VK_P) {
                 gamePanel.gameState = gamePanel.playState;
             }
         }
 
-        // DEBUG
-        if (code == KeyEvent.VK_T) {
-            checkDrawTime = !checkDrawTime;
+        //DIALOGUE STATE
+        else if(gamePanel.gameState == gamePanel.dialogueState){
+            if (code == KeyEvent.VK_ENTER) {
+                gamePanel.gameState = gamePanel.playState;
+            }
         }
+
+
     }
 
     @Override

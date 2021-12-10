@@ -12,19 +12,16 @@ public class UI {
 
     GamePanel gamePanel;
     Graphics2D g2;
-    Font arial_40, maruMonica;
-
+    Font maruMonica;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
-
     public String currentDialogue = "";
-
     public boolean gameFinished = false;
+    public int commandNum = 0;
 
     public UI(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        arial_40 = new Font("Arial", Font.PLAIN, 40);
         try {
             InputStream is = getClass().getResourceAsStream("/res/font/MaruMonica.ttf");
             maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -38,7 +35,10 @@ public class UI {
         g2.setFont(maruMonica);
         g2.setColor(Color.white);
 
-        if (gamePanel.gameState == gamePanel.playState) {
+        if (gamePanel.gameState == gamePanel.titleState) {
+            drawTitleScreen();
+        }
+        else if (gamePanel.gameState == gamePanel.playState) {
             // Do play state stuff later
         }
         else if (gamePanel.gameState == gamePanel.pauseState) {
@@ -52,6 +52,54 @@ public class UI {
     public void showMessage(String text) {
         message = text;
         messageOn = true;
+    }
+
+    private void drawTitleScreen(){
+
+        g2.setColor(new Color(33, 33, 33));
+        g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96));
+        
+        String text = "ADVENTURE GAME";
+        int x = getXforCenteredText(text);
+        int y = 3 * gamePanel.tileSize;
+
+        drawMenuTextWithShadow(text, x, y);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48));
+
+        text = "NEW GAME";
+        x = getXforCenteredText(text);
+        y += gamePanel.tileSize * 4;
+        drawMenuTextWithShadow(text, x, y);
+        if(commandNum == 0){
+            drawMenuTextWithShadow(">", x - 40, y);
+        }
+
+        text = "LOAD GAME";
+        x = getXforCenteredText(text);
+        y += gamePanel.tileSize * 2;
+        drawMenuTextWithShadow(text, x, y);
+        if(commandNum == 1){
+            drawMenuTextWithShadow(">", x - 40, y);
+        }
+
+        text = "EXIT";
+        x = getXforCenteredText(text);
+        y += gamePanel.tileSize * 2;
+        drawMenuTextWithShadow(text, x, y);
+        if(commandNum == 2){
+            drawMenuTextWithShadow(">", x - 40, y);
+        }
+    }
+
+    private void drawMenuTextWithShadow(String text, int x, int y){
+        g2.setColor(Color.BLACK);
+        g2.drawString(text, x+5, y+5);
+
+        g2.setColor(Color.WHITE);
+        g2.drawString(text, x, y);
     }
 
     private void drawPauseScreen() {

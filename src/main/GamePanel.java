@@ -49,10 +49,12 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity npc[] = new Entity[10];
 
     // GAME STATE       
-    public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    
+    public int gameState = titleState;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -64,7 +66,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         assetSetter.setObject();
-        assetSetter.setNPC();
+        assetSetter.setNPC();   
         playMusic(0);
         gameState = playState;
     }
@@ -124,27 +126,36 @@ public class GamePanel extends JPanel implements Runnable {
             drawStart = System.nanoTime();
         }
 
-        // TILE
-        tileManager.draw(g2);
-
-        // OBJECTS
-        for (int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                obj[i].draw(g2, this);
-            }
-        }
-        // NPC
-        for (int i = 0; i < npc.length; i++) {
-            if (npc[i] != null) {
-                npc[i].draw(g2);
-            }
+        // TITLE SCREEN
+        if(gameState == titleState){
+            ui.draw(g2); 
         }
 
-        // PLAYER
-        player.draw(g2);
+        // GAME SCREEN
+        else {
+            // TILE
+            tileManager.draw(g2);
+    
+            // OBJECTS
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    obj[i].draw(g2, this);
+                }
+            }
+            // NPC
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].draw(g2);
+                }
+            }
+    
+            // PLAYER
+            player.draw(g2);
+    
+            // UI
+            ui.draw(g2); 
+        }
 
-        // UI
-        ui.draw(g2);
 
         if(keyHandler.checkDrawTime){
             long drawEnd = System.nanoTime();
@@ -170,5 +181,9 @@ public class GamePanel extends JPanel implements Runnable {
     public void playSoundEfect(int index) {
         soundEfect.setFile(index);
         soundEfect.play();
+    }
+
+    public void exitGame(){
+        System.exit(0);
     }
 }

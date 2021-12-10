@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.awt.Graphics2D;
 
 import javax.imageio.ImageIO;
+
+import helper.LoadSave;
+
 import java.awt.image.BufferedImage;
 
 
@@ -28,7 +31,11 @@ public class TileManager {
         getTileImage();
         loadMap("src/res/maps/world02.txt");
     }
-    
+
+    private void loadAtlas(){
+        atlas = LoadSave.getAtlas();
+    }
+
     public void getTileImage(){
         setup(0, "old/grass", false);
         setup(1, "old/wall", true);

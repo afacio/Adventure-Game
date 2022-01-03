@@ -6,8 +6,8 @@ import main.GamePanel;
 
 public class NPC_Stranger extends Entity {
 
-    public NPC_Stranger(GamePanel gamePanel, Long id) {
-        super(gamePanel, id);
+    public NPC_Stranger(GamePanel gamePanel) {
+        super(gamePanel);
         
         direction = "down";
         speed = 1;

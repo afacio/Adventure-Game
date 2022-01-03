@@ -27,11 +27,6 @@ public class EventHandler {
             eventRect[col][row].height = 2;
             eventRect[col][row].eventRectDefaultX = eventRect[col][row].x;
             eventRect[col][row].eventRectDefaultY = eventRect[col][row].y;
-            System.out.print(col);
-            System.out.print(" ");
-
-            System.out.print(row);
-            System.out.print("\n");
 
             col++;
             if (col == gamePanel.maxWorldColumn) {
@@ -66,7 +61,6 @@ public class EventHandler {
 
         gamePanel.player.solidArea.x = (int) (gamePanel.player.worldX) + gamePanel.player.solidArea.x;
         gamePanel.player.solidArea.y = (int) (gamePanel.player.worldY) + gamePanel.player.solidArea.y;
-        System.out.print(eventRect.length);
         eventRect[col][row].x = col * gamePanel.tileSize + eventRect[col][row].x;
         eventRect[col][row].y = row * gamePanel.tileSize + eventRect[col][row].y;
 

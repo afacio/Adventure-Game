@@ -17,14 +17,11 @@ public class Entity {
 
     GamePanel gamePanel;
 
-    public Long id;
-    public boolean frendly = false;
-
     public double worldX, worldY;
     public double speed;
 
     public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
-    public String direction;
+    public String direction = "down";
 
     public int spriteCounter = 0;
     public int spriteNumber = 1;
@@ -41,9 +38,12 @@ public class Entity {
     public int maxHealth;
     public int health;
 
-    public Entity(GamePanel gamePanel, Long id) {
+    public BufferedImage image1, image2, image3;
+    public String name;
+    public boolean collision = false;
+
+    public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        this.id = id;
 
         setDefaultSolidAreaValues();
     }
@@ -102,14 +102,9 @@ public class Entity {
         gamePanel.collisionChecker.checkTile(this);
         gamePanel.collisionChecker.checkObject(this, false);
         gamePanel.collisionChecker.checkPlayerCollision(this);
-        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+        // gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
 
         int animationRefresh = 8;
-
-        // if(collisionOn && gamePanel.collisionChecker.entityCollisionWithPlayer(this)){
-        //     gamePanel.player.health--;
-        //     System.out.println(gamePanel.player.health);
-        // }
 
         // IF COLLISION IS FALSE, ENTITY CAN MOVE
         if (!collisionOn) {

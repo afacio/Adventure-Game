@@ -21,8 +21,8 @@ public class Player extends Entity {
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
 
-        super(gamePanel, 999L);
-        frendly = true;
+        super(gamePanel);
+
 
         this.keyHandler = keyHandler;
 
@@ -83,9 +83,9 @@ public class Player extends Entity {
             int objIndex = gamePanel.collisionChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
-            // CHECK NPC COLLISION
-            int npcIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
-            interactNPC(npcIndex);
+            // // CHECK NPC COLLISION
+            // int npcIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+            // interactNPC(npcIndex);
 
             // CHECK EVENT
             gamePanel.eventHandler.checkEvent();

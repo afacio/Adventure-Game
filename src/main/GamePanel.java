@@ -4,13 +4,15 @@ import javax.swing.JPanel;
 
 import entity.Entity;
 import entity.Player;
-import object.SuperObject;
 import tile.TileManager;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -46,8 +48,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITY AND OBJECT
     public Player player = new Player(this, keyHandler);
-    public SuperObject obj[] = new SuperObject[10];
+    public Entity obj[] = new Entity[10];
     public Entity npc[] = new Entity[10];
+    ArrayList<Entity> entityListy = new ArrayList<>();
 
     // GAME STATE       
     public final int titleState = 0;
@@ -137,37 +140,44 @@ public class GamePanel extends JPanel implements Runnable {
         else {
             // TILE
             tileManager.draw(g2);
-    
-            // OBJECTS
+
+            // ADD ENTITIESTO THE LIST
+            entityListy.add(player);
+
             for (int i = 0; i < obj.length; i++) {
                 if (obj[i] != null) {
-                    obj[i].draw(g2, this);
+                    entityListy.add(obj[i]);
                 }
             }
-            // NPC
             for (int i = 0; i < npc.length; i++) {
                 if (npc[i] != null) {
-                    npc[i].draw(g2);
+                    entityListy.add(npc[i]);
                 }
             }
-   
-                   // PLAYER
-                   player.draw(g2);
-    
-                   // UI
-                   ui.draw(g2); 
-               }
-       
-       
-               if(keyHandler.checkDrawTime){
-                   long drawEnd = System.nanoTime();
-                   long passed = drawEnd - drawStart;
+            // SORT
+            Collections.sort(entityListy, new Comparator<Entity>() {
+
+                @Override
+                public int compare(Entity e1, Entity e2) {
+                    int result = Integer.compare((int) e1.worldY, (int) e2.worldY);
+                    return result;
+                }
+                
+            });
            
-                   g2.setColor(Color.white);
-                   g2.drawString("Draw Time: "+ passed, 10, 400);
-               }
-        
-        g2.dispose();
+            // DRAW ENTITIES
+            for(int i = 0; i < entityListy.size(); i++){
+                entityListy.get(i).draw(g2);
+            }
+           
+            // EMPTY ENTITY LIST
+            for(int i = 0; i < entityListy.size(); i++){
+                entityListy.remove(i);
+            }
+    
+            // UI
+            ui.draw(g2); 
+        }
     }
 
     public void playMusic(int index) {

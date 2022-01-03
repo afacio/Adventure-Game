@@ -7,8 +7,8 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.InputStream;
 
+import entity.Entity;
 import object.OBJ_Heart;
-import object.SuperObject;
 
 import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
@@ -36,7 +36,7 @@ public class UI {
             e.printStackTrace();
         }
 
-        SuperObject heart = new OBJ_Heart(gamePanel);
+        Entity heart = new OBJ_Heart(gamePanel);
         heart_full = heart.image1;
         heart_half = heart.image2;
         heart_empty = heart.image3;

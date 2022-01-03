@@ -15,8 +15,8 @@ public class OBJ_Door extends SuperObject {
         this.gamePanel = gamePanel;
         name = "Door";
         try {
-            image = ImageIO.read(new File("src/res/objects/door.png"));
-            uTool.scaleImage(image, gamePanel.tileSize, gamePanel.tileSize);
+            image1 = ImageIO.read(new File("src/res/objects/door.png"));
+            image1 = uTool.scaleImage(image1, gamePanel.tileSize, gamePanel.tileSize);
         } catch (IOException e) {
             e.printStackTrace();
         }

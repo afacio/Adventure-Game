@@ -38,6 +38,9 @@ public class Player extends Entity {
         worldY = gamePanel.tileSize * 21;
         speed = 4;
         direction = "down";
+
+        maxHealth = 6;
+        health = maxHealth;
     }
 
     public void getPlayerImage() {
@@ -70,9 +73,10 @@ public class Player extends Entity {
             if (keyHandler.rightPressed) {
                 direction = "right";
             }
-
-            // CHECK TILE COLLISION
+            
             collisionOn = false;
+            
+            // CHECK TILE COLLISION
             gamePanel.collisionChecker.checkTile(this);
 
             // CHECK OBJECTS COLLISION
@@ -82,6 +86,11 @@ public class Player extends Entity {
             // CHECK NPC COLLISION
             int npcIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
             interactNPC(npcIndex);
+
+            // CHECK EVENT
+            gamePanel.eventHandler.checkEvent();
+
+            gamePanel.keyHandler.enterPressed = false;
 
             // IF COLLISION IS FALSE, PLAYER CAN MOVE
             if (!collisionOn) {
@@ -137,7 +146,6 @@ public class Player extends Entity {
                 gamePanel.npc[index].speak();
             }
         }
-        gamePanel.keyHandler.enterPressed = false;
     }
 
     public void draw(Graphics2D g2) {

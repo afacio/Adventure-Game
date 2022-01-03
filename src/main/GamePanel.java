@@ -41,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
+    public EventHandler eventHandler = new EventHandler(this);
     Thread gameThread;
 
     // ENTITY AND OBJECT
@@ -53,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public final int creatingState = 4;
     
     public int gameState = titleState;
 
@@ -148,23 +150,23 @@ public class GamePanel extends JPanel implements Runnable {
                     npc[i].draw(g2);
                 }
             }
+   
+                   // PLAYER
+                   player.draw(g2);
     
-            // PLAYER
-            player.draw(g2);
-    
-            // UI
-            ui.draw(g2); 
-        }
-
-
-        if(keyHandler.checkDrawTime){
-            long drawEnd = System.nanoTime();
-            long passed = drawEnd - drawStart;
-    
-            g2.setColor(Color.white);
-            g2.drawString("Draw Time: "+ passed, 10, 400);
-        }
-
+                   // UI
+                   ui.draw(g2); 
+               }
+       
+       
+               if(keyHandler.checkDrawTime){
+                   long drawEnd = System.nanoTime();
+                   long passed = drawEnd - drawStart;
+           
+                   g2.setColor(Color.white);
+                   g2.drawString("Draw Time: "+ passed, 10, 400);
+               }
+        
         g2.dispose();
     }
 

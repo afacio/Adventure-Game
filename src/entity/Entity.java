@@ -13,7 +13,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
 
-public class Entity { // klasa abstrakcyjna nie mająca żądnej instancji
+public class Entity {
 
     GamePanel gamePanel;
 
@@ -37,6 +37,9 @@ public class Entity { // klasa abstrakcyjna nie mająca żądnej instancji
 
     public String dialogues[] = new String[20];
     public int dialoguesIntex = 0;
+
+    public int maxHealth;
+    public int health;
 
     public Entity(GamePanel gamePanel, Long id) {
         this.gamePanel = gamePanel;
@@ -101,6 +104,8 @@ public class Entity { // klasa abstrakcyjna nie mająca żądnej instancji
         gamePanel.collisionChecker.checkPlayerCollision(this);
         gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
 
+        int animationRefresh = 8;
+
         // if(collisionOn && gamePanel.collisionChecker.entityCollisionWithPlayer(this)){
         //     gamePanel.player.health--;
         //     System.out.println(gamePanel.player.health);
@@ -126,7 +131,7 @@ public class Entity { // klasa abstrakcyjna nie mająca żądnej instancji
         }
 
         spriteCounter++;
-        if (spriteCounter > 8) {
+        if (spriteCounter > animationRefresh) {
             if (spriteNumber == 1) {
                 spriteNumber = 2;
             } else if (spriteNumber == 2) {

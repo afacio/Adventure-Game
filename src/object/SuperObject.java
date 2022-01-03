@@ -8,8 +8,9 @@ import main.GamePanel;
 import main.UtilityTool;
 
 public class SuperObject {
+    GamePanel gamePanel;
 
-    public BufferedImage image;
+    public BufferedImage image1, image2, image3;
     public String name;
     public boolean collision = false;
     public int worldX, worldY;
@@ -19,6 +20,7 @@ public class SuperObject {
     UtilityTool uTool = new UtilityTool();
 
     public void draw(Graphics2D g2, GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
 
         double screenX = (worldX - gamePanel.player.worldX + gamePanel.player.screenX);
         double screenY = (worldY - gamePanel.player.worldY + gamePanel.player.screenY);
@@ -28,7 +30,7 @@ public class SuperObject {
                 && worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY
                 && worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY) {
 
-            g2.drawImage(image, (int) screenX, (int) screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.drawImage(image1, (int) screenX, (int) screenY, gamePanel.tileSize, gamePanel.tileSize, null);
         }
     }
 }

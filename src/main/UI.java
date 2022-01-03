@@ -6,13 +6,20 @@ import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.InputStream;
+
+import object.OBJ_Heart;
+import object.SuperObject;
+
 import java.awt.BasicStroke;
+import java.awt.image.BufferedImage;
+
 
 public class UI {
 
     GamePanel gamePanel;
     Graphics2D g2;
     Font maruMonica;
+    BufferedImage heart_full, heart_half, heart_empty;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
@@ -28,6 +35,11 @@ public class UI {
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
+
+        SuperObject heart = new OBJ_Heart(gamePanel);
+        heart_full = heart.image1;
+        heart_half = heart.image2;
+        heart_empty = heart.image3;
     }
 
     public void draw(Graphics2D g2) {
@@ -39,13 +51,16 @@ public class UI {
             drawTitleScreen();
         }
         else if (gamePanel.gameState == gamePanel.playState) {
-            // Do play state stuff later
+            drawPlayerHealth();
         }
         else if (gamePanel.gameState == gamePanel.pauseState) {
             drawPauseScreen();
         }
         else if (gamePanel.gameState == gamePanel.dialogueState) {
             drawDialogueScreen();
+        }
+        else if (gamePanel.gameState == gamePanel.creatingState) {
+            // drawCreatingScreen();
         }
     }
 
@@ -71,7 +86,7 @@ public class UI {
 
         text = "NEW GAME";
         x = getXforCenteredText(text);
-        y += gamePanel.tileSize * 4;
+        y += gamePanel.tileSize * 3;
         drawMenuTextWithShadow(text, x, y);
         if(commandNum == 0){
             drawMenuTextWithShadow(">", x - 40, y);
@@ -79,17 +94,25 @@ public class UI {
 
         text = "LOAD GAME";
         x = getXforCenteredText(text);
-        y += gamePanel.tileSize * 2;
+        y += 64;
         drawMenuTextWithShadow(text, x, y);
         if(commandNum == 1){
             drawMenuTextWithShadow(">", x - 40, y);
         }
 
-        text = "EXIT";
+        text = "MAP EDITOR";
         x = getXforCenteredText(text);
-        y += gamePanel.tileSize * 2;
+        y += 64;
         drawMenuTextWithShadow(text, x, y);
         if(commandNum == 2){
+            drawMenuTextWithShadow(">", x - 40, y);
+        }
+
+        text = "EXIT";
+        x = getXforCenteredText(text);
+        y += 64;
+        drawMenuTextWithShadow(text, x, y);
+        if(commandNum == 3){
             drawMenuTextWithShadow(">", x - 40, y);
         }
     }
@@ -100,6 +123,33 @@ public class UI {
 
         g2.setColor(Color.WHITE);
         g2.drawString(text, x, y);
+    }
+
+    private void drawPlayerHealth(){
+        int x = gamePanel.tileSize / 2;
+        int y = gamePanel.tileSize / 2;
+        int i = 0;
+
+        while(i < gamePanel.player.maxHealth / 2){
+            g2.drawImage(heart_empty, x, y, null);
+            i++;
+            x += gamePanel.tileSize * 1.3 ;
+        }
+
+        x = gamePanel.tileSize / 2;
+        y = gamePanel.tileSize / 2;
+        i = 0;
+
+        while(i < gamePanel.player.health){
+            g2.drawImage(heart_half, x, y, null);
+            i++;
+            if(i < gamePanel.player.health){
+                g2.drawImage(heart_full, x, y, null);
+            }
+            i++;
+            x += gamePanel.tileSize * 1.3 ;
+        }
+
     }
 
     private void drawPauseScreen() {

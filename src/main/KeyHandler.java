@@ -30,11 +30,11 @@ public class KeyHandler implements KeyListener {
                 if(gamePanel.ui.commandNum != 0){
                     gamePanel.ui.commandNum--;
                 } else {
-                    gamePanel.ui.commandNum = 2;
+                    gamePanel.ui.commandNum = 3;
                 }
             }
             if (code == KeyEvent.VK_S) {
-                if(gamePanel.ui.commandNum != 2){
+                if(gamePanel.ui.commandNum != 3){
                     gamePanel.ui.commandNum++;
                 } else {
                     gamePanel.ui.commandNum = 0;
@@ -48,6 +48,9 @@ public class KeyHandler implements KeyListener {
                     //todo
                 }
                 if(gamePanel.ui.commandNum == 2){
+                    gamePanel.gameState = gamePanel.creatingState;
+                }
+                if(gamePanel.ui.commandNum == 3){
                     gamePanel.exitGame();
                 }
             }

@@ -3,10 +3,10 @@ package entity;
 import main.KeyHandler;
 import main.GamePanel;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
 
 public class Player extends Entity {
 
@@ -22,7 +22,6 @@ public class Player extends Entity {
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
 
         super(gamePanel);
-
 
         this.keyHandler = keyHandler;
 
@@ -45,14 +44,14 @@ public class Player extends Entity {
 
     public void getPlayerImage() {
         up1 = setup("/player/player_up (1)");
-        up2 = setup("/player/player_up (2)");            
-        up3 = setup("/player/player_up (3)");            
+        up2 = setup("/player/player_up (2)");
+        up3 = setup("/player/player_up (3)");
         down1 = setup("/player/player_down (1)");
-        down2 = setup("/player/player_down (2)");          
-        down3 = setup("/player/player_down (3)");          
-        left1 = setup("/player/player_left (1)");          
-        left2 = setup("/player/player_left (2)");            
-        left3 = setup("/player/player_left (3)");            
+        down2 = setup("/player/player_down (2)");
+        down3 = setup("/player/player_down (3)");
+        left1 = setup("/player/player_left (1)");
+        left2 = setup("/player/player_left (2)");
+        left3 = setup("/player/player_left (3)");
         right1 = setup("/player/player_right (1)");
         right2 = setup("/player/player_right (2)");
         right3 = setup("/player/player_right (3)");
@@ -73,9 +72,9 @@ public class Player extends Entity {
             if (keyHandler.rightPressed) {
                 direction = "right";
             }
-            
+
             collisionOn = false;
-            
+
             // CHECK TILE COLLISION
             gamePanel.collisionChecker.checkTile(this);
 
@@ -84,8 +83,12 @@ public class Player extends Entity {
             pickUpObject(objIndex);
 
             // // CHECK NPC COLLISION
-            // int npcIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
-            // interactNPC(npcIndex);
+            int npcIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+            interactNPC(npcIndex);
+
+            // // CHECK MONSTER COLLISION
+            int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
+            monsterContact(monsterIndex);
 
             // CHECK EVENT
             gamePanel.eventHandler.checkEvent();
@@ -96,18 +99,18 @@ public class Player extends Entity {
             if (!collisionOn) {
 
                 switch (direction) {
-                case "up":
-                    worldY -= speed;
-                    break;
-                case "down":
-                    worldY += speed;
-                    break;
-                case "left":
-                    worldX -= speed;
-                    break;
-                case "right":
-                    worldX += speed;
-                    break;
+                    case "up":
+                        worldY -= speed;
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
                 }
             }
 
@@ -124,26 +127,41 @@ public class Player extends Entity {
             }
         } else {
             standCounter++;
-
             if (standCounter == 20) {
-                spriteNumber = 1;
-                spriteCounter = 0;
+                spriteNumber = 2;
+                standCounter = 0;
             }
-
         }
+        if (invincible == true) {
+            invincibleCounter++;
+            if (invincibleCounter > 60) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
+
     }
 
-    public void pickUpObject(int index) {
+    private void pickUpObject(int index) {
         if (index != 999) {
 
         }
     }
 
-    public void interactNPC(int index){
+    private void interactNPC(int index) {
         if (index != 999) {
-            if(gamePanel.keyHandler.enterPressed){
+            if (gamePanel.keyHandler.enterPressed) {
                 gamePanel.gameState = gamePanel.dialogueState;
                 gamePanel.npc[index].speak();
+            }
+        }
+    }
+
+    private void monsterContact(int index) {
+        if (index != 999) {
+            if (invincible == false) {
+                health--;
+                invincible = true;
             }
         }
     }
@@ -156,7 +174,7 @@ public class Player extends Entity {
             case "up":
                 if (spriteNumber == 1) {
                     image = up1;
-                } else if(spriteNumber == 2) {
+                } else if (spriteNumber == 2) {
                     image = up2;
                 } else {
                     image = up3;
@@ -165,7 +183,7 @@ public class Player extends Entity {
             case "down":
                 if (spriteNumber == 1) {
                     image = down1;
-                } else if(spriteNumber == 2) {
+                } else if (spriteNumber == 2) {
                     image = down2;
                 } else {
                     image = down3;
@@ -174,7 +192,7 @@ public class Player extends Entity {
             case "left":
                 if (spriteNumber == 1) {
                     image = left1;
-                } else if(spriteNumber == 2) {
+                } else if (spriteNumber == 2) {
                     image = left2;
                 } else {
                     image = left3;
@@ -183,7 +201,7 @@ public class Player extends Entity {
             case "right":
                 if (spriteNumber == 1) {
                     image = right1;
-                } else if(spriteNumber == 2) {
+                } else if (spriteNumber == 2) {
                     image = right2;
                 } else {
                     image = right3;
@@ -194,25 +212,30 @@ public class Player extends Entity {
         int x = screenX;
         int y = screenY;
 
-        if(screenX > worldX){
-            x = (int)worldX;
+        if (screenX > worldX) {
+            x = (int) worldX;
         }
-        if(screenY > worldY){
-            y = (int)worldY;
+        if (screenY > worldY) {
+            y = (int) worldY;
         }
         int rightOffset = gamePanel.screenWidth - screenX;
-        if(rightOffset > gamePanel.worldWidth - worldX){
-            x = (int)(gamePanel.screenWidth - (gamePanel.worldWidth - worldX));
+        if (rightOffset > gamePanel.worldWidth - worldX) {
+            x = (int) (gamePanel.screenWidth - (gamePanel.worldWidth - worldX));
         }
         int bottomOffset = gamePanel.screenHeight - screenY;
-        if(bottomOffset > gamePanel.worldHeight- worldY){
-            y = (int)(gamePanel.screenHeight - (gamePanel.worldHeight - worldY));
+        if (bottomOffset > gamePanel.worldHeight - worldY) {
+            y = (int) (gamePanel.screenHeight - (gamePanel.worldHeight - worldY));
         }
 
+        if (invincible) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
 
         g2.drawImage(image, x, y, null);
         g2.setColor(Color.green);
         g2.drawRect(x + solidArea.x, y + solidArea.y, solidArea.width, solidArea.height);
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
     }
 }

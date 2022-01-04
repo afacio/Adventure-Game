@@ -42,18 +42,22 @@ public class Entity {
     public String name;
     public boolean collision = false;
 
+    public boolean invincible = false;
+    public int invincibleCounter;
+
+    public int type;
+
     public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
 
         setDefaultSolidAreaValues();
     }
 
-    private void setDefaultSolidAreaValues(){
+    private void setDefaultSolidAreaValues() {
 
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
     }
-
 
     public BufferedImage setup(String imagePath) {
         UtilityTool uTool = new UtilityTool();
@@ -70,28 +74,29 @@ public class Entity {
         return image;
     }
 
-    public void setAction() { }
+    public void setAction() {
+    }
 
     public void speak() {
-        if(dialogues[dialoguesIntex] == null){
+        if (dialogues[dialoguesIntex] == null) {
             dialoguesIntex = 0;
         }
         gamePanel.ui.currentDialogue = dialogues[dialoguesIntex];
         dialoguesIntex++;
 
-        switch(gamePanel.player.direction){
+        switch (gamePanel.player.direction) {
             case "up":
-                    direction = "down";
-                    break;
-                case "down":
-                    direction = "up";
-                    break;
-                case "left":
-                    direction = "right";
-                    break;
-                case "right":
-                    direction = "left";
-                    break;
+                direction = "down";
+                break;
+            case "down":
+                direction = "up";
+                break;
+            case "left":
+                direction = "right";
+                break;
+            case "right":
+                direction = "left";
+                break;
         }
     }
 
@@ -101,8 +106,16 @@ public class Entity {
         collisionOn = false;
         gamePanel.collisionChecker.checkTile(this);
         gamePanel.collisionChecker.checkObject(this, false);
-        gamePanel.collisionChecker.checkPlayerCollision(this);
-        // gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
+        boolean contactPlayer = gamePanel.collisionChecker.checkPlayerCollision(this);
+
+        if (this.type == 2 && contactPlayer) {
+            if (gamePanel.player.invincible == false) {
+                gamePanel.player.health--;
+                gamePanel.player.invincible = true;
+            }
+        }
 
         int animationRefresh = 8;
 
@@ -190,7 +203,7 @@ public class Entity {
 
             g2.drawImage(image, (int) screenX, (int) screenY, gamePanel.tileSize, gamePanel.tileSize, null);
             g2.setColor(Color.red);
-            g2.drawRect((int)(screenX + solidArea.x), (int)(screenY + solidArea.y), solidArea.width, solidArea.height);
+            g2.drawRect((int) (screenX + solidArea.x), (int) (screenY + solidArea.y), solidArea.width, solidArea.height);
         }
     }
 

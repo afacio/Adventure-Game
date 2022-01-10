@@ -10,6 +10,6 @@ public class OBJ_Trofeum extends Entity {
         super(gamePanel);
 
         name = "Trofeum";
-        down1 = setup("/objects/trofeum");
+        down1 = setup("/objects/trofeum", gamePanel.tileSize, gamePanel.tileSize);
     }
 }

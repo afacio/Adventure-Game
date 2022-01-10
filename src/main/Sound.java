@@ -1,7 +1,6 @@
 package main;
 
 import java.io.File;
-import java.net.URL;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -19,6 +18,11 @@ public class Sound {
         soundPath[2] = "src/res/sound/powerup.wav";
         soundPath[3] = "src/res/sound/unlock.wav";
         soundPath[4] = "src/res/sound/fanfare.wav";
+        soundPath[5] = "src/res/sound/hitmonster.wav";
+        soundPath[6] = "src/res/sound/receivedamage.wav";
+        soundPath[7] = "src/res/sound/swingweapon.wav";
+        soundPath[8] = "src/res/sound/blood-pop.wav";
+        soundPath[9] = "src/res/sound/player-demage.wav";
     }
 
     public void setFile(int index) {

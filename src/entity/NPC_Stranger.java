@@ -17,18 +17,18 @@ public class NPC_Stranger extends Entity {
     }
 
     public void getImage() {
-        up1 = setup("/npc/stranger/stranger_up_1");
-        up2 = setup("/npc/stranger/stranger_up_2");            
-        up3 = setup("/npc/stranger/stranger_up_3");            
-        down1 = setup("/npc/stranger/stranger_down_1");
-        down2 = setup("/npc/stranger/stranger_down_2");          
-        down3 = setup("/npc/stranger/stranger_down_3");          
-        left1 = setup("/npc/stranger/stranger_left_1");          
-        left2 = setup("/npc/stranger/stranger_left_2");            
-        left3 = setup("/npc/stranger/stranger_left_3");            
-        right1 = setup("/npc/stranger/stranger_right_1");
-        right2 = setup("/npc/stranger/stranger_right_2");
-        right3 = setup("/npc/stranger/stranger_right_3");
+        up1 = setup("/npc/stranger/stranger_up_1", gamePanel.tileSize, gamePanel.tileSize);
+        up2 = setup("/npc/stranger/stranger_up_2", gamePanel.tileSize, gamePanel.tileSize);            
+        // up3 = setup("/npc/stranger/stranger_up_3");            
+        down1 = setup("/npc/stranger/stranger_down_1", gamePanel.tileSize, gamePanel.tileSize);
+        down2 = setup("/npc/stranger/stranger_down_2", gamePanel.tileSize, gamePanel.tileSize);          
+        // down3 = setup("/npc/stranger/stranger_down_3");          
+        left1 = setup("/npc/stranger/stranger_left_1", gamePanel.tileSize, gamePanel.tileSize);          
+        left2 = setup("/npc/stranger/stranger_left_2", gamePanel.tileSize, gamePanel.tileSize);            
+        // left3 = setup("/npc/stranger/stranger_left_3");            
+        right1 = setup("/npc/stranger/stranger_right_1", gamePanel.tileSize, gamePanel.tileSize);
+        right2 = setup("/npc/stranger/stranger_right_2", gamePanel.tileSize, gamePanel.tileSize);
+        // right3 = setup("/npc/stranger/stranger_right_3");
     }
 
     @Override
@@ -57,10 +57,7 @@ public class NPC_Stranger extends Entity {
     }
 
     public void setDialogue(){
-        dialogues[0] = "Hello stranger.";
-        dialogues[1] = "So you've come to this island to find the treasure ?";
-        dialogues[2] = "I used to be a great wizard but now... \nI'm a bit too old for taking an adventure.";
-        dialogues[3] = "Well, good luck on you!";
+        dialogues[0] = "...";
 
     }
 

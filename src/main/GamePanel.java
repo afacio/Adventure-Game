@@ -74,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setObject();
         assetSetter.setNPC();   
         assetSetter.setMonster();   
-        playMusic(0);
+        // playMusic(0);
         gameState = playState;
     }
 
@@ -121,7 +121,11 @@ public class GamePanel extends JPanel implements Runnable {
             // MONSTER
             for (int i = 0; i < monster.length; i++) {
                 if (monster[i] != null) {
-                    monster[i].update();
+                    if(monster[i].alive == false && monster[i].dying == false){
+                        monster[i] = null;
+                    } else {
+                        monster[i].update();
+                    }
                 }
             }      
         }
@@ -185,9 +189,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
            
             // EMPTY ENTITY LIST
-            for(int i = 0; i < entityListy.size(); i++){
-                entityListy.remove(i);
-            }
+            entityListy.clear();
+            
     
             // UI
             ui.draw(g2); 

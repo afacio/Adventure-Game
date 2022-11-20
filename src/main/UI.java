@@ -324,6 +324,12 @@ public class UI {
         int slotSize = gamePanel.tileSize + 1;
 
         for(int item = 0; item < gamePanel.player.inventory.size(); item++) {
+
+            if(gamePanel.player.inventory.get(item) == gamePanel.player.currentWeapon || gamePanel.player.inventory.get(item) == gamePanel.player.currentShield) {
+                g2.setColor(new Color(240, 190, 90));
+                g2.fillRoundRect(slotX, slotY, gamePanel.tileSize, gamePanel.tileSize, 10, 10);
+            }
+
             g2.drawImage(gamePanel.player.inventory.get(item).down1, slotX, slotY, null);
             slotX += slotSize;
 
@@ -367,7 +373,7 @@ public class UI {
         }
     }
 
-    private int getCurrentItemInventoryIndex() {
+    public int getCurrentItemInventoryIndex() {
         return currentSlotCol + (currentSlotRow * SLOT_MAX_ROW);
     }
 

@@ -50,6 +50,13 @@ public class Entity {
     public int invincibleTime = 30;
     
     public int type;
+    public static final int PLAYER_TYPE = 0;
+    public static final int NPC_TYPE = 1;
+    public static final int MONSTER_TYPE = 2;
+    public static final int SWORD_TYPE = 3;
+    public static final int AXE_TYPE = 4;
+    public static final int SHIELD_TYPE = 5;
+    public static final int CONSUMABLE_TYPE = 6;
    
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,attackLeft1, attackLeft2, attackRight1, attackRight2;
     public boolean attacking = false;
@@ -105,11 +112,9 @@ public class Entity {
         return image;
     }
 
-    public void setAction() {
-    }
-
-    public void demageReaction() {
-    }
+    public void setAction() { }
+    public void demageReaction() { }
+    public void use(Entity entity) { }
 
     public void speak() {
         if (dialogues[dialoguesIntex] == null) {
@@ -137,7 +142,7 @@ public class Entity {
         gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
         boolean contactPlayer = gamePanel.collisionChecker.checkPlayerCollision(this);
 
-        if (this.type == 2 && contactPlayer) {
+        if (this.type == MONSTER_TYPE && contactPlayer) {
             if (!gamePanel.player.invincible) {
                 gamePanel.playSoundEfect(6); 
                 int damage = attack - gamePanel.player.defense;
@@ -211,7 +216,7 @@ public class Entity {
             }
 
             // MONSTER HP BAR
-            if(type == 2 && hpBarOn) {
+            if(type == MONSTER_TYPE && hpBarOn) {
 
                 double scale = (double)gamePanel.tileSize/maxHealth;
                 double hpBarValue = scale * health;

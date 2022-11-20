@@ -123,6 +123,9 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_I || code == KeyEvent.VK_ESCAPE) {
             gamePanel.gameState = gamePanel.PLAY_STATE;
         }
+        else if (code == KeyEvent.VK_ENTER) {
+            gamePanel.player.selectItem();
+        }
         else if (code == KeyEvent.VK_W) {
             if(gamePanel.ui.currentSlotRow > 0) {
                 gamePanel.ui.currentSlotRow--;

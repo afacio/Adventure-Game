@@ -50,9 +50,6 @@ public class Player extends Entity {
         maxHealth = 6;
         health = maxHealth;
 
-        attackArea.width = 36;
-        attackArea.height = 36;
-
         level = 1;
         strenght = 1;
         dexterity = 1;
@@ -75,6 +72,7 @@ public class Player extends Entity {
     }
 
     private int getAttack() {
+        attackArea = currentWeapon.attackArea;
         attack = strenght * currentWeapon.attackValue;
         return attack;
     }
@@ -96,22 +94,42 @@ public class Player extends Entity {
     }
 
     private void getPlayerAttackImage() {
-        attackUp1 = setup("/player/old_player/Attacking sprites/boy_attack_up_1", gamePanel.tileSize,
-                2 * gamePanel.tileSize);
-        attackUp2 = setup("/player/old_player/Attacking sprites/boy_attack_up_2", gamePanel.tileSize,
-                2 * gamePanel.tileSize);
-        attackDown1 = setup("/player/old_player/Attacking sprites/boy_attack_down_1", gamePanel.tileSize,
-                2 * gamePanel.tileSize);
-        attackDown2 = setup("/player/old_player/Attacking sprites/boy_attack_down_2", gamePanel.tileSize,
-                2 * gamePanel.tileSize);
-        attackLeft1 = setup("/player/old_player/Attacking sprites/boy_attack_left_1", 2 * gamePanel.tileSize,
-                gamePanel.tileSize);
-        attackLeft2 = setup("/player/old_player/Attacking sprites/boy_attack_left_2", 2 * gamePanel.tileSize,
-                gamePanel.tileSize);
-        attackRight1 = setup("/player/old_player/Attacking sprites/boy_attack_right_1", 2 * gamePanel.tileSize,
-                gamePanel.tileSize);
-        attackRight2 = setup("/player/old_player/Attacking sprites/boy_attack_right_2", 2 * gamePanel.tileSize,
-                gamePanel.tileSize);
+        if(currentWeapon.type == SWORD_TYPE) {
+            attackUp1 = setup("/player/old_player/Attacking sprites/boy_attack_up_1", gamePanel.tileSize,
+                    2 * gamePanel.tileSize);
+            attackUp2 = setup("/player/old_player/Attacking sprites/boy_attack_up_2", gamePanel.tileSize,
+                    2 * gamePanel.tileSize);
+            attackDown1 = setup("/player/old_player/Attacking sprites/boy_attack_down_1", gamePanel.tileSize,
+                    2 * gamePanel.tileSize);
+            attackDown2 = setup("/player/old_player/Attacking sprites/boy_attack_down_2", gamePanel.tileSize,
+                    2 * gamePanel.tileSize);
+            attackLeft1 = setup("/player/old_player/Attacking sprites/boy_attack_left_1", 2 * gamePanel.tileSize,
+                    gamePanel.tileSize);
+            attackLeft2 = setup("/player/old_player/Attacking sprites/boy_attack_left_2", 2 * gamePanel.tileSize,
+                    gamePanel.tileSize);
+            attackRight1 = setup("/player/old_player/Attacking sprites/boy_attack_right_1", 2 * gamePanel.tileSize,
+                    gamePanel.tileSize);
+            attackRight2 = setup("/player/old_player/Attacking sprites/boy_attack_right_2", 2 * gamePanel.tileSize,
+                    gamePanel.tileSize);
+        }
+        if(currentWeapon.type == AXE_TYPE) {
+            attackUp1 = setup("/player/old_player/Attacking sprites/boy_axe_up_1", gamePanel.tileSize,
+                    2 * gamePanel.tileSize);
+            attackUp2 = setup("/player/old_player/Attacking sprites/boy_axe_up_2", gamePanel.tileSize,
+                    2 * gamePanel.tileSize);
+            attackDown1 = setup("/player/old_player/Attacking sprites/boy_axe_down_1", gamePanel.tileSize,
+                    2 * gamePanel.tileSize);
+            attackDown2 = setup("/player/old_player/Attacking sprites/boy_axe_down_2", gamePanel.tileSize,
+                    2 * gamePanel.tileSize);
+            attackLeft1 = setup("/player/old_player/Attacking sprites/boy_axe_left_1", 2 * gamePanel.tileSize,
+                    gamePanel.tileSize);
+            attackLeft2 = setup("/player/old_player/Attacking sprites/boy_axe_left_2", 2 * gamePanel.tileSize,
+                    gamePanel.tileSize);
+            attackRight1 = setup("/player/old_player/Attacking sprites/boy_axe_right_1", 2 * gamePanel.tileSize,
+                    gamePanel.tileSize);
+            attackRight2 = setup("/player/old_player/Attacking sprites/boy_axe_right_2", 2 * gamePanel.tileSize,
+                    gamePanel.tileSize);
+        }
     }
 
     public void update() {
@@ -447,5 +465,25 @@ public class Player extends Entity {
 
     }
 
+    public void selectItem() {
+        int itemIndex = gamePanel.ui.getCurrentItemInventoryIndex();
 
+        if(itemIndex < inventory.size()) {
+            Entity selectedItem = inventory.get(itemIndex);
+    
+            if(selectedItem.type == SWORD_TYPE || selectedItem.type == AXE_TYPE) {
+                currentWeapon = selectedItem;
+                attack = getAttack();
+                getPlayerAttackImage();
+            }
+            else if(selectedItem.type == SHIELD_TYPE) {
+                currentShield = selectedItem;
+                defense = getDefense();
+            }
+            else if(selectedItem.type == CONSUMABLE_TYPE) {
+                selectedItem.use(this);
+                inventory.remove(itemIndex);
+            }
+        }
+    }
 }

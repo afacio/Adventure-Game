@@ -11,6 +11,7 @@ public class NPC_Stranger extends Entity {
         
         direction = "down";
         speed = 1;
+        type = NPC_TYPE;
 
         getImage();
         setDialogue();

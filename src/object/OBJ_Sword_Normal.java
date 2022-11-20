@@ -9,8 +9,11 @@ public class OBJ_Sword_Normal extends Entity {
         super(gamePanel);
        
         name = "Basic Sword";
+        type = SWORD_TYPE;
         down1 = setup("/objects/sword_normal", gamePanel.tileSize, gamePanel.tileSize);
         attackValue = 1;
+        attackArea.width = 36;
+        attackArea.height = 36;
         description = "[" + name + "]\nAttack: " + attackValue + "\nEfects: No special efects";
     }
     

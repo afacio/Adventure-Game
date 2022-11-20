@@ -3,15 +3,15 @@ package object;
 import entity.Entity;
 import main.GamePanel;
 
-public class OBJ_Shield_Wood extends Entity{
+public class OBJ_Shield_Iron extends Entity{
 
-    public OBJ_Shield_Wood(GamePanel gamePanel) {
+    public OBJ_Shield_Iron(GamePanel gamePanel) {
         super(gamePanel);
         
-        name = "Wood Shield";
+        name = "Iron Shield";
         type = SHIELD_TYPE;
-        down1 = setup("/objects/shield_wood", gamePanel.tileSize, gamePanel.tileSize);
-        defenseValue = 1;
+        down1 = setup("/objects/shield_blue", gamePanel.tileSize, gamePanel.tileSize);
+        defenseValue = 2;
         description = "[" + name + "]\nDefense: " + defenseValue + "\nEfects: No special efects";
     }
     

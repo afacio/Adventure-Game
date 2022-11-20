@@ -13,7 +13,7 @@ public class MON_Slime extends Entity {
         super(gamePanel);
         this.gamePanel = gamePanel;
 
-        type = 2;
+        type = MONSTER_TYPE;
         name = "Slime";
         speed = 1;
         maxHealth = 7;

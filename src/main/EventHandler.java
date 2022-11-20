@@ -12,7 +12,7 @@ public class EventHandler {
     public EventHandler(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
 
-        eventRect = new EventRectangle[gamePanel.maxWorldColumn][gamePanel.maxWorldRow];
+        eventRect = new EventRectangle[gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
         fillEventArray();
 
     }
@@ -20,7 +20,7 @@ public class EventHandler {
     private void fillEventArray() {
         int col = 0;
         int row = 0;
-        while (col < gamePanel.maxWorldColumn && row < gamePanel.maxWorldRow) {
+        while (col < gamePanel.MAX_WORLD_COLUMN && row < gamePanel.MAX_WORLD_ROW) {
             eventRect[col][row] = new EventRectangle();
             eventRect[col][row].x = 23;
             eventRect[col][row].y = 23;
@@ -30,7 +30,7 @@ public class EventHandler {
             eventRect[col][row].eventRectDefaultY = eventRect[col][row].y;
 
             col++;
-            if (col == gamePanel.maxWorldColumn) {
+            if (col == gamePanel.MAX_WORLD_COLUMN) {
                 col = 0;
                 row++;
             }
@@ -48,10 +48,10 @@ public class EventHandler {
         }
         if (canTouchEvent) {
             if (hit(27, 17, "right")) {
-                damagePit(gamePanel.dialogueState);
+                damagePit(gamePanel.DIALOGUE_STATE);
             }
             if (hit(23, 12, "up")) {
-                healingPool(gamePanel.dialogueState);
+                healingPool(gamePanel.DIALOGUE_STATE);
             }
         }
     }

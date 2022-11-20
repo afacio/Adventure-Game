@@ -17,23 +17,23 @@ import java.util.Comparator;
 public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
-    final int originalTileSize = 16; // 16x16 tile
-    final int scale = 3;
+    static final int ORIGINAL_TILE_SIZE = 16; // 16x16 tile
+    static final int SCALE = 3;
 
-    public int tileSize = originalTileSize * scale; // 48x48 tile
-    public int maxScreenColumn = 16;
-    public int maxScreenRow = 12;
-    public int screenWidth = tileSize * maxScreenColumn; // 768 pixels
-    public int screenHeight = tileSize * maxScreenRow; // 579 pixels
+    public final int tileSize = ORIGINAL_TILE_SIZE * SCALE; // 48x48 tile
+    public static final int MAX_SCREEN_COLUMN = 16;
+    public static final int MAX_SCREEN_ROW = 12;
+    public final int screenWidth = tileSize * MAX_SCREEN_COLUMN; // 768 pixels
+    public final int screenHeight = tileSize * MAX_SCREEN_ROW; // 579 pixels
 
     // WORLD SETTINGS
-    public final int maxWorldColumn = 50;
-    public final int maxWorldRow = 50;
-    public final int worldWidth = tileSize * maxWorldColumn;
-    public final int worldHeight = tileSize * maxWorldRow;
+    public static final int MAX_WORLD_COLUMN = 50;
+    public static final int MAX_WORLD_ROW = 50;
+    public final int worldWidth = tileSize * MAX_WORLD_COLUMN;
+    public final int worldHeight = tileSize * MAX_WORLD_ROW;
 
     // FPS
-    final int FPS = 60;
+    static final int FPS = 60;
 
     // SYSTEM
     public KeyHandler keyHandler = new KeyHandler(this);
@@ -48,19 +48,20 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITY AND OBJECT
     public Player player = new Player(this, keyHandler);
-    public Entity obj[] = new Entity[10];
-    public Entity npc[] = new Entity[10];
-    public Entity monster[] = new Entity[20];
+    public Entity[] obj = new Entity[10];
+    public Entity[] npc = new Entity[10];
+    public Entity[] monster = new Entity[20];
     ArrayList<Entity> entityListy = new ArrayList<>();
 
     // GAME STATE       
-    public final int titleState = 0;
-    public final int playState = 1;
-    public final int pauseState = 2;
-    public final int dialogueState = 3;
-    public final int creatingState = 4;
+    public static final int TITLE_STATE = 0;
+    public static final int PLAY_STATE = 1;
+    public static final int PAUSE_STATE = 2;
+    public static final int DIALOGUE_STATE = 3;
+    public static final int CHARACTER_STATE = 4;
+    public static final int creatingState = 5;
     
-    public int gameState = titleState;
+    public int gameState = TITLE_STATE;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -75,7 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setNPC();   
         assetSetter.setMonster();   
         // playMusic(0);
-        gameState = playState;
+        gameState = PLAY_STATE;
     }
 
     public void startGameThread() {
@@ -107,7 +108,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if(gameState == playState){
+        if(gameState == PLAY_STATE){
             // PLAYER
             player.update();
 
@@ -129,7 +130,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }      
         }
-        if(gameState == pauseState){
+        if(gameState == PAUSE_STATE){
         }
     }
 
@@ -145,7 +146,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // TITLE SCREEN
-        if(gameState == titleState){
+        if(gameState == TITLE_STATE){
             ui.draw(g2); 
         }
 

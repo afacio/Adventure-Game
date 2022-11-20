@@ -1,6 +1,8 @@
 package entity;
 
 import main.KeyHandler;
+import object.OBJ_Shield_Wood;
+import object.OBJ_Sword_Normal;
 import main.GamePanel;
 
 import java.awt.AlphaComposite;
@@ -46,6 +48,27 @@ public class Player extends Entity {
         attackArea.width = 36;
         attackArea.height = 36;
 
+        level = 1;
+        strenght = 1;
+        dexterity = 1;
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+
+        currentWeapon = new OBJ_Sword_Normal(gamePanel);
+        currentShield = new OBJ_Shield_Wood(gamePanel);
+        attack = getAttack();
+        defense = getDefense();
+    }
+
+    public int getAttack() {
+        attack = strenght * currentWeapon.attackValue;
+        return attack;
+    }
+
+    public int getDefense() {
+        defense = dexterity * currentShield.defenseValue;
+        return defense;
     }
 
     public void getPlayerImage() {
@@ -232,7 +255,7 @@ public class Player extends Entity {
     if (gamePanel.keyHandler.enterPressed) {
             if (index != 999) {
                 attackCanceled = true;
-                gamePanel.gameState = gamePanel.dialogueState;
+                gamePanel.gameState = gamePanel.DIALOGUE_STATE;
                 gamePanel.npc[index].speak();
             }
         }

@@ -107,6 +107,7 @@ public class Entity {
             case "down": direction = "up"; break;
             case "left": direction = "right"; break;
             case "right": direction = "left"; break;
+            default: break;
         }
     }
 

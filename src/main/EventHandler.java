@@ -3,20 +3,21 @@ package main;
 public class EventHandler {
 
     GamePanel gamePanel;
-    EventRectangle eventRect[][] = null;
+    EventRectangle[][] eventRect = null;
 
-    int previousEventX, previousEventY;
+    int previousEventX;
+    int previousEventY;
     boolean canTouchEvent = true;
 
     public EventHandler(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
 
         eventRect = new EventRectangle[gamePanel.maxWorldColumn][gamePanel.maxWorldRow];
-        fillEventRectArray();
+        fillEventArray();
 
     }
 
-    private void fillEventRectArray() {
+    private void fillEventArray() {
         int col = 0;
         int row = 0;
         while (col < gamePanel.maxWorldColumn && row < gamePanel.maxWorldRow) {
@@ -47,7 +48,7 @@ public class EventHandler {
         }
         if (canTouchEvent) {
             if (hit(27, 17, "right")) {
-                damagePit(27, 17, gamePanel.dialogueState);
+                damagePit(gamePanel.dialogueState);
             }
             if (hit(23, 12, "up")) {
                 healingPool(gamePanel.dialogueState);
@@ -81,8 +82,9 @@ public class EventHandler {
         return hit;
     }
 
-    private void damagePit(int col, int row, int gameState) {
+    private void damagePit(int gameState) {
         gamePanel.gameState = gameState;
+        gamePanel.playSoundEfect(6);
         gamePanel.ui.currentDialogue = "You fall into a pit!";
         gamePanel.player.health--;
         canTouchEvent = false;
@@ -93,6 +95,8 @@ public class EventHandler {
 
         if (gamePanel.keyHandler.enterPressed) {
             gamePanel.gameState = gameState;
+            gamePanel.player.attackCanceled = true;
+            gamePanel.playSoundEfect(2);
             gamePanel.ui.currentDialogue = "You drink the water.\nYout life has been recovered.";
             gamePanel.player.health = gamePanel.player.maxHealth;
         }

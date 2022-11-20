@@ -25,7 +25,7 @@ public class Player extends Entity {
     public boolean attackCanceled = false;
 
     public ArrayList<Entity> inventory = new ArrayList<>();
-    // public final int inventoryMaxSize = gamePanel.ui.SLOT_MAX_COL * gamePanel.ui.SLOT_MAX_ROW;
+    public final int inventoryMaxSize = gamePanel.ui.SLOT_MAX_COL * gamePanel.ui.SLOT_MAX_ROW;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
 
@@ -260,7 +260,17 @@ public class Player extends Entity {
 
     private void pickUpObject(int index) {
         if (index != 999) {
-            
+            String information;
+
+            if(inventory.size() < inventoryMaxSize) {
+                inventory.add(gamePanel.obj[index]);
+                gamePanel.playSoundEfect(1);
+                information = "Got a " + gamePanel.obj[index].name + ".";
+            } else {
+                information = "You cannot carry any more.";
+            }
+            gamePanel.ui.addMessage(information);
+            gamePanel.obj[index] = null;
         }
     }
 

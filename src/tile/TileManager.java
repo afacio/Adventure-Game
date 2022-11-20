@@ -27,7 +27,7 @@ public class TileManager {
         this.gamePanel = gamePanel;
 
         tiles = new Tile[50];
-        mapTileNumber = new int[gamePanel.maxWorldColumn][gamePanel.maxWorldRow];
+        mapTileNumber = new int[gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
         getTileImage();
         loadMap("src/res/maps/world02.txt");
     }
@@ -105,7 +105,7 @@ public class TileManager {
         int worldColumn = 0;
         int worldRow = 0;
 
-        while(worldColumn< gamePanel.maxWorldColumn && worldRow < gamePanel.maxWorldRow){
+        while(worldColumn< gamePanel.MAX_WORLD_COLUMN && worldRow < gamePanel.MAX_WORLD_ROW){
 
             int tileNumber = mapTileNumber[worldColumn][worldRow];
 
@@ -148,7 +148,7 @@ public class TileManager {
 
             worldColumn++;
 
-            if( worldColumn == gamePanel.maxWorldColumn){
+            if( worldColumn == gamePanel.MAX_WORLD_COLUMN){
                 worldColumn = 0;
                 worldRow++;
             }
@@ -163,16 +163,16 @@ public class TileManager {
             int column = 0;
             int row = 0;
 
-            while(column < gamePanel.maxWorldColumn && row < gamePanel.maxWorldRow){
+            while(column < gamePanel.MAX_WORLD_COLUMN && row < gamePanel.MAX_WORLD_ROW){
                 String line = br.readLine();
-                while(column < gamePanel.maxWorldColumn){
+                while(column < gamePanel.MAX_WORLD_COLUMN){
                     String[] numbers = line.split(" ");
                     int number = Integer.parseInt(numbers[column]);
 
                     mapTileNumber[column][row] = number;
                     column++;
                 }
-                if(column == gamePanel.maxWorldColumn){
+                if(column == gamePanel.MAX_WORLD_COLUMN){
                     column = 0;
                     row++;
                 }

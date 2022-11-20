@@ -35,8 +35,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = gamePanel.tileSize * 23;
-        worldY = gamePanel.tileSize * 21;
+        worldX = (double) gamePanel.tileSize * 23;
+        worldY = (double) gamePanel.tileSize * 21;
         speed = 4;
         direction = "down";
 
@@ -51,16 +51,12 @@ public class Player extends Entity {
     public void getPlayerImage() {
         up1 = setup("/player/old_player/Walking sprites/boy_up_1", gamePanel.tileSize, gamePanel.tileSize);
         up2 = setup("/player/old_player/Walking sprites/boy_up_2", gamePanel.tileSize, gamePanel.tileSize);
-        // up3 = setup("/player/player_up (3)");
         down1 = setup("/player/old_player/Walking sprites/boy_down_1", gamePanel.tileSize, gamePanel.tileSize);
         down2 = setup("/player/old_player/Walking sprites/boy_down_2", gamePanel.tileSize, gamePanel.tileSize);
-        // down3 = setup("/player/player_down (3)");
         left1 = setup("/player/old_player/Walking sprites/boy_left_1", gamePanel.tileSize, gamePanel.tileSize);
         left2 = setup("/player/old_player/Walking sprites/boy_left_2", gamePanel.tileSize, gamePanel.tileSize);
-        // left3 = setup("/player/player_left (3)");
         right1 = setup("/player/old_player/Walking sprites/boy_right_1", gamePanel.tileSize, gamePanel.tileSize);
         right2 = setup("/player/old_player/Walking sprites/boy_right_2", gamePanel.tileSize, gamePanel.tileSize);
-        // right3 = setup("/player/player_right (3)");
     }
 
     private void getPlayerAttackImage() {
@@ -204,6 +200,8 @@ public class Player extends Entity {
                 case "right":
                     worldX += attackArea.width;
                     break;
+                default:
+                    break;
             }
 
             solidArea.width = attackArea.width;
@@ -226,12 +224,12 @@ public class Player extends Entity {
 
     private void pickUpObject(int index) {
         if (index != 999) {
-
+            
         }
     }
 
     private void interactNPC(int index) {
-        if (gamePanel.keyHandler.enterPressed) {
+    if (gamePanel.keyHandler.enterPressed) {
             if (index != 999) {
                 attackCanceled = true;
                 gamePanel.gameState = gamePanel.dialogueState;
@@ -279,7 +277,6 @@ public class Player extends Entity {
                     } else if (spriteNumber == 2) {
                         image = up2;
                     }
-                    // else { image = up3; }
                 }
                 if (attacking) {
                     if (spriteNumber == 1) {
@@ -297,7 +294,6 @@ public class Player extends Entity {
                     } else if (spriteNumber == 2) {
                         image = down2;
                     }
-                    // else { image = down3; }
                 }
                 if (attacking) {
                     if (spriteNumber == 1) {
@@ -314,7 +310,6 @@ public class Player extends Entity {
                     } else if (spriteNumber == 2) {
                         image = left2;
                     }
-                    // else { image = left3; }
                 }
                 if (attacking) {
                     if (spriteNumber == 1) {
@@ -332,7 +327,6 @@ public class Player extends Entity {
                     } else if (spriteNumber == 2) {
                         image = right2;
                     }
-                    // else { image = right3; }
                 }
                 if (attacking) {
                     if (spriteNumber == 1) {
@@ -341,6 +335,8 @@ public class Player extends Entity {
                         image = attackRight2;
                     }
                 }
+                break;
+            default:
                 break;
         }
 

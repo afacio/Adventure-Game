@@ -86,7 +86,7 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void run() { // Game loop
 
-        double drawInterval = 1000000000 / FPS; // 0.01666 seconsds
+        double drawInterval = (double) 1000000000 / FPS; // 0.01666 seconsds
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -121,7 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
             // MONSTER
             for (int i = 0; i < monster.length; i++) {
                 if (monster[i] != null) {
-                    if(monster[i].alive == false && monster[i].dying == false){
+                    if(!monster[i].alive && !monster[i].dying){
                         monster[i] = null;
                     } else {
                         monster[i].update();

@@ -18,7 +18,8 @@ public class Entity {
 
     GamePanel gamePanel;
 
-    public double worldX, worldY;
+    public double worldX;
+    public double worldY;
     public double speed;
 
     public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
@@ -30,7 +31,8 @@ public class Entity {
     
     public Rectangle solidArea = new Rectangle(14, 16, 22, 32);
     
-    public int solidAreaDefaultX, solidAreaDefaultY;
+    public int solidAreaDefaultX;
+    public int solidAreaDefaultY;
     public boolean collisionOn = false;
     
     public String dialogues[] = new String[20];
@@ -122,7 +124,7 @@ public class Entity {
         boolean contactPlayer = gamePanel.collisionChecker.checkPlayerCollision(this);
 
         if (this.type == 2 && contactPlayer) {
-            if (gamePanel.player.invincible == false) {
+            if (!gamePanel.player.invincible) {
                 gamePanel.playSoundEfect(6); 
                 gamePanel.player.health--;
                 gamePanel.player.invincible = true;
@@ -139,6 +141,7 @@ public class Entity {
                 case "down": worldY += speed; break;
                 case "left": worldX -= speed; break;
                 case "right": worldX += speed; break;
+                default: break;
             }
         }
 
@@ -146,9 +149,6 @@ public class Entity {
         if (spriteCounter > animationRefresh) {
             if (spriteNumber == 1) { spriteNumber = 2; } 
             else if (spriteNumber == 2) { spriteNumber = 1; } 
-            // else if (spriteNumber == 3) {
-            //     spriteNumber = 1;
-            // }
             spriteCounter = 0;
         }
         if (invincible == true) {
@@ -175,30 +175,20 @@ public class Entity {
                 case "up":
                     if (spriteNumber == 1) { image = up1; } 
                     else if (spriteNumber == 2) { image = up2; } 
-                    // else {
-                    //     image = up3;
-                    // }
                     break;
                 case "down":
                     if (spriteNumber == 1) { image = down1; } 
                     else if (spriteNumber == 2) { image = down2; } 
-                    // else {
-                    //     image = down3;
-                    // }
                     break;
                 case "left":
                     if (spriteNumber == 1) { image = left1; } 
                     else if (spriteNumber == 2) { image = left2; } 
-                    // else {
-                    //     image = left3;
-                    // }
                     break;
                 case "right":
                     if (spriteNumber == 1) { image = right1; } 
                     else if (spriteNumber == 2) { image = right2; } 
-                    // else {
-                    //     image = right3;
-                    // }
+                    break;
+                default:
                     break;
             }
 

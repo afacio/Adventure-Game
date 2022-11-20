@@ -22,7 +22,8 @@ public class CollisionChecker {
         int entityTopRow = (int) (entityTopWorldY / gamePanel.tileSize);
         int entityBottomRow = (int) (entityBottomWorldY / gamePanel.tileSize);
 
-        int tileNum1, tileNum2;
+        int tileNum1;
+        int tileNum2;
 
         switch (entity.direction) {
             case "up":
@@ -61,6 +62,8 @@ public class CollisionChecker {
                     entity.collisionOn = true;
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -91,6 +94,8 @@ public class CollisionChecker {
                         break;
                     case "right":
                         entity.solidArea.x += entity.speed;
+                        break;
+                    default:
                         break;
                 }
 
@@ -141,6 +146,8 @@ public class CollisionChecker {
                     case "right":
                         entity.solidArea.x += entity.speed;
                         break;
+                    default:
+                        break;
                 }
 
                 if (entity.solidArea.intersects(targets[i].solidArea)) {
@@ -184,6 +191,8 @@ public class CollisionChecker {
                 break;
             case "right":
                 entity.solidArea.x += entity.speed;
+                break;
+            default:
                 break;
         }
 

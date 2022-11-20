@@ -9,7 +9,7 @@ import javax.sound.sampled.Clip;
 public class Sound {
 
     Clip clip;
-    String soundPath[] = new String[30];
+    String[] soundPath = new String[30];
 
     public Sound() {
 

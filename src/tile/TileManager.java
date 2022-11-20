@@ -21,7 +21,7 @@ public class TileManager {
     public Tile[] tiles;
     public BufferedImage atlas;
 
-    public int mapTileNumber[][];
+    public int[][] mapTileNumber;
 
     public TileManager(GamePanel gamePanel){
         this.gamePanel = gamePanel;
@@ -166,7 +166,7 @@ public class TileManager {
             while(column < gamePanel.maxWorldColumn && row < gamePanel.maxWorldRow){
                 String line = br.readLine();
                 while(column < gamePanel.maxWorldColumn){
-                    String numbers[] = line.split(" ");
+                    String[] numbers = line.split(" ");
                     int number = Integer.parseInt(numbers[column]);
 
                     mapTileNumber[column][row] = number;

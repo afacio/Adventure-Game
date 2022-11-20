@@ -293,6 +293,7 @@ public class Player extends Entity {
                     gamePanel.playSoundEfect(8);
                     gamePanel.monster[index].dying = true;
                     exp += gamePanel.monster[index].exp;
+                    gamePanel.ui.addMessage("+ Exp: " + gamePanel.monster[index].exp);
                     checkLevelUp();
                 }
             }

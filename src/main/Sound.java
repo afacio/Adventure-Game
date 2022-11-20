@@ -23,6 +23,7 @@ public class Sound {
         soundPath[7] = "src/res/sound/swingweapon.wav";
         soundPath[8] = "src/res/sound/blood-pop.wav";
         soundPath[9] = "src/res/sound/player-demage.wav";
+        soundPath[10] = "src/res/sound/levelup.wav";
     }
 
     public void setFile(int index) {

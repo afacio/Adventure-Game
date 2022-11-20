@@ -76,6 +76,7 @@ public class Entity {
     // ITEM ATTRIBUTES
     public int attackValue;
     public int defenseValue;
+    public String description = "";
 
     public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -168,7 +169,7 @@ public class Entity {
             else if (spriteNumber == 2) { spriteNumber = 1; } 
             spriteCounter = 0;
         }
-        if (invincible == true) {
+        if (invincible) {
             invincibleCounter++;
             if (invincibleCounter > invincibleTime) {
                 invincible = false;

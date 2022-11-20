@@ -3,6 +3,7 @@ package main;
 import entity.NPC_OldMan;
 import entity.NPC_Stranger;
 import monster.MON_Slime;
+import object.OBJ_Key;
 
 public class AssetSetter {
 
@@ -13,11 +14,20 @@ public class AssetSetter {
     }
 
     public void setObject() {
+        int i = 0;
 
-        // gamePanel.obj[0] = new OBJ_Key(gamePanel);
-        // gamePanel.obj[0].worldX = (double)gamePanel.tileSize * 22;
-        // gamePanel.obj[0].worldY = (double)gamePanel.tileSize * 22;
-       
+        gamePanel.obj[i] = new OBJ_Key(gamePanel);
+        gamePanel.obj[i].worldX = (double)gamePanel.tileSize * 25;
+        gamePanel.obj[i].worldY = (double)gamePanel.tileSize * 23;
+        i++;
+        gamePanel.obj[i] = new OBJ_Key(gamePanel);
+        gamePanel.obj[i].worldX = (double)gamePanel.tileSize * 21;
+        gamePanel.obj[i].worldY = (double)gamePanel.tileSize * 19;
+        i++;
+        gamePanel.obj[i] = new OBJ_Key(gamePanel);
+        gamePanel.obj[i].worldX = (double)gamePanel.tileSize * 26;
+        gamePanel.obj[i].worldY = (double)gamePanel.tileSize * 21;
+
     }
     public void setNPC(){
         gamePanel.npc[0] = new NPC_OldMan(gamePanel);

@@ -24,6 +24,7 @@ public class Sound {
         soundPath[8] = "src/res/sound/blood-pop.wav";
         soundPath[9] = "src/res/sound/player-demage.wav";
         soundPath[10] = "src/res/sound/levelup.wav";
+        soundPath[11] = "src/res/sound/cursor.wav";
     }
 
     public void setFile(int index) {

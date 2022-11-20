@@ -27,6 +27,10 @@ public class UI {
     public String currentDialogue = "";
     public boolean gameFinished = false;
     public int commandNum = 0;
+    public int currentSlotCol = 0;
+    public int currentSlotRow = 0;
+    public static final int SLOT_MAX_COL = 7;
+    public static final int SLOT_MAX_ROW = 5;
 
     public UI(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -64,7 +68,9 @@ public class UI {
             drawDialogueScreen();
         }
         else if (gamePanel.gameState == gamePanel.CHARACTER_STATE) {
-            drawCharacterScreen();
+            drawCharacterStatsScreen();
+            drawCharacterInventoryScreen();
+            drawObjectDescriptionScreen();
         }
         else if (gamePanel.gameState == gamePanel.creatingState) {
             // drawCreatingScreen();
@@ -218,7 +224,7 @@ public class UI {
         }
     }
 
-    private void drawCharacterScreen() {
+    private void drawCharacterStatsScreen() {
         int frameX = gamePanel.tileSize;
         int frameY = gamePanel.tileSize;
         int frameWidth = gamePanel.tileSize * 5;
@@ -300,6 +306,69 @@ public class UI {
         textY += gamePanel.tileSize;
         g2.drawImage(gamePanel.player.currentShield.down1, tailX - gamePanel.tileSize, textY - 14, null);
       
+    }
+
+    private void drawCharacterInventoryScreen() {
+
+        int frameX = gamePanel.tileSize * 7;
+        int frameY = gamePanel.tileSize;
+        int frameWidth = gamePanel.tileSize * (SLOT_MAX_COL + 1);
+        int frameHeight = gamePanel.tileSize * (SLOT_MAX_ROW + 1);
+
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        final int firstSlotX = frameX + 20;
+        final int firstSlotY = frameY + 20;
+        int slotX = firstSlotX;
+        int slotY = firstSlotY;
+        int slotSize = gamePanel.tileSize + 1;
+
+        for(int item = 0; item < gamePanel.player.inventory.size(); item++) {
+            g2.drawImage(gamePanel.player.inventory.get(item).down1, slotX, slotY, null);
+            slotX += slotSize;
+
+            if(item == 6 || item == 13 || item == 20 || item == 27) {
+                slotX = firstSlotX;
+                slotY += slotSize;
+            }
+            
+        }
+        
+        int cursorX = firstSlotX + (slotSize * currentSlotCol);
+        int cursorY = firstSlotY + (slotSize * currentSlotRow);
+        int cursorWidth = gamePanel.tileSize;
+        int cursorHeight = gamePanel.tileSize;
+
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+    }
+
+    private void drawObjectDescriptionScreen() {
+
+        int frameX = gamePanel.tileSize * 7;
+        int frameY = SLOT_MAX_ROW * gamePanel.tileSize + 2 * gamePanel.tileSize;
+        int frameWidth = gamePanel.tileSize * (SLOT_MAX_COL + 1);
+        int frameHeight = gamePanel.tileSize * 4;
+
+        int descriptionX = frameX + 20;
+        int descriptionY = frameY + gamePanel.tileSize;
+        g2.setFont(g2.getFont().deriveFont(28F));
+
+        int itemIndex = getCurrentItemInventoryIndex();
+        if(itemIndex < gamePanel.player.inventory.size()){
+
+            drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+            for(String line: gamePanel.player.inventory.get(itemIndex).description.split("\n")) {
+                g2.drawString(line, descriptionX, descriptionY);
+                descriptionY += 32;
+            }
+        }
+    }
+
+    private int getCurrentItemInventoryIndex() {
+        return currentSlotCol + (currentSlotRow * SLOT_MAX_ROW);
     }
 
     private void drawSubWindow(int x, int y, int width, int height) {

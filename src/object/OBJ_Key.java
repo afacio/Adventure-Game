@@ -11,6 +11,6 @@ public class OBJ_Key extends Entity {
 
         name = "Key";
         down1 = setup("/objects/key", gamePanel.tileSize, gamePanel.tileSize);
-        
+        description = "[" + name + "]\nIt open the door";
     }
 }

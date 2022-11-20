@@ -1,6 +1,7 @@
 package entity;
 
 import main.KeyHandler;
+import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 import main.GamePanel;
@@ -9,6 +10,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Entity {
 
@@ -21,6 +23,9 @@ public class Player extends Entity {
 
     int standCounter = 0;
     public boolean attackCanceled = false;
+
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    // public final int inventoryMaxSize = gamePanel.ui.SLOT_MAX_COL * gamePanel.ui.SLOT_MAX_ROW;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
 
@@ -59,19 +64,27 @@ public class Player extends Entity {
         currentShield = new OBJ_Shield_Wood(gamePanel);
         attack = getAttack();
         defense = getDefense();
+
+        setInventoryItems();
+    }
+    
+    private void setInventoryItems() {
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new OBJ_Key(gamePanel));
     }
 
-    public int getAttack() {
+    private int getAttack() {
         attack = strenght * currentWeapon.attackValue;
         return attack;
     }
 
-    public int getDefense() {
+    private int getDefense() {
         defense = dexterity * currentShield.defenseValue;
         return defense;
     }
 
-    public void getPlayerImage() {
+    private void getPlayerImage() {
         up1 = setup("/player/old_player/Walking sprites/boy_up_1", gamePanel.tileSize, gamePanel.tileSize);
         up2 = setup("/player/old_player/Walking sprites/boy_up_2", gamePanel.tileSize, gamePanel.tileSize);
         down1 = setup("/player/old_player/Walking sprites/boy_down_1", gamePanel.tileSize, gamePanel.tileSize);

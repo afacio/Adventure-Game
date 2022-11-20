@@ -6,6 +6,7 @@ import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import entity.Entity;
 import object.OBJ_Heart;
@@ -21,8 +22,8 @@ public class UI {
     Font maruMonica;
     BufferedImage heart_full, heart_half, heart_empty;
     public boolean messageOn = false;
-    public String message = "";
-    int messageCounter = 0;
+    ArrayList<String> messages = new ArrayList<>();
+    ArrayList<Integer> messageCounter = new ArrayList<>();
     public String currentDialogue = "";
     public boolean gameFinished = false;
     public int commandNum = 0;
@@ -52,6 +53,7 @@ public class UI {
         }
         else if (gamePanel.gameState == gamePanel.PLAY_STATE) {
             drawPlayerHealth();
+            drawMessage();
         }
         else if (gamePanel.gameState == gamePanel.PAUSE_STATE) {
             drawPlayerHealth();
@@ -69,9 +71,36 @@ public class UI {
         }
     }
 
-    public void showMessage(String text) {
-        message = text;
-        messageOn = true;
+    public void addMessage(String text) {
+        messages.add(text);
+        messageCounter.add(0);
+    }
+
+    private void drawMessage() {
+        int messageX = gamePanel.tileSize;
+        int messageY = gamePanel.tileSize * 4;
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
+
+        if(!messages.isEmpty()) {
+            for(int i = 0; i < messages.size(); i++) {
+                if(messages.get(i) != null) {
+                    g2.setColor(Color.BLACK);
+                    g2.drawString(messages.get(i), messageX + 2, messageY + 2);
+                    g2.setColor(Color.WHITE);
+                    g2.drawString(messages.get(i), messageX, messageY);
+
+                    int counter = messageCounter.get(i) + 1;
+                    messageCounter.set(i, counter);
+                    messageY += 50;
+
+                    if(messageCounter.get(i) > 180) {
+                        messages.remove(i);
+                        messageCounter.remove(i);
+                    }
+                }
+            }
+        }
     }
 
     private void drawTitleScreen(){
@@ -85,44 +114,44 @@ public class UI {
         int x = getXforCenteredText(text);
         int y = 3 * gamePanel.tileSize;
 
-        drawMenuTextWithShadow(text, x, y);
+        drawTextWithShadow(text, x, y);
 
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48));
 
         text = "NEW GAME";
         x = getXforCenteredText(text);
         y += gamePanel.tileSize * 3;
-        drawMenuTextWithShadow(text, x, y);
+        drawTextWithShadow(text, x, y);
         if(commandNum == 0){
-            drawMenuTextWithShadow(">", x - 40, y);
+            drawTextWithShadow(">", x - 40, y);
         }
 
         text = "LOAD GAME";
         x = getXforCenteredText(text);
         y += 64;
-        drawMenuTextWithShadow(text, x, y);
+        drawTextWithShadow(text, x, y);
         if(commandNum == 1){
-            drawMenuTextWithShadow(">", x - 40, y);
+            drawTextWithShadow(">", x - 40, y);
         }
 
         text = "MAP EDITOR";
         x = getXforCenteredText(text);
         y += 64;
-        drawMenuTextWithShadow(text, x, y);
+        drawTextWithShadow(text, x, y);
         if(commandNum == 2){
-            drawMenuTextWithShadow(">", x - 40, y);
+            drawTextWithShadow(">", x - 40, y);
         }
 
         text = "EXIT";
         x = getXforCenteredText(text);
         y += 64;
-        drawMenuTextWithShadow(text, x, y);
+        drawTextWithShadow(text, x, y);
         if(commandNum == 3){
-            drawMenuTextWithShadow(">", x - 40, y);
+            drawTextWithShadow(">", x - 40, y);
         }
     }
 
-    private void drawMenuTextWithShadow(String text, int x, int y){
+    private void drawTextWithShadow(String text, int x, int y){
         g2.setColor(Color.BLACK);
         g2.drawString(text, x+5, y+5);
 

@@ -139,7 +139,11 @@ public class Entity {
         if (this.type == 2 && contactPlayer) {
             if (!gamePanel.player.invincible) {
                 gamePanel.playSoundEfect(6); 
-                gamePanel.player.health--;
+                int damage = attack - gamePanel.player.defense;
+                if(damage < 0) {
+                    damage = 0;
+                }
+                gamePanel.player.health -= damage;
                 gamePanel.player.invincible = true;
             }
         }

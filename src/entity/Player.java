@@ -231,7 +231,7 @@ public class Player extends Entity {
             solidArea.height = attackArea.height;
 
             int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
-            demageMonster(monsterIndex);
+            damageMonster(monsterIndex);
 
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -265,24 +265,54 @@ public class Player extends Entity {
         if (index != 999) {
             if (!invincible) {
                 gamePanel.playSoundEfect(9);
-                health--;
+                int damage = gamePanel.monster[index].attack - defense;
+                if(damage < 0) {
+                    damage = 0;
+                }
+                health -= damage;
                 invincible = true;
             }
         }
     }
 
-    private void demageMonster(int index) {
+    private void damageMonster(int index) {
         if (index != 999) {
             if (!gamePanel.monster[index].invincible) {
                 gamePanel.playSoundEfect(5);
-                gamePanel.monster[index].health--;
+
+                int damage = attack - gamePanel.monster[index].defense;
+                if(damage < 0) {
+                    damage = 0;
+                }
+
+                gamePanel.monster[index].health -= damage;
                 gamePanel.monster[index].invincible = true;
                 gamePanel.monster[index].demageReaction();
+
                 if (gamePanel.monster[index].health <= 0) {
                     gamePanel.playSoundEfect(8);
                     gamePanel.monster[index].dying = true;
+                    exp += gamePanel.monster[index].exp;
+                    checkLevelUp();
                 }
             }
+        }
+    }
+
+    private void checkLevelUp() {
+        if(exp >= nextLevelExp) {
+            exp = exp - nextLevelExp;
+            level += 1;
+            nextLevelExp = nextLevelExp*2;
+            maxHealth += 2;
+            strenght += 1;
+            dexterity += 1;
+            
+            attack = getAttack();
+            defense = getDefense();
+
+            gamePanel.playSoundEfect(10);
+            gamePanel.ui.addMessage("Level up!");
         }
     }
 
@@ -392,4 +422,6 @@ public class Player extends Entity {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
     }
+
+
 }

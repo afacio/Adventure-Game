@@ -52,27 +52,30 @@ public class UI {
         g2.setFont(maruMonica);
         g2.setColor(Color.white);
 
-        if (gamePanel.gameState == gamePanel.TITLE_STATE) {
+        if (gamePanel.gameState == GamePanel.TITLE_STATE) {
             drawTitleScreen();
         }
-        else if (gamePanel.gameState == gamePanel.PLAY_STATE) {
+        else if (gamePanel.gameState == GamePanel.PLAY_STATE) {
             drawPlayerHealth();
+            drawPlayerManaBar();
             drawMessage();
         }
-        else if (gamePanel.gameState == gamePanel.PAUSE_STATE) {
+        else if (gamePanel.gameState == GamePanel.PAUSE_STATE) {
             drawPlayerHealth();
+            drawPlayerManaBar();
             drawPauseScreen();
         }
-        else if (gamePanel.gameState == gamePanel.DIALOGUE_STATE) {
+        else if (gamePanel.gameState == GamePanel.DIALOGUE_STATE) {
             drawPlayerHealth();
+            drawPlayerManaBar();
             drawDialogueScreen();
         }
-        else if (gamePanel.gameState == gamePanel.CHARACTER_STATE) {
-            drawCharacterStatsScreen();
-            drawCharacterInventoryScreen();
+        else if (gamePanel.gameState == GamePanel.CHARACTER_STATE) {
+            drawPlayerStatsScreen();
+            drawPlayerInventoryScreen();
             drawObjectDescriptionScreen();
         }
-        else if (gamePanel.gameState == gamePanel.creatingState) {
+        else if (gamePanel.gameState == GamePanel.CREATING_STATE) {
             // drawCreatingScreen();
         }
     }
@@ -168,28 +171,39 @@ public class UI {
     private void drawPlayerHealth(){
         int x = gamePanel.tileSize / 2;
         int y = gamePanel.tileSize / 2;
-        int i = 0;
+        int width = gamePanel.tileSize * 6;
+        int height = gamePanel.tileSize/2;
 
-        while(i < gamePanel.player.maxHealth / 2){
-            g2.drawImage(heart_empty, x, y, null);
-            i++;
-            x += gamePanel.tileSize * 1.3 ;
-        }
+        double scale = (double)width/gamePanel.player.maxHealth;
+        double hpBarValue = scale * gamePanel.player.health;
 
-        x = gamePanel.tileSize / 2;
-        y = gamePanel.tileSize / 2;
-        i = 0;
+        g2.setColor(Color.darkGray);
+        g2.fillRect(x, y, width + 4, height);
+        g2.setColor(Color.red);
+        g2.fillRect(x + 2, y + 2 , (int) hpBarValue, height - 4);
 
-        while(i < gamePanel.player.health){
-            g2.drawImage(heart_half, x, y, null);
-            i++;
-            if(i < gamePanel.player.health){
-                g2.drawImage(heart_full, x, y, null);
-            }
-            i++;
-            x += gamePanel.tileSize * 1.3 ;
-        }
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(maruMonica.getStyle(), 16F));
+        g2.drawString(gamePanel.player.health + "/" + gamePanel.player.maxHealth, x + width/2 - 8, y + height - 6);
+    }
 
+    private void drawPlayerManaBar(){
+        int x = gamePanel.tileSize / 2;
+        int y = gamePanel.tileSize + 10;
+        int width = gamePanel.tileSize * 6;
+        int height = gamePanel.tileSize/2;
+
+        double scale = (double)width/gamePanel.player.maxMana;
+        double manaBarValue = scale * gamePanel.player.mana;
+
+        g2.setColor(Color.darkGray);
+        g2.fillRect(x, y, width + 4, height);
+        g2.setColor(Color.BLUE);
+        g2.fillRect(x + 2, y + 2 , (int) manaBarValue, height - 4);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(maruMonica.getStyle(), 16F));
+        g2.drawString(gamePanel.player.mana + "/" + gamePanel.player.maxMana, x + width/2 - 8, y + height - 6);
     }
 
     private void drawPauseScreen() {
@@ -224,7 +238,7 @@ public class UI {
         }
     }
 
-    private void drawCharacterStatsScreen() {
+    private void drawPlayerStatsScreen() {
         int frameX = gamePanel.tileSize;
         int frameY = gamePanel.tileSize;
         int frameWidth = gamePanel.tileSize * 5;
@@ -243,6 +257,8 @@ public class UI {
         textY += lineHeight;
         g2.drawString("Life", textX, textY);
         textY += lineHeight;
+        g2.drawString("Mana", textX, textY);
+        textY += lineHeight;
         g2.drawString("Strength", textX, textY);
         textY += lineHeight;
         g2.drawString("Dexterity", textX, textY);
@@ -256,7 +272,7 @@ public class UI {
         g2.drawString("Next Level", textX, textY);
         textY += lineHeight;
         g2.drawString("Coin", textX, textY);
-        textY += lineHeight + 20;
+        textY += lineHeight + 10;
         g2.drawString("Weapon", textX, textY);
         textY += lineHeight + 15;
         g2.drawString("Shield", textX, textY);
@@ -270,6 +286,10 @@ public class UI {
         g2.drawString(value, textX, textY);
         textY += lineHeight;
         value = String.valueOf(gamePanel.player.health + "/" + gamePanel.player.maxHealth);
+        textX = getXforAlignToRightText(value, tailX);
+        g2.drawString(value, textX, textY);
+        textY += lineHeight;
+        value = String.valueOf(gamePanel.player.mana + "/" + gamePanel.player.maxMana);
         textX = getXforAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
@@ -302,13 +322,13 @@ public class UI {
         g2.drawString(value, textX, textY);
         textY += lineHeight;
         
-        g2.drawImage(gamePanel.player.currentWeapon.down1, tailX - gamePanel.tileSize, textY - 14, null);
+        g2.drawImage(gamePanel.player.currentMeleeWeapon.down1, tailX - gamePanel.tileSize, textY - 24, null);
         textY += gamePanel.tileSize;
-        g2.drawImage(gamePanel.player.currentShield.down1, tailX - gamePanel.tileSize, textY - 14, null);
+        g2.drawImage(gamePanel.player.currentShield.down1, tailX - gamePanel.tileSize, textY - 24, null);
       
     }
 
-    private void drawCharacterInventoryScreen() {
+    private void drawPlayerInventoryScreen() {
 
         int frameX = gamePanel.tileSize * 7;
         int frameY = gamePanel.tileSize;
@@ -325,7 +345,7 @@ public class UI {
 
         for(int item = 0; item < gamePanel.player.inventory.size(); item++) {
 
-            if(gamePanel.player.inventory.get(item) == gamePanel.player.currentWeapon || gamePanel.player.inventory.get(item) == gamePanel.player.currentShield) {
+            if(gamePanel.player.inventory.get(item) == gamePanel.player.currentMeleeWeapon || gamePanel.player.inventory.get(item) == gamePanel.player.currentShield) {
                 g2.setColor(new Color(240, 190, 90));
                 g2.fillRoundRect(slotX, slotY, gamePanel.tileSize, gamePanel.tileSize, 10, 10);
             }

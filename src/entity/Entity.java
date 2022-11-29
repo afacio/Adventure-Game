@@ -28,6 +28,7 @@ public class Entity {
     public int spriteCounter = 0;
     public int spriteNumber = 1;
     public int actionLockCounter = 0;
+    public int shotAvelibleCounter = 0;
     
     public Rectangle solidArea = new Rectangle(14, 16, 22, 32);
     
@@ -40,6 +41,8 @@ public class Entity {
     
     public int maxHealth;
     public int health;
+    public int maxMana;
+    public int mana;
     
     public BufferedImage image1, image2, image3;
     public String name;
@@ -53,10 +56,12 @@ public class Entity {
     public static final int PLAYER_TYPE = 0;
     public static final int NPC_TYPE = 1;
     public static final int MONSTER_TYPE = 2;
-    public static final int SWORD_TYPE = 3;
-    public static final int AXE_TYPE = 4;
-    public static final int SHIELD_TYPE = 5;
-    public static final int CONSUMABLE_TYPE = 6;
+    public static final int MELEE_WEAPON_TYPE = 3;
+    public static final int MAGIC_WEAPON_TYPE = 4;
+    public static final int AXE_TYPE = 5;
+    public static final int SHIELD_TYPE = 6;
+    public static final int CONSUMABLE_TYPE = 7;
+    public static final int PICKUP_ONLY_TYPE = 8;
    
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,attackLeft1, attackLeft2, attackRight1, attackRight2;
     public boolean attacking = false;
@@ -71,19 +76,24 @@ public class Entity {
 
     public int level;
     public int strenght;
+    public int knowledge;
+    public int currentAttackPower;
     public int dexterity;
     public int attack;
     public int defense;
     public int exp;
     public int nextLevelExp;
     public int coin;
-    public Entity currentWeapon;
+    public Entity currentMeleeWeapon;
+    public Entity currentMagicWeapon;
     public Entity currentShield;
+    public Projectile projectile;
 
     // ITEM ATTRIBUTES
     public int attackValue;
     public int defenseValue;
     public String description = "";
+    public int useManaCost;
 
     public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -143,15 +153,7 @@ public class Entity {
         boolean contactPlayer = gamePanel.collisionChecker.checkPlayerCollision(this);
 
         if (this.type == MONSTER_TYPE && contactPlayer) {
-            if (!gamePanel.player.invincible) {
-                gamePanel.playSoundEfect(6); 
-                int damage = attack - gamePanel.player.defense;
-                if(damage < 0) {
-                    damage = 0;
-                }
-                gamePanel.player.health -= damage;
-                gamePanel.player.invincible = true;
-            }
+            damagePlayer(attack);
         }
 
         int animationRefresh = 8;
@@ -180,6 +182,21 @@ public class Entity {
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if( shotAvelibleCounter < 30) {
+            shotAvelibleCounter++;
+        }
+    }
+
+    public void damagePlayer(int attackPower) {
+        if (!gamePanel.player.invincible) {
+            gamePanel.playSoundEfect(6); 
+            int damage = attackPower - gamePanel.player.defense;
+            if(damage < 0) {
+                damage = 0;
+            }
+            gamePanel.player.health -= damage;
+            gamePanel.player.invincible = true;
         }
     }
 
@@ -242,7 +259,7 @@ public class Entity {
                 dyingAnimation(g2);
             }
 
-            g2.drawImage(image, (int) screenX, (int) screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.drawImage(image, (int) screenX, (int) screenY, null);
             g2.setColor(Color.red);
             g2.drawRect((int) (screenX + solidArea.x), (int) (screenY + solidArea.y), solidArea.width, solidArea.height);
 

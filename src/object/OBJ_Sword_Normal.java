@@ -9,7 +9,7 @@ public class OBJ_Sword_Normal extends Entity {
         super(gamePanel);
        
         name = "Basic Sword";
-        type = SWORD_TYPE;
+        type = MELEE_WEAPON_TYPE;
         down1 = setup("/objects/sword_normal", gamePanel.tileSize, gamePanel.tileSize);
         attackValue = 1;
         attackArea.width = 36;

@@ -92,13 +92,14 @@ public class EventHandler {
     }
 
     private void healingPool(int gameState) {
-
         if (gamePanel.keyHandler.enterPressed) {
             gamePanel.gameState = gameState;
             gamePanel.player.attackCanceled = true;
             gamePanel.playSoundEfect(2);
-            gamePanel.ui.currentDialogue = "You drink the water.\nYout life has been recovered.";
+            gamePanel.ui.currentDialogue = "You drink the water.\nYout life and mana has been recovered.";
             gamePanel.player.health = gamePanel.player.maxHealth;
+            gamePanel.player.mana = gamePanel.player.maxMana;
+            gamePanel.assetSetter.setMonster();
         }
     }
 

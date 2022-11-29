@@ -1,20 +1,31 @@
-package entity;
+package monster;
 
 import java.util.Random;
 
+import entity.Entity;
 import main.GamePanel;
+import projectile.Rock;
 
-public class NPC_Stranger extends Entity {
 
-    public NPC_Stranger(GamePanel gamePanel) {
+public class MON_Stranger extends Entity {
+
+    GamePanel gamePanel;
+
+    public MON_Stranger(GamePanel gamePanel) {
         super(gamePanel);
-        
-        direction = "down";
+        this.gamePanel = gamePanel;
+
+        type = MONSTER_TYPE;
+        name = "Stranger";
         speed = 1;
-        type = NPC_TYPE;
+        maxHealth = 20;
+        health = maxHealth;
+        attack = 2;
+        defense = 1;
+        exp = 12;
+        projectile = new Rock(gamePanel);
 
         getImage();
-        setDialogue();
     }
 
     public void getImage() {
@@ -50,16 +61,19 @@ public class NPC_Stranger extends Entity {
                 direction = "right";
             }
             actionLockCounter = 0;
+
+        }
+        int i = new Random().nextInt(100)+1;
+        if(i > 99 && !projectile.alive && shotAvelibleCounter == 30) {
+            projectile.set(worldX, worldY, direction, true, this);
+            gamePanel.projectileList.add(projectile);
+            projectile.playSoundEfect();
+            shotAvelibleCounter = 0;
         }
     }
 
-    public void setDialogue(){
-        dialogues[0] = "...";
-
-    }
-
-    @Override
-    public void speak(){
-        super.speak();
+    public void demageReaction() {
+        actionLockCounter = 0;
+        direction = gamePanel.player.direction;
     }
 }

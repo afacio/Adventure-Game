@@ -21,9 +21,6 @@ public class OBJ_Potion_Red extends Entity {
 
     public void use(Entity entity) {
         gamePanel.player.health += healingValue;
-        if(gamePanel.player.health > gamePanel.player.maxHealth) {
-            gamePanel.player.health = gamePanel.player.maxHealth;
-        }
         gamePanel.playSoundEfect(2);
     }
 }

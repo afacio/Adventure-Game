@@ -4,6 +4,7 @@ import main.KeyHandler;
 import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
+import projectile.Spell_Fireball;
 import main.GamePanel;
 
 import java.awt.AlphaComposite;
@@ -15,8 +16,6 @@ import java.util.ArrayList;
 public class Player extends Entity {
 
     KeyHandler keyHandler;
-
-    public int health = 100;
 
     public final int screenX;
     public final int screenY;
@@ -49,6 +48,8 @@ public class Player extends Entity {
 
         maxHealth = 6;
         health = maxHealth;
+        maxMana = 6;
+        mana = maxMana;
 
         level = 1;
         strenght = 1;
@@ -57,23 +58,30 @@ public class Player extends Entity {
         nextLevelExp = 5;
         coin = 0;
 
-        currentWeapon = new OBJ_Sword_Normal(gamePanel);
+        currentMeleeWeapon = new OBJ_Sword_Normal(gamePanel);
         currentShield = new OBJ_Shield_Wood(gamePanel);
-        attack = getAttack();
+        projectile = new Spell_Fireball(gamePanel);
+        attack = getMeleAttackPower();
         defense = getDefense();
 
         setInventoryItems();
     }
-    
+
     private void setInventoryItems() {
-        inventory.add(currentWeapon);
+        inventory.add(currentMeleeWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Key(gamePanel));
     }
 
-    private int getAttack() {
-        attackArea = currentWeapon.attackArea;
-        attack = strenght * currentWeapon.attackValue;
+    private int getMeleAttackPower() {
+        attackArea = currentMeleeWeapon.attackArea;
+        attack = strenght * currentMeleeWeapon.attackValue;
+        return attack;
+    }
+
+    private int getMagicAttackPower() {
+        attackArea = currentMeleeWeapon.attackArea;
+        attack = knowledge * currentMeleeWeapon.attackValue;
         return attack;
     }
 
@@ -94,7 +102,7 @@ public class Player extends Entity {
     }
 
     private void getPlayerAttackImage() {
-        if(currentWeapon.type == SWORD_TYPE) {
+        if (currentMeleeWeapon.type == MELEE_WEAPON_TYPE) {
             attackUp1 = setup("/player/old_player/Attacking sprites/boy_attack_up_1", gamePanel.tileSize,
                     2 * gamePanel.tileSize);
             attackUp2 = setup("/player/old_player/Attacking sprites/boy_attack_up_2", gamePanel.tileSize,
@@ -112,7 +120,7 @@ public class Player extends Entity {
             attackRight2 = setup("/player/old_player/Attacking sprites/boy_attack_right_2", 2 * gamePanel.tileSize,
                     gamePanel.tileSize);
         }
-        if(currentWeapon.type == AXE_TYPE) {
+        if (currentMeleeWeapon.type == AXE_TYPE) {
             attackUp1 = setup("/player/old_player/Attacking sprites/boy_axe_up_1", gamePanel.tileSize,
                     2 * gamePanel.tileSize);
             attackUp2 = setup("/player/old_player/Attacking sprites/boy_axe_up_2", gamePanel.tileSize,
@@ -217,12 +225,32 @@ public class Player extends Entity {
                 standCounter = 0;
             }
         }
+
+        if (gamePanel.keyHandler.shotKeyPressed && !projectile.alive && shotAvelibleCounter == 30
+                && projectile.haveResource(this)) {
+            projectile.set(worldX, worldY, direction, true, this);
+
+            gamePanel.projectileList.add(projectile);
+            projectile.playSoundEfect();
+            shotAvelibleCounter = 0;
+            projectile.subtractResource(this);
+        }
+
         if (invincible) {
             invincibleCounter++;
             if (invincibleCounter > 60) {
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if (shotAvelibleCounter < 30) {
+            shotAvelibleCounter++;
+        }
+        if (mana > maxMana) {
+            mana = maxMana;
+        }
+        if (health > maxHealth) {
+            health = maxHealth;
         }
 
     }
@@ -262,7 +290,7 @@ public class Player extends Entity {
             solidArea.height = attackArea.height;
 
             int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
-            damageMonster(monsterIndex);
+            damageMonster(monsterIndex, attack);
 
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -278,22 +306,30 @@ public class Player extends Entity {
 
     private void pickUpObject(int index) {
         if (index != 999) {
-            String information;
 
-            if(inventory.size() < inventoryMaxSize) {
-                inventory.add(gamePanel.obj[index]);
-                gamePanel.playSoundEfect(1);
-                information = "Got a " + gamePanel.obj[index].name + ".";
+            if (gamePanel.obj[index].type == PICKUP_ONLY_TYPE) {
+
+                gamePanel.obj[index].use(this);
+                gamePanel.obj[index] = null;
+
             } else {
-                information = "You cannot carry any more.";
+                String information;
+
+                if (inventory.size() < inventoryMaxSize) {
+                    inventory.add(gamePanel.obj[index]);
+                    gamePanel.playSoundEfect(1);
+                    information = "Got a " + gamePanel.obj[index].name + ".";
+                } else {
+                    information = "You cannot carry any more.";
+                }
+                gamePanel.ui.addMessage(information);
+                gamePanel.obj[index] = null;
             }
-            gamePanel.ui.addMessage(information);
-            gamePanel.obj[index] = null;
         }
     }
 
     private void interactNPC(int index) {
-    if (gamePanel.keyHandler.enterPressed) {
+        if (gamePanel.keyHandler.enterPressed) {
             if (index != 999) {
                 attackCanceled = true;
                 gamePanel.gameState = gamePanel.DIALOGUE_STATE;
@@ -302,12 +338,12 @@ public class Player extends Entity {
         }
     }
 
-    private void monsterContact(int index) {
+    public void monsterContact(int index) {
         if (index != 999) {
             if (!invincible) {
                 gamePanel.playSoundEfect(9);
                 int damage = gamePanel.monster[index].attack - defense;
-                if(damage < 0) {
+                if (damage < 0) {
                     damage = 0;
                 }
                 health -= damage;
@@ -316,13 +352,13 @@ public class Player extends Entity {
         }
     }
 
-    private void damageMonster(int index) {
+    public void damageMonster(int index, int attackPower) {
         if (index != 999) {
             if (!gamePanel.monster[index].invincible) {
                 gamePanel.playSoundEfect(5);
 
-                int damage = attack - gamePanel.monster[index].defense;
-                if(damage < 0) {
+                int damage = attackPower - gamePanel.monster[index].defense;
+                if (damage < 0) {
                     damage = 0;
                 }
 
@@ -342,15 +378,20 @@ public class Player extends Entity {
     }
 
     private void checkLevelUp() {
-        if(exp >= nextLevelExp) {
+        if (exp >= nextLevelExp) {
             exp = exp - nextLevelExp;
             level += 1;
-            nextLevelExp = nextLevelExp*2;
+            nextLevelExp = nextLevelExp * 2;
             maxHealth += 2;
+            health = maxHealth;
+            if (level % 2 == 0) {
+                maxMana += 1;
+            }
+            mana += 2;
             strenght += 1;
             dexterity += 1;
-            
-            attack = getAttack();
+
+            attack = getMeleAttackPower();
             defense = getDefense();
 
             gamePanel.playSoundEfect(10);
@@ -468,19 +509,17 @@ public class Player extends Entity {
     public void selectItem() {
         int itemIndex = gamePanel.ui.getCurrentItemInventoryIndex();
 
-        if(itemIndex < inventory.size()) {
+        if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
-    
-            if(selectedItem.type == SWORD_TYPE || selectedItem.type == AXE_TYPE) {
-                currentWeapon = selectedItem;
-                attack = getAttack();
+
+            if (selectedItem.type == MELEE_WEAPON_TYPE || selectedItem.type == AXE_TYPE) {
+                currentMeleeWeapon = selectedItem;
+                attack = getMeleAttackPower();
                 getPlayerAttackImage();
-            }
-            else if(selectedItem.type == SHIELD_TYPE) {
+            } else if (selectedItem.type == SHIELD_TYPE) {
                 currentShield = selectedItem;
                 defense = getDefense();
-            }
-            else if(selectedItem.type == CONSUMABLE_TYPE) {
+            } else if (selectedItem.type == CONSUMABLE_TYPE) {
                 selectedItem.use(this);
                 inventory.remove(itemIndex);
             }

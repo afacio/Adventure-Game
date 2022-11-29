@@ -4,6 +4,9 @@ import java.util.Random;
 
 import entity.Entity;
 import main.GamePanel;
+import object.OBJ_Coin_Bronze;
+import object.OBJ_Heart;
+import object.OBJ_Mana_Crystal;
 
 public class MON_Slime extends Entity {
 
@@ -64,7 +67,7 @@ public class MON_Slime extends Entity {
             if (i > 50 && i <= 75) {
                 direction = "left";
             }
-            if (i > 55 && i <= 100) {
+            if (i > 75 && i <= 100) {
                 direction = "right";
             }
             actionLockCounter = 0;
@@ -77,4 +80,19 @@ public class MON_Slime extends Entity {
         direction = gamePanel.player.direction;
     }
 
+    public void checkDrop() {
+
+        int i = new Random().nextInt(100) + 1;
+
+        if (i <= 50) {
+            dropItem(new OBJ_Coin_Bronze(gamePanel));
+        }
+        if (i > 50 && i <= 75) {
+            dropItem(new OBJ_Heart(gamePanel));
+        }
+        if (i > 75 && i <= 100) {
+            dropItem(new OBJ_Mana_Crystal(gamePanel));
+        }
+        
+    }
 }

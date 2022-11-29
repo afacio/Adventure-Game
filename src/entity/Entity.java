@@ -124,7 +124,19 @@ public class Entity {
 
     public void setAction() { }
     public void demageReaction() { }
+    public void checkDrop() { }
     public void use(Entity entity) { }
+    
+    public void dropItem(Entity droppedItmen) { 
+        for (int i = 0; i < gamePanel.obj.length; i++){
+            if(gamePanel.obj[i] == null) {
+                gamePanel.obj[i] = droppedItmen;
+                gamePanel.obj[i].worldX = worldX;
+                gamePanel.obj[i].worldY = worldY;
+                break;
+            }
+        }
+    }
 
     public void speak() {
         if (dialogues[dialoguesIntex] == null) {

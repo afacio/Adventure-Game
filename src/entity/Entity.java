@@ -317,13 +317,13 @@ public class Entity {
         int speed = generator.getParticleSpeed();
         int maxHealth = generator.getParticleMaxHealth();
 
-        Particle particle1 = new Particle(gamePanel, generator, color, size, speed, maxHealth, -2, -1);
+        Particle particle1 = new Particle(gamePanel, target, color, size, speed, maxHealth, -2, -1);
         gamePanel.particleList.add(particle1);
-        Particle particle2 = new Particle(gamePanel, generator, color, size, speed, maxHealth, 2, -1);
+        Particle particle2 = new Particle(gamePanel, target, color, size, speed, maxHealth, 2, -1);
         gamePanel.particleList.add(particle2);
-        Particle particle3 = new Particle(gamePanel, generator, color, size, speed, maxHealth, -2, 1);
+        Particle particle3 = new Particle(gamePanel, target, color, size, speed, maxHealth, -2, 1);
         gamePanel.particleList.add(particle3);
-        Particle particle4 = new Particle(gamePanel, generator, color, size, speed, maxHealth, 2, 1);
+        Particle particle4 = new Particle(gamePanel, target, color, size, speed, maxHealth, 2, 1);
         gamePanel.particleList.add(particle4);
     }
 

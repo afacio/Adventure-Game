@@ -2,6 +2,7 @@ package projectile;
 
 import entity.Entity;
 import entity.Projectile;
+import java.awt.Color;
 import main.GamePanel;
 
 public class Spell_Fireball extends Projectile {
@@ -43,6 +44,23 @@ public class Spell_Fireball extends Projectile {
 
     public void subtractResource(Entity entity) {
         entity.mana -= useManaCost;
+    }
+
+    @Override
+    public Color getParticleColor() {
+        return new Color(240, 50, 0);
+    }
+    @Override
+    public int getParticleSize() {
+        return 5;
+    }
+    @Override
+    public int getParticleSpeed() {
+        return 1;
+    }
+    @Override
+    public int getParticleMaxHealth() {
+        return 20;
     }
     
 }

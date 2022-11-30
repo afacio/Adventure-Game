@@ -2,6 +2,7 @@ package projectile;
 
 import entity.Projectile;
 import main.GamePanel;
+import java.awt.Color;
 
 public class Rock extends Projectile {
 
@@ -34,6 +35,23 @@ public class Rock extends Projectile {
 
     public void playSoundEfect() {
         gamePanel.playSoundEfect(7);
+    }
+    
+    @Override
+    public Color getParticleColor() {
+        return new Color(40, 50, 0);
+    }
+    @Override
+    public int getParticleSize() {
+        return 8;
+    }
+    @Override
+    public int getParticleSpeed() {
+        return 1;
+    }
+    @Override
+    public int getParticleMaxHealth() {
+        return 20;
     }
     
 }

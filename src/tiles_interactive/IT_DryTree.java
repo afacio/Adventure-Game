@@ -2,6 +2,7 @@ package tiles_interactive;
 
 import entity.Entity;
 import main.GamePanel;
+import java.awt.Color;
 
 public class IT_DryTree extends InteractiveTile{
 
@@ -35,6 +36,23 @@ public class IT_DryTree extends InteractiveTile{
     @Override
     public void playSoundEfect() {
         gamePanel.playSoundEfect(13);
+    }
+
+    @Override
+    public Color getParticleColor() {
+        return new Color(65, 50, 30);
+    }
+    @Override
+    public int getParticleSize() {
+        return 6;
+    }
+    @Override
+    public int getParticleSpeed() {
+        return 1;
+    }
+    @Override
+    public int getParticleMaxHealth() {
+        return 20;
     }
     
 }

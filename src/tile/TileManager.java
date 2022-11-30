@@ -29,7 +29,7 @@ public class TileManager {
         tiles = new Tile[50];
         mapTileNumber = new int[gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
         getTileImage();
-        loadMap("src/res/maps/world02.txt");
+        loadMap("src/res/maps/worldmap.txt");
     }
 
     private void loadAtlas(){

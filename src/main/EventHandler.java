@@ -8,6 +8,9 @@ public class EventHandler {
     int previousEventX;
     int previousEventY;
     boolean canTouchEvent = true;
+    int tempMap;
+    int tempCol;
+    int tempRow;
 
     public EventHandler(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -121,11 +124,10 @@ public class EventHandler {
     }
 
     private void teleport(int map, int col, int row) {
-        gamePanel.currentMap = map;
-        gamePanel.player.worldX = (double)gamePanel.tileSize * col;
-        gamePanel.player.worldY = (double)gamePanel.tileSize * row;
-        previousEventX = (int)gamePanel.player.worldX;
-        previousEventY = (int)gamePanel.player.worldY;
+        gamePanel.gameState = gamePanel.MAP_TRANSITION_STATE;
+        tempCol = col;
+        tempRow = row;
+        tempMap = map;
         canTouchEvent = false;
         gamePanel.playSoundEfect(15);
     }

@@ -31,6 +31,7 @@ public class UI {
     public static final int SLOT_MAX_COL = 7;
     public static final int SLOT_MAX_ROW = 5;
     public int subState = 0;
+    int counter = 0;
 
     public UI(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -74,6 +75,8 @@ public class UI {
             drawOptionsScreen();
         } else if (gamePanel.gameState == GamePanel.GAME_OVER_STATE) {
             gameOverScreen();
+        } else if (gamePanel.gameState == GamePanel.MAP_TRANSITION_STATE) {
+            transitionStateScreen();
         } else if (gamePanel.gameState == GamePanel.CREATING_STATE) {
             // drawCreatingScreen();
         }
@@ -668,6 +671,21 @@ public class UI {
             drawTextWithShadow(">", x - 25, y);
         }
 
+    }
+
+    private void transitionStateScreen() {
+        counter++;
+        g2.setColor(new Color(0,0,0,counter*5));
+        g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+        if(counter == 50) {
+            counter = 0;
+            gamePanel.gameState = gamePanel.PLAY_STATE;
+            gamePanel.currentMap = gamePanel.eventHandler.tempMap;
+            gamePanel.player.worldX = (double)gamePanel.tileSize * gamePanel.eventHandler.tempCol;
+            gamePanel.player.worldY = (double)gamePanel.tileSize * gamePanel.eventHandler.tempRow;
+            gamePanel.eventHandler.previousEventX = (int)gamePanel.player.worldX;
+            gamePanel.eventHandler.previousEventY = (int)gamePanel.player.worldY;
+        }
     }
 
     private void drawSubWindow(int x, int y, int width, int height) {

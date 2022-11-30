@@ -77,7 +77,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int CHARACTER_STATE = 4;
     public static final int OPTIONS_STATE = 5;
     public static final int GAME_OVER_STATE = 6;
-    public static final int CREATING_STATE = 7;
+    public static final int MAP_TRANSITION_STATE = 7;
+    public static final int CREATING_STATE = 8;
 
     public int gameState = TITLE_STATE;
 

@@ -264,6 +264,9 @@ public class Player extends Entity {
         }
         if(health <= 0) {
             gamePanel.gameState = gamePanel.GAME_OVER_STATE;
+            gamePanel.ui.commandNum = -1;
+            gamePanel.keyHandler.enterPressed = false;
+            gamePanel.stopMusic();
             gamePanel.playSoundEfect(14);
         }
 

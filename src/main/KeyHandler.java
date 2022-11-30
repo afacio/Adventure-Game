@@ -256,13 +256,25 @@ public class KeyHandler implements KeyListener {
 
     private void gameOverState(int code) {
         if (code == KeyEvent.VK_ENTER) {
-            enterPressed = true;
+            if(gamePanel.ui.commandNum == 0) {
+                gamePanel.gameState = gamePanel.PLAY_STATE;
+                gamePanel.restart();
+                gamePanel.playMusic(0);
+                gamePanel.keyHandler.enterPressed = false;
+            } else if(gamePanel.ui.commandNum == 1) {
+                gamePanel.gameState = gamePanel.TITLE_STATE;
+                gamePanel.restart();
+                gamePanel.ui.commandNum = 0;
+                gamePanel.keyHandler.enterPressed = false;
+            }
             gamePanel.playSoundEfect(13);
         }
 
         int maxCommandNumber = 1;
         if (code == KeyEvent.VK_W) {
-            if (gamePanel.ui.commandNum != 0) {
+            if(gamePanel.ui.commandNum == -1) {
+                gamePanel.ui.commandNum = maxCommandNumber;
+            } else if (gamePanel.ui.commandNum != 0) {
                 gamePanel.ui.commandNum--;
             } else {
                 gamePanel.ui.commandNum = maxCommandNumber;
@@ -270,7 +282,9 @@ public class KeyHandler implements KeyListener {
             gamePanel.playSoundEfect(11);
         }
         if (code == KeyEvent.VK_S) {
-            if (gamePanel.ui.commandNum != maxCommandNumber) {
+            if(gamePanel.ui.commandNum == -1) {
+                gamePanel.ui.commandNum = 0;
+            } else if (gamePanel.ui.commandNum != maxCommandNumber) {
                 gamePanel.ui.commandNum++;
             } else {
                 gamePanel.ui.commandNum = 0;

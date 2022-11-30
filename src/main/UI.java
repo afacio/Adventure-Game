@@ -658,11 +658,6 @@ public class UI {
         drawTextWithShadow(text, x, y);
         if (commandNum == 0) {
             drawTextWithShadow(">", x - 25, y);
-            if (gamePanel.keyHandler.enterPressed) {
-                gamePanel.gameState = gamePanel.PLAY_STATE;
-                gamePanel.restart();
-                gamePanel.keyHandler.enterPressed = false;
-            }
         }
 
         text = "Quit";
@@ -671,12 +666,6 @@ public class UI {
         drawTextWithShadow(text, x, y);
         if (commandNum == 1) {
             drawTextWithShadow(">", x - 25, y);
-            if (gamePanel.keyHandler.enterPressed) {
-                gamePanel.gameState = gamePanel.TITLE_STATE;
-                gamePanel.restart();
-                commandNum = 0;
-                gamePanel.keyHandler.enterPressed = false;
-            }
         }
 
     }

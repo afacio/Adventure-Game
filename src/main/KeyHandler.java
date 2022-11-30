@@ -122,6 +122,13 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_T) {
             checkDrawTime = !checkDrawTime;
         }
+        if (code == KeyEvent.VK_R) {
+            switch(gamePanel.currentMap) {
+                case 0: gamePanel.tileManager.loadMap("src/res/maps/worldV3.txt", 0); break;
+                case 1: gamePanel.tileManager.loadMap("src/res/maps/interior01.txt", 1); break;
+                default: break;
+            }
+        }
     }
 
     private void pauseState(int code) {

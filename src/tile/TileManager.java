@@ -21,19 +21,16 @@ public class TileManager {
     public Tile[] tiles;
     public BufferedImage atlas;
 
-    public int[][] mapTileNumber;
+    public int[][][] mapTileNumber;
 
     public TileManager(GamePanel gamePanel){
         this.gamePanel = gamePanel;
 
         tiles = new Tile[50];
-        mapTileNumber = new int[gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
+        mapTileNumber = new int[gamePanel.maxMap][gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
         getTileImage();
-        loadMap("src/res/maps/world02.txt");
-    }
-
-    private void loadAtlas(){
-        atlas = LoadSave.getAtlas();
+        loadMap("src/res/maps/worldV3.txt", 0);
+        loadMap("src/res/maps/interior01.txt", 1);
     }
 
     public void getTileImage(){
@@ -73,12 +70,12 @@ public class TileManager {
         setup(36, "New version/road10", false);
         setup(37, "New version/road11", false);
         setup(38, "New version/road12", false);
-
         setup(39, "New version/earth", false);
-
         setup(40, "New version/wall", true);
-
         setup(41, "New version/tree", true);
+        setup(42, "New version/hut", false);
+        setup(43, "New version/floor01", false);
+        setup(44, "New version/table01", true);
     }
 
     public void setup(int index, String imageName, boolean collision){
@@ -101,7 +98,7 @@ public class TileManager {
 
         while(worldColumn< gamePanel.MAX_WORLD_COLUMN && worldRow < gamePanel.MAX_WORLD_ROW){
 
-            int tileNumber = mapTileNumber[worldColumn][worldRow];
+            int tileNumber = mapTileNumber[gamePanel.currentMap][worldColumn][worldRow];
 
             int worldX = worldColumn * gamePanel.tileSize;
             int worldY = worldRow * gamePanel.tileSize;
@@ -149,7 +146,7 @@ public class TileManager {
         }  
     }
 
-    public void loadMap(String filePath){
+    public void loadMap(String filePath, int map){
         try {
             FileReader fr = new FileReader(filePath);
             BufferedReader br = new BufferedReader(fr);
@@ -163,7 +160,7 @@ public class TileManager {
                     String[] numbers = line.split(" ");
                     int number = Integer.parseInt(numbers[column]);
 
-                    mapTileNumber[column][row] = number;
+                    mapTileNumber[map][column][row] = number;
                     column++;
                 }
                 if(column == gamePanel.MAX_WORLD_COLUMN){

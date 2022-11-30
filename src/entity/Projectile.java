@@ -23,9 +23,9 @@ public class Projectile extends Entity {
 
         if(entity == gamePanel.player) {
             int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
-            if( monsterIndex != 999 && !gamePanel.monster[monsterIndex].invincible) {
+            if( monsterIndex != 999 && !gamePanel.monster[gamePanel.currentMap][monsterIndex].invincible) {
                 gamePanel.player.damageMonster(monsterIndex, attack * gamePanel.player.attack);
-                generateParticle(entity.projectile, gamePanel.monster[monsterIndex]);
+                generateParticle(entity.projectile, gamePanel.monster[gamePanel.currentMap][monsterIndex]);
                 alive = false;
             }
         } else if(entity != gamePanel.player) {

@@ -72,7 +72,8 @@ public class Player extends Entity {
         setInventoryItems();
     }
 
-    private void setInventoryItems() {
+    public void setInventoryItems() {
+        inventory.clear();
         inventory.add(currentMeleeWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Key(gamePanel));
@@ -260,6 +261,10 @@ public class Player extends Entity {
         }
         if (health > maxHealth) {
             health = maxHealth;
+        }
+        if(health <= 0) {
+            gamePanel.gameState = gamePanel.GAME_OVER_STATE;
+            gamePanel.playSoundEfect(14);
         }
 
     }

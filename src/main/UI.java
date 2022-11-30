@@ -72,6 +72,8 @@ public class UI {
             drawObjectDescriptionScreen();
         } else if (gamePanel.gameState == GamePanel.OPTIONS_STATE) {
             drawOptionsScreen();
+        } else if (gamePanel.gameState == GamePanel.GAME_OVER_STATE) {
+            gameOverScreen();
         } else if (gamePanel.gameState == GamePanel.CREATING_STATE) {
             // drawCreatingScreen();
         }
@@ -540,7 +542,7 @@ public class UI {
             }
         }
     }
-   
+
     private void options_control(int frameX, int frameY) {
         int textX = frameX + gamePanel.tileSize;
         int textY = frameY + gamePanel.tileSize * 3;
@@ -570,16 +572,16 @@ public class UI {
 
         g2.drawString("Options", textX, textY);
 
-         // BACK
-         textY = frameY + gamePanel.tileSize * 9;
-         g2.drawString("Back", textX, textY);
-         if (commandNum == 0) {
-             g2.drawString(">", textX - 25, textY);
-             if (gamePanel.keyHandler.enterPressed) {
-                 subState = 0;
-                 commandNum = 3;
-             }
-         }
+        // BACK
+        textY = frameY + gamePanel.tileSize * 9;
+        g2.drawString("Back", textX, textY);
+        if (commandNum == 0) {
+            g2.drawString(">", textX - 25, textY);
+            if (gamePanel.keyHandler.enterPressed) {
+                subState = 0;
+                commandNum = 3;
+            }
+        }
 
         textX = frameX + gamePanel.tileSize * 6;
         textY = frameY + gamePanel.tileSize * 2;
@@ -594,7 +596,7 @@ public class UI {
         g2.drawString("P", textX, textY);
         textY += gamePanel.tileSize;
         g2.drawString("ESC", textX, textY);
-        
+
     }
 
     private void options_endGameConfirmation(int frameX, int frameY) {
@@ -613,7 +615,7 @@ public class UI {
         textX = getXforCenteredText(text);
         textY += gamePanel.tileSize * 3;
         g2.drawString(text, textX, textY);
-        if(commandNum == 0) {
+        if (commandNum == 0) {
             g2.drawString(">", textX - 25, textY);
             if (gamePanel.keyHandler.enterPressed) {
                 subState = 0;
@@ -626,13 +628,57 @@ public class UI {
         textX = getXforCenteredText(text);
         textY += gamePanel.tileSize;
         g2.drawString(text, textX, textY);
-        if(commandNum == 1) {
+        if (commandNum == 1) {
             g2.drawString(">", textX - 25, textY);
             if (gamePanel.keyHandler.enterPressed) {
                 subState = 0;
                 commandNum = 4;
             }
         }
+    }
+
+    private void gameOverScreen() {
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
+
+        String text = "Game Over";
+        int x;
+        int y;
+        g2.setFont(g2.getFont().deriveFont(110F));
+
+        g2.setColor(Color.black);
+        x = getXforCenteredText(text);
+        y = gamePanel.tileSize * 4;
+        drawTextWithShadow(text, x, y);
+
+        g2.setFont(g2.getFont().deriveFont(50F));
+        text = "Retry";
+        x = getXforCenteredText(text);
+        y += gamePanel.tileSize * 4;
+        drawTextWithShadow(text, x, y);
+        if (commandNum == 0) {
+            drawTextWithShadow(">", x - 25, y);
+            if (gamePanel.keyHandler.enterPressed) {
+                gamePanel.gameState = gamePanel.PLAY_STATE;
+                gamePanel.restart();
+                gamePanel.keyHandler.enterPressed = false;
+            }
+        }
+
+        text = "Quit";
+        x = getXforCenteredText(text);
+        y += 60;
+        drawTextWithShadow(text, x, y);
+        if (commandNum == 1) {
+            drawTextWithShadow(">", x - 25, y);
+            if (gamePanel.keyHandler.enterPressed) {
+                gamePanel.gameState = gamePanel.TITLE_STATE;
+                gamePanel.restart();
+                commandNum = 0;
+                gamePanel.keyHandler.enterPressed = false;
+            }
+        }
+
     }
 
     private void drawSubWindow(int x, int y, int width, int height) {

@@ -47,6 +47,10 @@ public class KeyHandler implements KeyListener {
         else if (gamePanel.gameState == gamePanel.OPTIONS_STATE) {
             optionsState(code);
         }
+
+        else if (gamePanel.gameState == gamePanel.GAME_OVER_STATE) {
+            gameOverState(code);
+        }
     }
 
     private void titleState(int code) {
@@ -248,6 +252,31 @@ public class KeyHandler implements KeyListener {
             }
         }
 
+    }
+
+    private void gameOverState(int code) {
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+            gamePanel.playSoundEfect(13);
+        }
+
+        int maxCommandNumber = 1;
+        if (code == KeyEvent.VK_W) {
+            if (gamePanel.ui.commandNum != 0) {
+                gamePanel.ui.commandNum--;
+            } else {
+                gamePanel.ui.commandNum = maxCommandNumber;
+            }
+            gamePanel.playSoundEfect(11);
+        }
+        if (code == KeyEvent.VK_S) {
+            if (gamePanel.ui.commandNum != maxCommandNumber) {
+                gamePanel.ui.commandNum++;
+            } else {
+                gamePanel.ui.commandNum = 0;
+            }
+            gamePanel.playSoundEfect(11);
+        }
     }
 
     @Override

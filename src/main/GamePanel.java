@@ -75,7 +75,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int DIALOGUE_STATE = 3;
     public static final int CHARACTER_STATE = 4;
     public static final int OPTIONS_STATE = 5;
-    public static final int CREATING_STATE = 6;
+    public static final int GAME_OVER_STATE = 6;
+    public static final int CREATING_STATE = 7;
 
     public int gameState = TITLE_STATE;
 
@@ -97,6 +98,15 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setInteractiveTile();
         gameState = PLAY_STATE;
 
+    }
+
+    public void restart() {
+        player.setDefaultValues();
+        player.setInventoryItems();
+        assetSetter.setObject();
+        assetSetter.setNPC();
+        assetSetter.setMonster();
+        assetSetter.setInteractiveTile();
     }
 
     public void setFullScreen() {

@@ -330,7 +330,7 @@ public class UI {
 
     private void drawPlayerInventoryScreen() {
 
-        int frameX = gamePanel.tileSize * 7;
+        int frameX = gamePanel.tileSize * 11;
         int frameY = gamePanel.tileSize;
         int frameWidth = gamePanel.tileSize * (SLOT_MAX_COL + 1);
         int frameHeight = gamePanel.tileSize * (SLOT_MAX_ROW + 1);
@@ -372,7 +372,7 @@ public class UI {
 
     private void drawObjectDescriptionScreen() {
 
-        int frameX = gamePanel.tileSize * 7;
+        int frameX = gamePanel.tileSize * 11;
         int frameY = SLOT_MAX_ROW * gamePanel.tileSize + 2 * gamePanel.tileSize;
         int frameWidth = gamePanel.tileSize * (SLOT_MAX_COL + 1);
         int frameHeight = gamePanel.tileSize * 4;
@@ -394,7 +394,7 @@ public class UI {
     }
 
     public int getCurrentItemInventoryIndex() {
-        return currentSlotCol + (currentSlotRow * SLOT_MAX_ROW);
+        return currentSlotCol + (currentSlotRow * (SLOT_MAX_ROW + 2));
     }
 
     private void drawSubWindow(int x, int y, int width, int height) {

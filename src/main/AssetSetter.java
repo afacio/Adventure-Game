@@ -13,6 +13,7 @@ import object.OBJ_Red_Book;
 import object.OBJ_Key;
 import object.OBJ_Potion_Red;
 import object.OBJ_Shield_Iron;
+import tiles_interactive.IT_DryTree;
 
 public class AssetSetter {
 
@@ -91,4 +92,21 @@ public class AssetSetter {
 
     }
 
+    public void setInteractiveTile() {
+        int i = 0;
+        gamePanel.interactiveTile[i] = new IT_DryTree(gamePanel, 27, 12);
+        i++;
+        gamePanel.interactiveTile[i] = new IT_DryTree(gamePanel, 28, 12);
+        i++;
+        gamePanel.interactiveTile[i] = new IT_DryTree(gamePanel, 29, 12);
+        i++;
+        gamePanel.interactiveTile[i] = new IT_DryTree(gamePanel, 30, 12);
+        i++;
+        gamePanel.interactiveTile[i] = new IT_DryTree(gamePanel, 31, 12);
+        i++;
+        gamePanel.interactiveTile[i] = new IT_DryTree(gamePanel, 32, 12);
+        i++;
+        gamePanel.interactiveTile[i] = new IT_DryTree(gamePanel, 33, 12);
+         
+    }
 }

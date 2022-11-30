@@ -26,6 +26,7 @@ public class Sound {
         soundPath[10] = "src/res/sound/levelup.wav";
         soundPath[11] = "src/res/sound/cursor.wav";
         soundPath[12] = "src/res/sound/burning.wav";
+        soundPath[13] = "src/res/sound/cuttree.wav";
     }
 
     public void setFile(int index) {

@@ -5,6 +5,7 @@ import java.util.Random;
 import entity.Entity;
 import main.GamePanel;
 import projectile.Rock;
+import java.awt.Rectangle;
 
 
 public class MON_Stranger extends Entity {
@@ -24,6 +25,10 @@ public class MON_Stranger extends Entity {
         defense = 1;
         exp = 12;
         projectile = new Rock(gamePanel);
+
+        solidArea = new Rectangle(14, 16, 22, 32);
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
 
         getImage();
     }

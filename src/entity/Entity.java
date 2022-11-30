@@ -30,7 +30,7 @@ public class Entity {
     public int actionLockCounter = 0;
     public int shotAvelibleCounter = 0;
     
-    public Rectangle solidArea = new Rectangle(14, 16, 22, 32);
+    public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     
     public int solidAreaDefaultX;
     public int solidAreaDefaultY;
@@ -162,6 +162,7 @@ public class Entity {
         gamePanel.collisionChecker.checkObject(this, false);
         gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
         gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
+        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
         boolean contactPlayer = gamePanel.collisionChecker.checkPlayerCollision(this);
 
         if (this.type == MONSTER_TYPE && contactPlayer) {

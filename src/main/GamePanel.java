@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
+import tiles_interactive.InteractiveTile;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -48,20 +49,21 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITY AND OBJECT
     public Player player = new Player(this, keyHandler);
-    public Entity[] obj = new Entity[20];
+    public Entity[] obj = new Entity[50];
     public Entity[] npc = new Entity[10];
-    public Entity[] monster = new Entity[20];
-    ArrayList<Entity> entityListy = new ArrayList<>();
+    public Entity[] monster = new Entity[50];
+    public InteractiveTile[] interactiveTile = new InteractiveTile[50];
+    ArrayList<Entity> entityList = new ArrayList<>();
     public ArrayList<Entity> projectileList = new ArrayList<>();
 
-    // GAME STATE       
+    // GAME STATE
     public static final int TITLE_STATE = 0;
     public static final int PLAY_STATE = 1;
     public static final int PAUSE_STATE = 2;
     public static final int DIALOGUE_STATE = 3;
     public static final int CHARACTER_STATE = 4;
     public static final int CREATING_STATE = 5;
-    
+
     public int gameState = TITLE_STATE;
 
     public GamePanel() {
@@ -74,8 +76,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         assetSetter.setObject();
-        assetSetter.setNPC();   
-        assetSetter.setMonster();   
+        assetSetter.setNPC();
+        assetSetter.setMonster();
+        assetSetter.setInteractiveTile();
         // playMusic(0);
         gameState = PLAY_STATE;
     }
@@ -109,7 +112,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if(gameState == PLAY_STATE){
+        if (gameState == PLAY_STATE) {
             // PLAYER
             player.update();
 
@@ -118,32 +121,38 @@ public class GamePanel extends JPanel implements Runnable {
                 if (npc[i] != null) {
                     npc[i].update();
                 }
-            }  
+            }
 
             // MONSTER
             for (int i = 0; i < monster.length; i++) {
                 if (monster[i] != null) {
-                    if(!monster[i].alive && !monster[i].dying){
+                    if (!monster[i].alive && !monster[i].dying) {
                         monster[i].checkDrop();
                         monster[i] = null;
                     } else {
                         monster[i].update();
                     }
                 }
-            }      
+            }
             // PROJECTILE
             for (int i = 0; i < projectileList.size(); i++) {
                 if (projectileList.get(i) != null) {
-                    if(!projectileList.get(i).alive){
+                    if (!projectileList.get(i).alive) {
                         projectileList.remove(i);
                     } else {
                         projectileList.get(i).update();
                     }
                 }
-            }      
+            }
+            // INTERACTIVE TILE
+            for (int i = 0; i < interactiveTile.length; i++) {
+                if (interactiveTile[i] != null) {
+                    interactiveTile[i].update();
+                }
+            }
         }
-        if(gameState == PAUSE_STATE){
-        }
+        // if (gameState == PAUSE_STATE) {
+        // }
     }
 
     public void paintComponent(Graphics g) {
@@ -151,15 +160,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
         // DEBUG
-
-        long drawStart = 0;
-        if(keyHandler.checkDrawTime){
-            drawStart = System.nanoTime();
-        }
+        // long drawStart = 0;
+        // if (keyHandler.checkDrawTime) {
+        //     drawStart = System.nanoTime();
+        // }
 
         // TITLE SCREEN
-        if(gameState == TITLE_STATE){
-            ui.draw(g2); 
+        if (gameState == TITLE_STATE) {
+            ui.draw(g2);
         }
 
         // GAME SCREEN
@@ -167,51 +175,56 @@ public class GamePanel extends JPanel implements Runnable {
             // TILE
             tileManager.draw(g2);
 
+            // INTERACTIVE TILE
+            for (int i = 0; i < interactiveTile.length; i++) {
+                if (interactiveTile[i] != null) {
+                    interactiveTile[i].draw(g2);
+                }
+            }
+
             // ADD ENTITIESTO THE LIST
-            entityListy.add(player);
+            entityList.add(player);
 
             for (int i = 0; i < obj.length; i++) {
                 if (obj[i] != null) {
-                    entityListy.add(obj[i]);
+                    entityList.add(obj[i]);
                 }
             }
             for (int i = 0; i < npc.length; i++) {
                 if (npc[i] != null) {
-                    entityListy.add(npc[i]);
+                    entityList.add(npc[i]);
                 }
             }
             for (int i = 0; i < monster.length; i++) {
                 if (monster[i] != null) {
-                    entityListy.add(monster[i]);
+                    entityList.add(monster[i]);
                 }
             }
             for (int i = 0; i < projectileList.size(); i++) {
                 if (projectileList.get(i) != null) {
-                    entityListy.add(projectileList.get(i));
+                    entityList.add(projectileList.get(i));
                 }
             }
             // SORT
-            Collections.sort(entityListy, new Comparator<Entity>() {
+            Collections.sort(entityList, new Comparator<Entity>() {
 
                 @Override
                 public int compare(Entity e1, Entity e2) {
-                    int result = Integer.compare((int) e1.worldY, (int) e2.worldY);
-                    return result;
+                    return Integer.compare((int) e1.worldY, (int) e2.worldY);
                 }
-                
+
             });
-           
+
             // DRAW ENTITIES
-            for(int i = 0; i < entityListy.size(); i++){
-                entityListy.get(i).draw(g2);
+            for (int i = 0; i < entityList.size(); i++) {
+                entityList.get(i).draw(g2);
             }
-           
+
             // EMPTY ENTITY LIST
-            entityListy.clear();
-            
-    
+            entityList.clear();
+
             // UI
-            ui.draw(g2); 
+            ui.draw(g2);
         }
     }
 
@@ -230,7 +243,7 @@ public class GamePanel extends JPanel implements Runnable {
         soundEfect.play();
     }
 
-    public void exitGame(){
+    public void exitGame() {
         System.exit(0);
     }
 }

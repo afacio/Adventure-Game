@@ -9,6 +9,7 @@ import main.GamePanel;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -45,6 +46,10 @@ public class Player extends Entity {
         worldY = (double) gamePanel.tileSize * 21;
         speed = 4;
         direction = "down";
+
+        solidArea = new Rectangle(14, 16, 22, 32);
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
 
         maxHealth = 6;
         health = maxHealth;
@@ -176,6 +181,10 @@ public class Player extends Entity {
             int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
             monsterContact(monsterIndex);
 
+            // // CHECK INTERACTIVE TAIL COLLISION
+            int interactiveTileIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
+
+
             // CHECK EVENT
             gamePanel.eventHandler.checkEvent();
 
@@ -292,6 +301,9 @@ public class Player extends Entity {
             int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
             damageMonster(monsterIndex, attack);
 
+            int interactiveTileIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
+            damageInteractiveTile(interactiveTileIndex);
+
             worldX = currentWorldX;
             worldY = currentWorldY;
             solidArea.width = solidAreaWidth;
@@ -376,6 +388,17 @@ public class Player extends Entity {
             }
         }
     }
+
+    private void damageInteractiveTile(int interactiveTileIndex) {
+        if(interactiveTileIndex != 999 && gamePanel.interactiveTile[interactiveTileIndex].destrucible && gamePanel.interactiveTile[interactiveTileIndex].isCorrectItem(this) && !gamePanel.interactiveTile[interactiveTileIndex].invincible) {
+            gamePanel.interactiveTile[interactiveTileIndex].health--;
+            gamePanel.interactiveTile[interactiveTileIndex].invincible = true;
+            gamePanel.interactiveTile[interactiveTileIndex].playSoundEfect();
+            if(gamePanel.interactiveTile[interactiveTileIndex].health <= 0) {
+                gamePanel.interactiveTile[interactiveTileIndex] = gamePanel.interactiveTile[interactiveTileIndex].getDestroyedForm();
+            }
+        }
+    } 
 
     private void checkLevelUp() {
         if (exp >= nextLevelExp) {

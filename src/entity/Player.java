@@ -8,7 +8,6 @@ import projectile.Spell_Fireball;
 import main.GamePanel;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

@@ -3,7 +3,7 @@ package main;
 public class EventHandler {
 
     GamePanel gamePanel;
-    EventRectangle[][] eventRect = null;
+    EventRectangle[][][] eventRect = null;
 
     int previousEventX;
     int previousEventY;
@@ -12,27 +12,33 @@ public class EventHandler {
     public EventHandler(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
 
-        eventRect = new EventRectangle[gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
+        eventRect = new EventRectangle[gamePanel.maxMap][gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
         fillEventArray();
 
     }
 
     private void fillEventArray() {
+        int map = 0;
         int col = 0;
         int row = 0;
-        while (col < gamePanel.MAX_WORLD_COLUMN && row < gamePanel.MAX_WORLD_ROW) {
-            eventRect[col][row] = new EventRectangle();
-            eventRect[col][row].x = 23;
-            eventRect[col][row].y = 23;
-            eventRect[col][row].width = 2;
-            eventRect[col][row].height = 2;
-            eventRect[col][row].eventRectDefaultX = eventRect[col][row].x;
-            eventRect[col][row].eventRectDefaultY = eventRect[col][row].y;
+        while (map < gamePanel.maxMap && col < gamePanel.MAX_WORLD_COLUMN && row < gamePanel.MAX_WORLD_ROW) {
+            eventRect[map][col][row] = new EventRectangle();
+            eventRect[map][col][row].x = 23;
+            eventRect[map][col][row].y = 23;
+            eventRect[map][col][row].width = 2;
+            eventRect[map][col][row].height = 2;
+            eventRect[map][col][row].eventRectDefaultX = eventRect[map][col][row].x;
+            eventRect[map][col][row].eventRectDefaultY = eventRect[map][col][row].y;
 
             col++;
             if (col == gamePanel.MAX_WORLD_COLUMN) {
                 col = 0;
                 row++;
+
+                if (row == gamePanel.MAX_WORLD_ROW) {
+                    row = 0;
+                    map++;
+                }
             }
         }
     }
@@ -47,37 +53,48 @@ public class EventHandler {
             canTouchEvent = true;
         }
         if (canTouchEvent) {
-            if (hit(27, 17, "right")) {
+            if (hit(0,27, 17, "right")) {
                 damagePit(gamePanel.DIALOGUE_STATE);
             }
-            if (hit(23, 12, "up")) {
+            else if (hit(0, 23, 12, "up")) {
                 healingPool(gamePanel.DIALOGUE_STATE);
+            }
+            else if (hit(0, 10,39, "any")) {
+                teleport(1, 12, 13);
+            }
+            else if (hit(1, 12, 13, "any")) {
+                teleport(0, 10,39);
             }
         }
     }
 
-    public boolean hit(int col, int row, String requiredDirection) {
+    public boolean hit(int map, int col, int row, String requiredDirection) {
 
         boolean hit = false;
 
-        gamePanel.player.solidArea.x = (int) (gamePanel.player.worldX) + gamePanel.player.solidArea.x;
-        gamePanel.player.solidArea.y = (int) (gamePanel.player.worldY) + gamePanel.player.solidArea.y;
-        eventRect[col][row].x = col * gamePanel.tileSize + eventRect[col][row].x;
-        eventRect[col][row].y = row * gamePanel.tileSize + eventRect[col][row].y;
+        if (map == gamePanel.currentMap) {
 
-        if (gamePanel.player.solidArea.intersects(eventRect[col][row]) && eventRect[col][row].eventDone == false) {
-            if (gamePanel.player.direction.contentEquals(requiredDirection) || requiredDirection.contentEquals("any")) {
-                hit = true;
+            gamePanel.player.solidArea.x = (int) (gamePanel.player.worldX) + gamePanel.player.solidArea.x;
+            gamePanel.player.solidArea.y = (int) (gamePanel.player.worldY) + gamePanel.player.solidArea.y;
+            eventRect[map][col][row].x = col * gamePanel.tileSize + eventRect[map][col][row].x;
+            eventRect[map][col][row].y = row * gamePanel.tileSize + eventRect[map][col][row].y;
 
-                previousEventX = (int) gamePanel.player.worldX;
-                previousEventY = (int) gamePanel.player.worldY;
+            if (gamePanel.player.solidArea.intersects(eventRect[map][col][row])
+                    && !eventRect[map][col][row].eventDone) {
+                if (gamePanel.player.direction.contentEquals(requiredDirection)
+                        || requiredDirection.contentEquals("any")) {
+                    hit = true;
+
+                    previousEventX = (int) gamePanel.player.worldX;
+                    previousEventY = (int) gamePanel.player.worldY;
+                }
             }
-        }
 
-        gamePanel.player.solidArea.x = gamePanel.player.solidAreaDefaultX;
-        gamePanel.player.solidArea.y = gamePanel.player.solidAreaDefaultY;
-        eventRect[col][row].x = eventRect[col][row].eventRectDefaultX;
-        eventRect[col][row].y = eventRect[col][row].eventRectDefaultY;
+            gamePanel.player.solidArea.x = gamePanel.player.solidAreaDefaultX;
+            gamePanel.player.solidArea.y = gamePanel.player.solidAreaDefaultY;
+            eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
+            eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;
+        }
 
         return hit;
     }
@@ -101,6 +118,16 @@ public class EventHandler {
             gamePanel.player.mana = gamePanel.player.maxMana;
             gamePanel.assetSetter.setMonster();
         }
+    }
+
+    private void teleport(int map, int col, int row) {
+        gamePanel.currentMap = map;
+        gamePanel.player.worldX = (double)gamePanel.tileSize * col;
+        gamePanel.player.worldY = (double)gamePanel.tileSize * row;
+        previousEventX = (int)gamePanel.player.worldX;
+        previousEventY = (int)gamePanel.player.worldY;
+        canTouchEvent = false;
+        gamePanel.playSoundEfect(15);
     }
 
 }

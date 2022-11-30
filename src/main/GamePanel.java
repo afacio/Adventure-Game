@@ -35,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
     int screenHeight2 = screenHeight;
     BufferedImage tempScreen;
     public Graphics2D g2;
+    public boolean fullScreenOn = false;
 
     // WORLD SETTINGS
     public static final int MAX_WORLD_COLUMN = 50;
@@ -72,7 +73,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int PAUSE_STATE = 2;
     public static final int DIALOGUE_STATE = 3;
     public static final int CHARACTER_STATE = 4;
-    public static final int CREATING_STATE = 5;
+    public static final int OPTIONS_STATE = 5;
+    public static final int CREATING_STATE = 6;
 
     public int gameState = TITLE_STATE;
 
@@ -92,7 +94,6 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setNPC();
         assetSetter.setMonster();
         assetSetter.setInteractiveTile();
-        // playMusic(0);
         gameState = PLAY_STATE;
 
     }

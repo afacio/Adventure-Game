@@ -55,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
     public EventHandler eventHandler = new EventHandler(this);
+    public Config config = new Config(this);
     Thread gameThread;
 
     // ENTITY AND OBJECT
@@ -125,7 +126,9 @@ public class GamePanel extends JPanel implements Runnable {
         long timer = 0;
         long drawCount = 0;
 
-        setFullScreen();
+        if(fullScreenOn) {
+            setFullScreen();
+        }
 
         while (gameThread != null) {
 

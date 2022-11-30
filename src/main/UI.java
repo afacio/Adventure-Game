@@ -513,6 +513,8 @@ public class UI {
         textY += gamePanel.tileSize;
         g2.drawRect(textX, textY, 120, 24);
         g2.fillRect(textX, textY, 24 * gamePanel.soundEfect.volumeScale, 24);
+
+        gamePanel.config.saveConfig();
     }
 
     private void options_fullscreenNotification(int frameX, int frameY) {

@@ -20,7 +20,6 @@ public class Projectile extends Entity {
         this.health = this.maxHealth;
     }
     public void update() {
-
         if(entity == gamePanel.player) {
             int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
             if( monsterIndex != 999 && !gamePanel.monster[gamePanel.currentMap][monsterIndex].invincible) {
@@ -55,6 +54,14 @@ public class Projectile extends Entity {
             if (spriteNumber == 1) { spriteNumber = 2; } 
             else if (spriteNumber == 2) { spriteNumber = 1; } 
             spriteCounter = 0;
+        }
+
+        collisionOn = false;
+    
+        gamePanel.collisionChecker.checkTile(this);
+        if(collisionOn) {
+            generateParticle(entity.projectile, this);
+            alive = false;
         }
 
     }

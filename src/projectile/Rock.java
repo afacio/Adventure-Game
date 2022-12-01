@@ -3,6 +3,7 @@ package projectile;
 import entity.Projectile;
 import main.GamePanel;
 import java.awt.Color;
+import java.awt.Rectangle;
 
 public class Rock extends Projectile {
 
@@ -20,6 +21,10 @@ public class Rock extends Projectile {
         useManaCost = 1;
         alive = false;
         readImage();
+
+        solidArea = new Rectangle(13, 13, 21, 21);
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
     }
 
     private void readImage(){

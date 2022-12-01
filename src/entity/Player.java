@@ -4,6 +4,7 @@ import main.KeyHandler;
 import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
+import projectile.Rock;
 import projectile.Spell_Fireball;
 import main.GamePanel;
 
@@ -11,7 +12,6 @@ import java.awt.AlphaComposite;
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Player extends Entity {
 

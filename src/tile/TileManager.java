@@ -5,10 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.awt.Graphics2D;
+import java.awt.Color;
 
 import javax.imageio.ImageIO;
-
-import helper.LoadSave;
 
 import java.awt.image.BufferedImage;
 
@@ -20,6 +19,7 @@ public class TileManager {
     GamePanel gamePanel;
     public Tile[] tiles;
     public BufferedImage atlas;
+    public boolean drawPath = true;
 
     public int[][][] mapTileNumber;
 
@@ -129,7 +129,8 @@ public class TileManager {
                worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY ){
 
                 g2.drawImage(tiles[tileNumber].image, (int) screenX, (int) screenY, null);
-            } else if( 
+            } 
+            else if( 
                     gamePanel.player.screenX > gamePanel.player.worldX || 
                     gamePanel.player.screenY > gamePanel.player.worldY || 
                     rightOffset > gamePanel.worldWidth - gamePanel.player.worldX ||
@@ -143,7 +144,19 @@ public class TileManager {
                 worldColumn = 0;
                 worldRow++;
             }
-        }  
+        }
+        if(drawPath) {
+            g2.setColor(new Color(255,0,0,70));
+
+            for(int i = 0; i < gamePanel.pathFinder.pathList.size(); i++) {
+                int worldX = gamePanel.pathFinder.pathList.get(i).col * gamePanel.tileSize;
+                int worldY = gamePanel.pathFinder.pathList.get(i).row * gamePanel.tileSize;
+                int screenX = (int)(worldX - gamePanel.player.worldX + gamePanel.player.screenX);
+                int screenY = (int)(worldY - gamePanel.player.worldY + gamePanel.player.screenY);
+                
+                g2.fillRect(screenX,screenY, gamePanel.tileSize, gamePanel.tileSize);
+            }
+        }
     }
 
     public void loadMap(String filePath, int map){

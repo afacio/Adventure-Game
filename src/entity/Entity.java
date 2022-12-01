@@ -68,6 +68,8 @@ public class Entity {
     public boolean attacking = false;
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 
+    public boolean onPath = false;
+
     public boolean alive = true;
     public boolean dying = false;
     public int dyingCounter;
@@ -166,17 +168,7 @@ public class Entity {
     public void update() {
         setAction();
 
-        collisionOn = false;
-        gamePanel.collisionChecker.checkTile(this);
-        gamePanel.collisionChecker.checkObject(this, false);
-        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
-        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
-        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
-        boolean contactPlayer = gamePanel.collisionChecker.checkPlayerCollision(this);
-
-        if (this.type == MONSTER_TYPE && contactPlayer) {
-            damagePlayer(attack);
-        }
+        checkCollision();
 
         // IF COLLISION IS FALSE, ENTITY CAN MOVE
         if (!collisionOn) {
@@ -332,6 +324,80 @@ public class Entity {
         gamePanel.particleList.add(particle3);
         Particle particle4 = new Particle(gamePanel, target, color, size, speed, maxHealth, 2, 1);
         gamePanel.particleList.add(particle4);
+    }
+
+    public void searchPath(int goalCol, int goalRow) {
+        int startCol = (int)((worldX + solidArea.x)/gamePanel.tileSize);
+        int startRow  = (int)((worldY + solidArea.y)/gamePanel.tileSize);
+
+        gamePanel.pathFinder.setNodes(startCol, startRow, goalCol, goalRow);
+
+        if(gamePanel.pathFinder.search()) {
+            int nextX = gamePanel.pathFinder.pathList.get(0).col * gamePanel.tileSize;
+            int nextY = gamePanel.pathFinder.pathList.get(0).row * gamePanel.tileSize;
+
+            int entityLeftX = (int)(worldX + solidArea.x);
+            int entityRightX = (int)(worldX + solidArea.x + solidArea.width);
+            int entityTopY = (int)(worldY + solidArea.y);
+            int entityBottomY = (int)(worldY + solidArea.y + solidArea.height);
+
+            if(entityTopY > nextY && entityLeftX >= nextX && entityRightX < nextX + gamePanel.tileSize) {
+                direction = "up";
+            } else if(entityTopY < nextY && entityLeftX >= nextX && entityRightX < nextX + gamePanel.tileSize) {
+                direction = "down";
+            } else if(entityTopY >= nextY && entityBottomY < nextY + gamePanel.tileSize) {
+                if(entityLeftX > nextX) {
+                    direction = "left";
+                } else if(entityLeftX < nextX) {
+                    direction = "right";
+                }
+            } else if(entityTopY > nextY && entityLeftX > nextX) {
+                direction = "up";
+                checkCollision();
+                if(collisionOn) {
+                    direction = "left";
+                }
+            } else if(entityTopY > nextY && entityLeftX < nextX) {
+                direction = "up";
+                checkCollision();
+                if(collisionOn) {
+                    direction = "right";
+                }
+            } else if(entityTopY < nextY && entityLeftX > nextX) {
+                direction = "down";
+                checkCollision();
+                if(collisionOn) {
+                    direction = "left";
+                }
+            } else if(entityTopY < nextY && entityLeftX < nextX) {
+                direction = "down";
+                checkCollision();
+                if(collisionOn) {
+                    direction = "right";
+                }
+            }
+
+            // int nextCol = gamePanel.pathFinder.pathList.get(0).col;
+            // int nextRow = gamePanel.pathFinder.pathList.get(0).row;
+
+            // if(nextCol == goalCol && nextRow == goalRow) {
+            //     onPath = false;
+            // }
+        }
+    }
+
+    private void checkCollision() {
+        collisionOn = false;
+        gamePanel.collisionChecker.checkTile(this);
+        gamePanel.collisionChecker.checkObject(this, false);
+        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
+        gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
+        boolean contactPlayer = gamePanel.collisionChecker.checkPlayerCollision(this);
+
+        if (this.type == MONSTER_TYPE && contactPlayer) {
+            damagePlayer(attack);
+        }
     }
 
 }

@@ -24,7 +24,6 @@ public class MON_Stranger extends Entity {
         attack = 2;
         defense = 1;
         exp = 12;
-        projectile = new Rock(gamePanel);
 
         solidArea = new Rectangle(14, 16, 22, 32);
         solidAreaDefaultX = solidArea.x;
@@ -67,13 +66,6 @@ public class MON_Stranger extends Entity {
             }
             actionLockCounter = 0;
 
-        }
-        int i = new Random().nextInt(100)+1;
-        if(i > 99 && !projectile.alive && shotAvelibleCounter == 30) {
-            projectile.set(worldX, worldY, direction, true, this);
-            gamePanel.projectileList.add(projectile);
-            projectile.playSoundEfect();
-            shotAvelibleCounter = 0;
         }
     }
 

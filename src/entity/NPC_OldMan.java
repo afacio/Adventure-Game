@@ -17,6 +17,7 @@ public class NPC_OldMan extends Entity{
         solidArea = new Rectangle(6,6, 32, 42);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+        animationRefresh = 25;
 
         getImage();
         setDialogue();
@@ -36,25 +37,31 @@ public class NPC_OldMan extends Entity{
     @Override
     public void setAction() {
         Random random = new Random();
+        if(onPath) {
+            // int goalCol = (int)(gamePanel.player.worldX + gamePanel.player.solidArea.x) / gamePanel.tileSize;
+            // int goalRow = (int)(gamePanel.player.worldY + gamePanel.player.solidArea.y) / gamePanel.tileSize;
 
-        actionLockCounter ++;
-
-        if(actionLockCounter == 120 || collisionOn){
-            int i = random.nextInt(100) + 1;
+            // searchPath(goalCol, goalRow);
+        } else {
+            actionLockCounter ++;
     
-            if (i <= 25) {
-                direction = "up";
+            if(actionLockCounter == 120 || collisionOn){
+                int i = random.nextInt(100) + 1;
+        
+                if (i <= 25) {
+                    direction = "up";
+                }
+                else if (i > 25 && i <= 50) {
+                    direction = "down";
+                }
+                else if (i > 50 && i <= 75) {
+                    direction = "left";
+                }
+                else if (i > 55 && i <= 100) {
+                    direction = "right";
+                }
+                actionLockCounter = 0;
             }
-            else if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            else if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            else if (i > 55 && i <= 100) {
-                direction = "right";
-            }
-            actionLockCounter = 0;
         }
     }
 
@@ -69,6 +76,7 @@ public class NPC_OldMan extends Entity{
     @Override
     public void speak(){
         super.speak();
+        // onPath = true;
     }
     
 }

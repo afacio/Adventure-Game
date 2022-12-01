@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.JPanel;
 
+import AI.PathFinder;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
@@ -43,13 +44,13 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldWidth = tileSize * MAX_WORLD_COLUMN;
     public final int worldHeight = tileSize * MAX_WORLD_ROW;
     public final int maxMap = 10;
-    public int currentMap = 1;
+    public int currentMap = 0;
     // FPS
     static final int FPS = 60;
 
     // SYSTEM
     public KeyHandler keyHandler = new KeyHandler(this);
-    TileManager tileManager = new TileManager(this);
+    public TileManager tileManager = new TileManager(this);
     Sound music = new Sound();
     Sound soundEfect = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
@@ -57,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     public UI ui = new UI(this);
     public EventHandler eventHandler = new EventHandler(this);
     public Config config = new Config(this);
+    public PathFinder pathFinder = new PathFinder(this);
     Thread gameThread;
 
     // ENTITY AND OBJECT

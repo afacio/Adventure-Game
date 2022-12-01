@@ -4,7 +4,6 @@ import main.KeyHandler;
 import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
-import projectile.Rock;
 import projectile.Spell_Fireball;
 import main.GamePanel;
 
@@ -38,10 +37,10 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        // worldX = (double) gamePanel.tileSize * 23;
-        // worldY = (double) gamePanel.tileSize * 21;
-        worldX = (double) gamePanel.tileSize * 12;
-        worldY = (double) gamePanel.tileSize * 12;
+        worldX = (double) gamePanel.tileSize * 23;
+        worldY = (double) gamePanel.tileSize * 21;
+        // worldX = (double) gamePanel.tileSize * 12;
+        // worldY = (double) gamePanel.tileSize * 12;
         speed = 4;
         direction = "down";
 

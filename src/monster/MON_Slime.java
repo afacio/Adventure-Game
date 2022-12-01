@@ -7,6 +7,7 @@ import main.GamePanel;
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Heart;
 import object.OBJ_Mana_Crystal;
+import projectile.Rock;
 
 public class MON_Slime extends Entity {
 
@@ -24,6 +25,7 @@ public class MON_Slime extends Entity {
         attack = 3;
         defense = 0;
         exp = 6;
+        projectile = new Rock(gamePanel);
 
         solidArea.x = 2;
         solidArea.y = 16;
@@ -49,35 +51,70 @@ public class MON_Slime extends Entity {
         right2 = setup("/monster/slime/right_2", gamePanel.tileSize, gamePanel.tileSize);
         right3 = setup("/monster/slime/right_3", gamePanel.tileSize, gamePanel.tileSize);
     }
+    @Override
+    public void update() {
+        super.update();
 
+        int xDistance = (int)Math.abs(worldX - gamePanel.player.worldX);
+        int yDistance = (int)Math.abs(worldY - gamePanel.player.worldY);
+        int tileDistance = (int)(xDistance + yDistance)/gamePanel.tileSize;
+
+        if(!onPath && tileDistance < 5) {
+            int i = new Random().nextInt(100)+1;
+            if(i > 50) {
+                onPath = true;
+            }
+        }
+        if(onPath && tileDistance > 10) {
+            onPath = false;
+        }
+    }
+
+    @Override
     public void setAction() {
         Random random = new Random();
+        if(onPath) {
+            int goalCol = (int)(gamePanel.player.worldX + gamePanel.player.solidArea.x) / gamePanel.tileSize;
+            int goalRow = (int)(gamePanel.player.worldY + gamePanel.player.solidArea.y) / gamePanel.tileSize;
 
-        actionLockCounter++;
+            searchPath(goalCol, goalRow);
 
-        if (actionLockCounter == 120) {
-            int i = random.nextInt(100) + 1;
-
-            if (i <= 25) {
-                direction = "up";
+            int i = new Random().nextInt(100)+1;
+            if(i > 99 && !projectile.alive && shotAvelibleCounter == 30) {
+                projectile.set(worldX, worldY, direction, true, this);
+                gamePanel.projectileList.add(projectile);
+                projectile.playSoundEfect();
+                shotAvelibleCounter = 0;
             }
-            if (i > 25 && i <= 50) {
-                direction = "down";
+        } else {
+            actionLockCounter ++;
+    
+            if(actionLockCounter == 120 || collisionOn){
+                int i = random.nextInt(100) + 1;
+        
+                if (i <= 25) {
+                    direction = "up";
+                }
+                else if (i > 25 && i <= 50) {
+                    direction = "down";
+                }
+                else if (i > 50 && i <= 75) {
+                    direction = "left";
+                }
+                else if (i > 55 && i <= 100) {
+                    direction = "right";
+                }
+                actionLockCounter = 0;
             }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75 && i <= 100) {
-                direction = "right";
-            }
-            actionLockCounter = 0;
         }
+
     }
 
     public void demageReaction() {
 
         actionLockCounter = 0;
-        direction = gamePanel.player.direction;
+        // direction = gamePanel.player.direction;
+        onPath = true;
     }
 
     public void checkDrop() {

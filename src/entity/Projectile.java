@@ -56,13 +56,14 @@ public class Projectile extends Entity {
             spriteCounter = 0;
         }
 
-        collisionOn = false;
+        // TODO obiekt wychodzi z x i y playera lub potwora nie z jego środka dlatego przy krawędziach ścian nie działa poprawnie 
+        // collisionOn = false;
     
-        gamePanel.collisionChecker.checkTile(this);
-        if(collisionOn) {
-            generateParticle(entity.projectile, this);
-            alive = false;
-        }
+        // gamePanel.collisionChecker.checkTile(this);
+        // if(collisionOn) {
+        //     generateParticle(entity.projectile, this);
+        //     alive = false;
+        // }
 
     }
 

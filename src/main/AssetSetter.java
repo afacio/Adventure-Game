@@ -1,5 +1,6 @@
 package main;
 
+import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import monster.MON_Slime;
 import monster.MON_Stranger;
@@ -70,9 +71,15 @@ public class AssetSetter {
     }
     public void setNPC(){
         int mapNum = 0;
-        gamePanel.npc[mapNum][0] = new NPC_OldMan(gamePanel);
-        gamePanel.npc[mapNum][0].worldX = (double)gamePanel.tileSize * 21;
-        gamePanel.npc[mapNum][0].worldY = (double)gamePanel.tileSize * 22;
+        int i = 0;
+        gamePanel.npc[mapNum][i] = new NPC_OldMan(gamePanel);
+        gamePanel.npc[mapNum][i].worldX = (double)gamePanel.tileSize * 21;
+        gamePanel.npc[mapNum][i].worldY = (double)gamePanel.tileSize * 22;
+        
+        mapNum = 1;
+        gamePanel.npc[mapNum][i] = new NPC_Merchant(gamePanel);
+        gamePanel.npc[mapNum][i].worldX = (double)gamePanel.tileSize * 12;
+        gamePanel.npc[mapNum][i].worldY = (double)gamePanel.tileSize * 7;
     }
 
     public void setMonster(){

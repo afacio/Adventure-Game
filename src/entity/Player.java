@@ -23,9 +23,6 @@ public class Player extends Entity {
     int standCounter = 0;
     public boolean attackCanceled = false;
 
-    public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int inventoryMaxSize = gamePanel.ui.SLOT_MAX_COL * gamePanel.ui.SLOT_MAX_ROW;
-
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
 
         super(gamePanel);
@@ -41,10 +38,10 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = (double) gamePanel.tileSize * 23;
-        worldY = (double) gamePanel.tileSize * 21;
-        // worldX = (double) gamePanel.tileSize * 12;
-        // worldY = (double) gamePanel.tileSize * 13;
+        // worldX = (double) gamePanel.tileSize * 23;
+        // worldY = (double) gamePanel.tileSize * 21;
+        worldX = (double) gamePanel.tileSize * 12;
+        worldY = (double) gamePanel.tileSize * 12;
         speed = 4;
         direction = "down";
 
@@ -62,7 +59,7 @@ public class Player extends Entity {
         dexterity = 1;
         exp = 0;
         nextLevelExp = 5;
-        coin = 0;
+        coin = 200;
 
         currentMeleeWeapon = new OBJ_Sword_Normal(gamePanel);
         currentShield = new OBJ_Shield_Wood(gamePanel);
@@ -544,7 +541,7 @@ public class Player extends Entity {
     }
 
     public void selectItem() {
-        int itemIndex = gamePanel.ui.getCurrentItemInventoryIndex();
+        int itemIndex = gamePanel.ui.getCurrentItemInventoryIndex(gamePanel.ui.playerCurrentSlotCol, gamePanel.ui.playerCurrentSlotRow);
 
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);

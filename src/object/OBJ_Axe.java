@@ -18,6 +18,8 @@ public class OBJ_Axe extends Entity {
         attackArea.height = 30;
         description = "[" + name + "]\nAttack: " + attackValue + "\nEfects: No special efects";
 
+        itemPrice = 105;
+
         solidArea = new Rectangle(17,4, 22, 42);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;

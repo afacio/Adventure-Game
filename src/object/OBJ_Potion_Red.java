@@ -17,6 +17,7 @@ public class OBJ_Potion_Red extends Entity {
         type = CONSUMABLE_TYPE;
         down1 = setup("/objects/potion_red", gamePanel.tileSize, gamePanel.tileSize);
         description = "[" + name + "]\nHeals your life by " + healingValue;
+        itemPrice = 25;
     }
 
     public void use(Entity entity) {

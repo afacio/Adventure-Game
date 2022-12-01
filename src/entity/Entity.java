@@ -4,6 +4,7 @@ import java.awt.AlphaComposite;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -74,6 +75,8 @@ public class Entity {
     public boolean hpBarOn = false;
     public int hpBarCounter;
 
+    int animationRefresh = 8;
+
     public int level;
     public int strenght;
     public int knowledge;
@@ -94,9 +97,15 @@ public class Entity {
     public int defenseValue;
     public String description = "";
     public int useManaCost;
+    public int itemPrice = 0;
+
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public int inventoryMaxSize;
 
     public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
+
+        inventoryMaxSize = gamePanel.ui.SLOT_MAX_COL * gamePanel.ui.SLOT_MAX_ROW;
 
         setDefaultSolidAreaValues();
     }
@@ -168,8 +177,6 @@ public class Entity {
         if (this.type == MONSTER_TYPE && contactPlayer) {
             damagePlayer(attack);
         }
-
-        int animationRefresh = 8;
 
         // IF COLLISION IS FALSE, ENTITY CAN MOVE
         if (!collisionOn) {

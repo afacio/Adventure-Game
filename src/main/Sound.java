@@ -33,6 +33,8 @@ public class Sound {
         soundPath[13] = "src/res/sound/cuttree.wav";
         soundPath[14] = "src/res/sound/gameover.wav";
         soundPath[15] = "src/res/sound/stairs.wav";
+        soundPath[16] = "src/res/sound/trade.wav";
+        soundPath[17] = "src/res/sound/noMany.wav";
     }
 
     public void setFile(int index) {

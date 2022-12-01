@@ -1,5 +1,7 @@
 package main;
 
+import entity.Entity;
+
 public class EventHandler {
 
     GamePanel gamePanel;
@@ -62,11 +64,14 @@ public class EventHandler {
             else if (hit(0, 23, 12, "up")) {
                 healingPool(gamePanel.DIALOGUE_STATE);
             }
-            else if (hit(0, 10,39, "any")) {
+            else if (hit(0, 10,39, "up")) {
                 teleport(1, 12, 13);
             }
-            else if (hit(1, 12, 13, "any")) {
+            else if (hit(1, 12, 13, "down")) {
                 teleport(0, 10,39);
+            }
+            else if (hit(1, 12, 9, "up")) {
+                trade(gamePanel.npc[1][0]);
             }
         }
     }
@@ -130,6 +135,14 @@ public class EventHandler {
         tempMap = map;
         canTouchEvent = false;
         gamePanel.playSoundEfect(15);
+    }
+
+    private void trade(Entity entity){
+        if(gamePanel.keyHandler.enterPressed) {
+            gamePanel.gameState = gamePanel.TRADE_STATE;
+            gamePanel.player.attackCanceled = true;
+            entity.speak();
+        }
     }
 
 }

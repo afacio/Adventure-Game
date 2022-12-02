@@ -67,7 +67,8 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity[][] npc = new Entity[maxMap][10];
     public Entity[][] monster = new Entity[maxMap][50];
     public InteractiveTile[][] interactiveTile = new InteractiveTile[maxMap][50];
-    public ArrayList<Entity> projectileList = new ArrayList<>();
+    public Entity[][] projectileList = new Entity[maxMap][20];
+    // public ArrayList<Entity> projectileList = new ArrayList<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
 
@@ -191,12 +192,12 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
             // PROJECTILE
-            for (int i = 0; i < projectileList.size(); i++) {
-                if (projectileList.get(i) != null) {
-                    if (!projectileList.get(i).alive) {
-                        projectileList.remove(i);
+            for (int i = 0; i < projectileList[1].length; i++) {
+                if (projectileList[currentMap][i] != null) {
+                    if (!projectileList[currentMap][i].alive) {
+                        projectileList[currentMap][i] = null;
                     } else {
-                        projectileList.get(i).update();
+                        projectileList[currentMap][i].update();
                     }
                 }
             }
@@ -263,9 +264,9 @@ public class GamePanel extends JPanel implements Runnable {
                     entityList.add(monster[currentMap][i]);
                 }
             }
-            for (int i = 0; i < projectileList.size(); i++) {
-                if (projectileList.get(i) != null) {
-                    entityList.add(projectileList.get(i));
+            for (int i = 0; i < projectileList[1].length; i++) {
+                if (projectileList[currentMap][i] != null) {
+                    entityList.add(projectileList[currentMap][i]);
                 }
             }
             for (int i = 0; i < particleList.size(); i++) {

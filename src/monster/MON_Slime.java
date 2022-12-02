@@ -20,6 +20,7 @@ public class MON_Slime extends Entity {
         type = MONSTER_TYPE;
         name = "Slime";
         speed = 1;
+        defaultSpeed = speed;
         maxHealth = 7;
         health = maxHealth;
         attack = 3;
@@ -82,7 +83,14 @@ public class MON_Slime extends Entity {
             int i = new Random().nextInt(100)+1;
             if(i > 99 && !projectile.alive && shotAvelibleCounter == 30) {
                 projectile.set(worldX, worldY, direction, true, this);
-                gamePanel.projectileList.add(projectile);
+
+                for(int index = 0; index < gamePanel.projectileList[1].length; index++) {
+                    if(gamePanel.projectileList[gamePanel.currentMap][index] == null) {
+                        gamePanel.projectileList[gamePanel.currentMap][index] = projectile;
+                        break;
+                    }
+                }
+
                 projectile.playSoundEfect();
                 shotAvelibleCounter = 0;
             }

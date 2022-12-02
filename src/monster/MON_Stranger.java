@@ -4,7 +4,6 @@ import java.util.Random;
 
 import entity.Entity;
 import main.GamePanel;
-import projectile.Rock;
 import java.awt.Rectangle;
 
 
@@ -19,6 +18,7 @@ public class MON_Stranger extends Entity {
         type = MONSTER_TYPE;
         name = "Stranger";
         speed = 1;
+        defaultSpeed = speed;
         maxHealth = 20;
         health = maxHealth;
         attack = 2;

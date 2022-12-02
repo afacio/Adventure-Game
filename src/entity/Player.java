@@ -8,6 +8,7 @@ import projectile.Spell_Fireball;
 import main.GamePanel;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -42,9 +43,10 @@ public class Player extends Entity {
         // worldX = (double) gamePanel.tileSize * 12;
         // worldY = (double) gamePanel.tileSize * 12;
         speed = 4;
+        defaultSpeed = speed;
         direction = "down";
 
-        solidArea = new Rectangle(14, 16, 22, 32);
+        solidArea = new Rectangle(14, 12, 22, 32);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
@@ -83,8 +85,8 @@ public class Player extends Entity {
     }
 
     private int getMagicAttackPower() {
-        attackArea = currentMeleeWeapon.attackArea;
-        attack = knowledge * currentMeleeWeapon.attackValue;
+        attackArea = currentMagicWeapon.attackArea;
+        attack = knowledge * currentMagicWeapon.attackValue;
         return attack;
     }
 
@@ -237,7 +239,13 @@ public class Player extends Entity {
                 && projectile.haveResource(this)) {
             projectile.set(worldX, worldY, direction, true, this);
 
-            gamePanel.projectileList.add(projectile);
+            for(int i = 0; i < gamePanel.projectileList[1].length; i++) {
+                if(gamePanel.projectileList[gamePanel.currentMap][i] == null) {
+                    gamePanel.projectileList[gamePanel.currentMap][i] = projectile;
+                    break;
+                }
+            }
+
             projectile.playSoundEfect();
             shotAvelibleCounter = 0;
             projectile.subtractResource(this);
@@ -304,10 +312,13 @@ public class Player extends Entity {
             solidArea.height = attackArea.height;
 
             int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
-            damageMonster(monsterIndex, attack);
+            damageMonster(monsterIndex, attack, currentMeleeWeapon.knockBackPower);
 
             int interactiveTileIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
             damageInteractiveTile(interactiveTileIndex);
+
+            int projectileIdnex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.projectileList);
+            damageProjectile(projectileIdnex);
 
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -369,10 +380,14 @@ public class Player extends Entity {
         }
     }
 
-    public void damageMonster(int index, int attackPower) {
+    public void damageMonster(int index, int attackPower, int knockBackPower) {
         if (index != 999) {
             if (!gamePanel.monster[gamePanel.currentMap][index].invincible) {
                 gamePanel.playSoundEfect(5);
+
+                if(knockBackPower > 0) {
+                    knockBack(gamePanel.monster[gamePanel.currentMap][index], knockBackPower);
+                }
 
                 int damage = attackPower - gamePanel.monster[gamePanel.currentMap][index].defense;
                 if (damage <= 0) {
@@ -409,6 +424,13 @@ public class Player extends Entity {
             }
         }
     } 
+
+    private void damageProjectile(int i) {
+        if(i != 999) {
+            generateParticle(gamePanel.projectileList[gamePanel.currentMap][i], gamePanel.projectileList[gamePanel.currentMap][i]);
+            gamePanel.projectileList[gamePanel.currentMap][i].alive = false;
+        }
+    }
 
     private void checkLevelUp() {
         if (exp >= nextLevelExp) {
@@ -557,5 +579,11 @@ public class Player extends Entity {
                 inventory.remove(itemIndex);
             }
         }
+    }
+
+    private void knockBack(Entity entity, int knockBackPower) {
+        entity.direction = direction;
+        entity.speed = knockBackPower;
+        entity.knockBack = true;
     }
 }

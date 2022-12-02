@@ -22,37 +22,40 @@ public class Entity {
     public double worldX;
     public double worldY;
     public double speed;
+    public double defaultSpeed;
 
     public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
     public String direction = "down";
-    
+
     public int spriteCounter = 0;
     public int spriteNumber = 1;
     public int actionLockCounter = 0;
     public int shotAvelibleCounter = 0;
-    
+    public int invincibleCounter = 0;
+    public int knockBackCounter = 0;
+
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-    
+
     public int solidAreaDefaultX;
     public int solidAreaDefaultY;
     public boolean collisionOn = false;
-    
+
     public String dialogues[] = new String[20];
     public int dialoguesIntex = 0;
-    
+
     public int maxHealth;
     public int health;
     public int maxMana;
     public int mana;
-    
+
     public BufferedImage image1, image2, image3;
     public String name;
     public boolean collision = false;
-    
+
+    public boolean knockBack = false;
     public boolean invincible = false;
-    public int invincibleCounter;
     public int invincibleTime = 30;
-    
+
     public int type;
     public static final int PLAYER_TYPE = 0;
     public static final int NPC_TYPE = 1;
@@ -63,8 +66,9 @@ public class Entity {
     public static final int SHIELD_TYPE = 6;
     public static final int CONSUMABLE_TYPE = 7;
     public static final int PICKUP_ONLY_TYPE = 8;
-   
-    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,attackLeft1, attackLeft2, attackRight1, attackRight2;
+
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1,
+            attackRight2;
     public boolean attacking = false;
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 
@@ -100,6 +104,7 @@ public class Entity {
     public String description = "";
     public int useManaCost;
     public int itemPrice = 0;
+    public int knockBackPower = 0;
 
     public ArrayList<Entity> inventory = new ArrayList<>();
     public int inventoryMaxSize;
@@ -133,14 +138,21 @@ public class Entity {
         return image;
     }
 
-    public void setAction() { }
-    public void demageReaction() { }
-    public void checkDrop() { }
-    public void use(Entity entity) { }
-    
-    public void dropItem(Entity droppedItmen) { 
-        for (int i = 0; i < gamePanel.obj[1].length; i++){
-            if(gamePanel.obj[gamePanel.currentMap][i] == null) {
+    public void setAction() {
+    }
+
+    public void demageReaction() {
+    }
+
+    public void checkDrop() {
+    }
+
+    public void use(Entity entity) {
+    }
+
+    public void dropItem(Entity droppedItmen) {
+        for (int i = 0; i < gamePanel.obj[1].length; i++) {
+            if (gamePanel.obj[gamePanel.currentMap][i] == null) {
                 gamePanel.obj[gamePanel.currentMap][i] = droppedItmen;
                 gamePanel.obj[gamePanel.currentMap][i].worldX = worldX;
                 gamePanel.obj[gamePanel.currentMap][i].worldY = worldY;
@@ -157,54 +169,112 @@ public class Entity {
         dialoguesIntex++;
 
         switch (gamePanel.player.direction) {
-            case "up": direction = "down"; break;
-            case "down": direction = "up"; break;
-            case "left": direction = "right"; break;
-            case "right": direction = "left"; break;
-            default: break;
+            case "up":
+                direction = "down";
+                break;
+            case "down":
+                direction = "up";
+                break;
+            case "left":
+                direction = "right";
+                break;
+            case "right":
+                direction = "left";
+                break;
+            default:
+                break;
         }
     }
 
     public void update() {
-        setAction();
+        if (!dying) {
 
-        checkCollision();
+            if (knockBack) {
+                checkCollision();
+                if (collisionOn) {
+                    knockBack = false;
+                    knockBackCounter = 0;
+                    speed = defaultSpeed;
+                } else if (!collisionOn) {
+                    switch (direction) {
+                        case "up":
+                            worldY -= speed;
+                            break;
+                        case "down":
+                            worldY += speed;
+                            break;
+                        case "left":
+                            worldX -= speed;
+                            break;
+                        case "right":
+                            worldX += speed;
+                            break;
+                        default:
+                            break;
+                    }
 
-        // IF COLLISION IS FALSE, ENTITY CAN MOVE
-        if (!collisionOn) {
+                    knockBackCounter++;
+                    if (knockBackCounter == 4) {
+                        knockBack = false;
+                        knockBackCounter = 0;
+                        speed = defaultSpeed;
+                    }
+                }
 
-            switch (direction) {
-                case "up": worldY -= speed; break;
-                case "down": worldY += speed; break;
-                case "left": worldX -= speed; break;
-                case "right": worldX += speed; break;
-                default: break;
+            } else {
+
+                setAction();
+                checkCollision();
+
+                // IF COLLISION IS FALSE, ENTITY CAN MOVE
+                if (!collisionOn) {
+
+                    switch (direction) {
+                        case "up":
+                            worldY -= speed;
+                            break;
+                        case "down":
+                            worldY += speed;
+                            break;
+                        case "left":
+                            worldX -= speed;
+                            break;
+                        case "right":
+                            worldX += speed;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                spriteCounter++;
+                if (spriteCounter > animationRefresh) {
+                    if (spriteNumber == 1) {
+                        spriteNumber = 2;
+                    } else if (spriteNumber == 2) {
+                        spriteNumber = 1;
+                    }
+                    spriteCounter = 0;
+                }
+                if (invincible) {
+                    invincibleCounter++;
+                    if (invincibleCounter > invincibleTime) {
+                        invincible = false;
+                        invincibleCounter = 0;
+                    }
+                }
+                if (shotAvelibleCounter < 30) {
+                    shotAvelibleCounter++;
+                }
             }
-        }
-
-        spriteCounter++;
-        if (spriteCounter > animationRefresh) {
-            if (spriteNumber == 1) { spriteNumber = 2; } 
-            else if (spriteNumber == 2) { spriteNumber = 1; } 
-            spriteCounter = 0;
-        }
-        if (invincible) {
-            invincibleCounter++;
-            if (invincibleCounter > invincibleTime) {
-                invincible = false;
-                invincibleCounter = 0;
-            }
-        }
-        if( shotAvelibleCounter < 30) {
-            shotAvelibleCounter++;
         }
     }
 
     public void damagePlayer(int attackPower) {
         if (!gamePanel.player.invincible) {
-            gamePanel.playSoundEfect(6); 
+            gamePanel.playSoundEfect(6);
             int damage = attackPower - gamePanel.player.defense;
-            if(damage < 0) {
+            if (damage < 0) {
                 damage = 0;
             }
             gamePanel.player.health -= damage;
@@ -225,29 +295,41 @@ public class Entity {
 
             switch (direction) {
                 case "up":
-                    if (spriteNumber == 1) { image = up1; } 
-                    else if (spriteNumber == 2) { image = up2; } 
+                    if (spriteNumber == 1) {
+                        image = up1;
+                    } else if (spriteNumber == 2) {
+                        image = up2;
+                    }
                     break;
                 case "down":
-                    if (spriteNumber == 1) { image = down1; } 
-                    else if (spriteNumber == 2) { image = down2; } 
+                    if (spriteNumber == 1) {
+                        image = down1;
+                    } else if (spriteNumber == 2) {
+                        image = down2;
+                    }
                     break;
                 case "left":
-                    if (spriteNumber == 1) { image = left1; } 
-                    else if (spriteNumber == 2) { image = left2; } 
+                    if (spriteNumber == 1) {
+                        image = left1;
+                    } else if (spriteNumber == 2) {
+                        image = left2;
+                    }
                     break;
                 case "right":
-                    if (spriteNumber == 1) { image = right1; } 
-                    else if (spriteNumber == 2) { image = right2; } 
+                    if (spriteNumber == 1) {
+                        image = right1;
+                    } else if (spriteNumber == 2) {
+                        image = right2;
+                    }
                     break;
                 default:
                     break;
             }
 
             // MONSTER HP BAR
-            if(type == MONSTER_TYPE && hpBarOn) {
+            if (type == MONSTER_TYPE && hpBarOn) {
 
-                double scale = (double)gamePanel.tileSize/maxHealth;
+                double scale = (double) gamePanel.tileSize / maxHealth;
                 double hpBarValue = scale * health;
 
                 g2.setColor(Color.darkGray);
@@ -256,7 +338,7 @@ public class Entity {
                 g2.fillRect((int) screenX, (int) screenY + gamePanel.tileSize + 5, (int) hpBarValue, 4);
 
                 hpBarCounter++;
-                if(hpBarCounter > 300) {
+                if (hpBarCounter > 300) {
                     hpBarCounter = 0;
                     hpBarOn = false;
                 }
@@ -273,43 +355,58 @@ public class Entity {
 
             g2.drawImage(image, (int) screenX, (int) screenY, null);
             // g2.setColor(Color.red);
-            // g2.drawRect((int) (screenX + solidArea.x), (int) (screenY + solidArea.y), solidArea.width, solidArea.height);
+            // g2.drawRect((int) (screenX + solidArea.x), (int) (screenY + solidArea.y),
+            // solidArea.width, solidArea.height);
 
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
     }
 
-    private void dyingAnimation(Graphics2D g2){
+    private void dyingAnimation(Graphics2D g2) {
         dyingCounter++;
         int i = 5;
-        
-        if(dyingCounter <= i){ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f)); }
-        if(dyingCounter > i && dyingCounter <= 2 * i){ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f)); }
-        if(dyingCounter > 2 * i && dyingCounter <= 3 * i){ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f)); }
-        if(dyingCounter > 3 * i && dyingCounter <= 4 * i){ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f)); }
-        if(dyingCounter > 4 * i && dyingCounter <= 5 * i){ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f)); }
-        if(dyingCounter > 5 * i && dyingCounter <= 6 * i){ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f)); }
-        if(dyingCounter > 6 * i && dyingCounter <= 7 * i){ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f)); }
-        if(dyingCounter > 7 * i && dyingCounter <= 8 * i){ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f)); }
-        
-        if(dyingCounter > 8 * i) {
+        alive = false;
+
+        if (dyingCounter <= i) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));
+        }
+        if (dyingCounter > i && dyingCounter <= 2 * i) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        }
+        if (dyingCounter > 2 * i && dyingCounter <= 3 * i) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));
+        }
+        if (dyingCounter > 3 * i && dyingCounter <= 4 * i) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        }
+        if (dyingCounter > 4 * i && dyingCounter <= 5 * i) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));
+        }
+        if (dyingCounter > 5 * i && dyingCounter <= 6 * i) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        }
+
+        if (dyingCounter > 8 * i) {
             dying = false;
-            alive = false;
         }
     }
 
     public Color getParticleColor() {
         return null;
     }
+
     public int getParticleSize() {
         return 0;
     }
+
     public int getParticleSpeed() {
         return 0;
     }
+
     public int getParticleMaxHealth() {
         return 0;
     }
+
     public void generateParticle(Entity generator, Entity target) {
         Color color = generator.getParticleColor();
         int size = generator.getParticleSize();
@@ -327,52 +424,52 @@ public class Entity {
     }
 
     public void searchPath(int goalCol, int goalRow) {
-        int startCol = (int)((worldX + solidArea.x)/gamePanel.tileSize);
-        int startRow  = (int)((worldY + solidArea.y)/gamePanel.tileSize);
+        int startCol = (int) ((worldX + solidArea.x) / gamePanel.tileSize);
+        int startRow = (int) ((worldY + solidArea.y) / gamePanel.tileSize);
 
         gamePanel.pathFinder.setNodes(startCol, startRow, goalCol, goalRow);
 
-        if(gamePanel.pathFinder.search()) {
+        if (gamePanel.pathFinder.search()) {
             int nextX = gamePanel.pathFinder.pathList.get(0).col * gamePanel.tileSize;
             int nextY = gamePanel.pathFinder.pathList.get(0).row * gamePanel.tileSize;
 
-            int entityLeftX = (int)(worldX + solidArea.x);
-            int entityRightX = (int)(worldX + solidArea.x + solidArea.width);
-            int entityTopY = (int)(worldY + solidArea.y);
-            int entityBottomY = (int)(worldY + solidArea.y + solidArea.height);
+            int entityLeftX = (int) (worldX + solidArea.x);
+            int entityRightX = (int) (worldX + solidArea.x + solidArea.width);
+            int entityTopY = (int) (worldY + solidArea.y);
+            int entityBottomY = (int) (worldY + solidArea.y + solidArea.height);
 
-            if(entityTopY > nextY && entityLeftX >= nextX && entityRightX < nextX + gamePanel.tileSize) {
+            if (entityTopY > nextY && entityLeftX >= nextX && entityRightX < nextX + gamePanel.tileSize) {
                 direction = "up";
-            } else if(entityTopY < nextY && entityLeftX >= nextX && entityRightX < nextX + gamePanel.tileSize) {
+            } else if (entityTopY < nextY && entityLeftX >= nextX && entityRightX < nextX + gamePanel.tileSize) {
                 direction = "down";
-            } else if(entityTopY >= nextY && entityBottomY < nextY + gamePanel.tileSize) {
-                if(entityLeftX > nextX) {
+            } else if (entityTopY >= nextY && entityBottomY < nextY + gamePanel.tileSize) {
+                if (entityLeftX > nextX) {
                     direction = "left";
-                } else if(entityLeftX < nextX) {
+                } else if (entityLeftX < nextX) {
                     direction = "right";
                 }
-            } else if(entityTopY > nextY && entityLeftX > nextX) {
+            } else if (entityTopY > nextY && entityLeftX > nextX) {
                 direction = "up";
                 checkCollision();
-                if(collisionOn) {
+                if (collisionOn) {
                     direction = "left";
                 }
-            } else if(entityTopY > nextY && entityLeftX < nextX) {
+            } else if (entityTopY > nextY && entityLeftX < nextX) {
                 direction = "up";
                 checkCollision();
-                if(collisionOn) {
+                if (collisionOn) {
                     direction = "right";
                 }
-            } else if(entityTopY < nextY && entityLeftX > nextX) {
+            } else if (entityTopY < nextY && entityLeftX > nextX) {
                 direction = "down";
                 checkCollision();
-                if(collisionOn) {
+                if (collisionOn) {
                     direction = "left";
                 }
-            } else if(entityTopY < nextY && entityLeftX < nextX) {
+            } else if (entityTopY < nextY && entityLeftX < nextX) {
                 direction = "down";
                 checkCollision();
-                if(collisionOn) {
+                if (collisionOn) {
                     direction = "right";
                 }
             }
@@ -381,7 +478,7 @@ public class Entity {
             // int nextRow = gamePanel.pathFinder.pathList.get(0).row;
 
             // if(nextCol == goalCol && nextRow == goalRow) {
-            //     onPath = false;
+            // onPath = false;
             // }
         }
     }

@@ -43,8 +43,6 @@ public class UI {
         this.gamePanel = gamePanel;
         try {
             InputStream is = getClass().getResourceAsStream("/font/MaruMonica.ttf");
-            // C:\Users\AFACISZEWSKI\Desktop\Adventure-Game\res\font\MaruMonica.ttf
-            // res\font\MaruMonica.ttf
             maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();

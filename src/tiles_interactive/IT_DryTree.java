@@ -2,7 +2,15 @@ package tiles_interactive;
 
 import entity.Entity;
 import main.GamePanel;
+import main.UtilityTool;
+
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
 
 public class IT_DryTree extends InteractiveTile{
 
@@ -15,6 +23,9 @@ public class IT_DryTree extends InteractiveTile{
         this.worldY = (double)gamePanel.tileSize * row;
 
         down1 = setup("/tiles_interactive/drytree", gamePanel.tileSize, gamePanel.tileSize);
+
+        
+
         destrucible = true;
         health = 3;
     }

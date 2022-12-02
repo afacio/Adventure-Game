@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -41,7 +42,9 @@ public class UI {
     public UI(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         try {
-            InputStream is = getClass().getResourceAsStream("/res/font/MaruMonica.ttf");
+            InputStream is = getClass().getResourceAsStream("/font/MaruMonica.ttf");
+            // C:\Users\AFACISZEWSKI\Desktop\Adventure-Game\res\font\MaruMonica.ttf
+            // res\font\MaruMonica.ttf
             maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();

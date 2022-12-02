@@ -17,24 +17,24 @@ public class Sound {
 
     public Sound() {
 
-        soundPath[0] = "src/res/sound/BlueBoyAdventure.wav";
-        soundPath[1] = "src/res/sound/coin.wav";
-        soundPath[2] = "src/res/sound/powerup.wav";
-        soundPath[3] = "src/res/sound/unlock.wav";
-        soundPath[4] = "src/res/sound/fanfare.wav";
-        soundPath[5] = "src/res/sound/hitmonster.wav";
-        soundPath[6] = "src/res/sound/receivedamage.wav";
-        soundPath[7] = "src/res/sound/swingweapon.wav";
-        soundPath[8] = "src/res/sound/blood-pop.wav";
-        soundPath[9] = "src/res/sound/player-demage.wav";
-        soundPath[10] = "src/res/sound/levelup.wav";
-        soundPath[11] = "src/res/sound/cursor.wav";
-        soundPath[12] = "src/res/sound/burning.wav";
-        soundPath[13] = "src/res/sound/cuttree.wav";
-        soundPath[14] = "src/res/sound/gameover.wav";
-        soundPath[15] = "src/res/sound/stairs.wav";
-        soundPath[16] = "src/res/sound/trade.wav";
-        soundPath[17] = "src/res/sound/noMany.wav";
+        soundPath[0] = "res/sound/BlueBoyAdventure.wav";
+        soundPath[1] = "res/sound/coin.wav";
+        soundPath[2] = "res/sound/powerup.wav";
+        soundPath[3] = "res/sound/unlock.wav";
+        soundPath[4] = "res/sound/fanfare.wav";
+        soundPath[5] = "res/sound/hitmonster.wav";
+        soundPath[6] = "res/sound/receivedamage.wav";
+        soundPath[7] = "res/sound/swingweapon.wav";
+        soundPath[8] = "res/sound/blood-pop.wav";
+        soundPath[9] = "res/sound/player-demage.wav";
+        soundPath[10] = "res/sound/levelup.wav";
+        soundPath[11] = "res/sound/cursor.wav";
+        soundPath[12] = "res/sound/burning.wav";
+        soundPath[13] = "res/sound/cuttree.wav";
+        soundPath[14] = "res/sound/gameover.wav";
+        soundPath[15] = "res/sound/stairs.wav";
+        soundPath[16] = "res/sound/trade.wav";
+        soundPath[17] = "res/sound/noMany.wav";
     }
 
     public void setFile(int index) {

@@ -29,8 +29,8 @@ public class TileManager {
         tiles = new Tile[50];
         mapTileNumber = new int[gamePanel.maxMap][gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
         getTileImage();
-        loadMap("src/res/maps/worldV3.txt", 0);
-        loadMap("src/res/maps/interior01.txt", 1);
+        loadMap("res/maps/worldV3.txt", 0);
+        loadMap("res/maps/interior01.txt", 1);
     }
 
     public void getTileImage(){
@@ -83,7 +83,7 @@ public class TileManager {
 
         try {
             tiles[index] = new Tile();
-            tiles[index].image = ImageIO.read(new File("src/res/tiles/" + imageName + ".png"));
+            tiles[index].image = ImageIO.read(new File("res/tiles/" + imageName + ".png"));
             tiles[index].image = uTool.scaleImage(tiles[index].image, gamePanel.tileSize, gamePanel.tileSize);
             tiles[index].collision = collision;
         } catch (IOException e) {
@@ -145,18 +145,18 @@ public class TileManager {
                 worldRow++;
             }
         }
-        if(drawPath) {
-            g2.setColor(new Color(255,0,0,70));
+        // if(drawPath) {
+        //     g2.setColor(new Color(255,0,0,70));
 
-            for(int i = 0; i < gamePanel.pathFinder.pathList.size(); i++) {
-                int worldX = gamePanel.pathFinder.pathList.get(i).col * gamePanel.tileSize;
-                int worldY = gamePanel.pathFinder.pathList.get(i).row * gamePanel.tileSize;
-                int screenX = (int)(worldX - gamePanel.player.worldX + gamePanel.player.screenX);
-                int screenY = (int)(worldY - gamePanel.player.worldY + gamePanel.player.screenY);
+        //     for(int i = 0; i < gamePanel.pathFinder.pathList.size(); i++) {
+        //         int worldX = gamePanel.pathFinder.pathList.get(i).col * gamePanel.tileSize;
+        //         int worldY = gamePanel.pathFinder.pathList.get(i).row * gamePanel.tileSize;
+        //         int screenX = (int)(worldX - gamePanel.player.worldX + gamePanel.player.screenX);
+        //         int screenY = (int)(worldY - gamePanel.player.worldY + gamePanel.player.screenY);
                 
-                g2.fillRect(screenX,screenY, gamePanel.tileSize, gamePanel.tileSize);
-            }
-        }
+        //         g2.fillRect(screenX,screenY, gamePanel.tileSize, gamePanel.tileSize);
+        //     }
+        // }
     }
 
     public void loadMap(String filePath, int map){

@@ -124,7 +124,7 @@ public class Entity {
 
         try {
 
-            image = ImageIO.read(new File("src/res" + imagePath + ".png"));
+            image = ImageIO.read(new File("res" + imagePath + ".png"));
             image = uTool.scaleImage(image, width, height);
 
         } catch (IOException e) {

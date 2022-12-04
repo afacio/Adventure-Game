@@ -106,6 +106,8 @@ public class Entity {
     public int useManaCost;
     public int itemPrice = 0;
     public int knockBackPower = 0;
+    public boolean stackable = false;
+    public int amount = 1;
 
     public ArrayList<Entity> inventory = new ArrayList<>();
     public int inventoryMaxSize;
@@ -566,4 +568,38 @@ public class Entity {
         return getTopY() / gamePanel.tileSize;
     }
 
+    private int searchItemInInventory(String itemName) {
+        int itemIndex = 999;
+
+        for(int i = 0; i < inventory.size(); i++) {
+            if(inventory.get(i).name.equals(itemName)) {
+                itemIndex = i;
+                break;
+            }
+        }
+        return itemIndex;
+    }
+
+    public boolean canObtainItem(Entity item) {
+        boolean canObtain = false;
+
+        if(item.stackable) {
+            int index = searchItemInInventory(item.name);
+            if(index != 999) {
+                inventory.get(index).amount += item.amount;
+                canObtain = true;
+            } else {
+                if(inventory.size() != inventoryMaxSize) {
+                    inventory.add(item);
+                    canObtain = true;
+                }
+            }
+        } else {
+            if(inventory.size() != inventoryMaxSize) {
+                inventory.add(item);
+                canObtain = true;
+            }
+        } 
+        return canObtain;       
+    }
 }

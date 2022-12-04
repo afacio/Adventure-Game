@@ -173,14 +173,6 @@ public class UI {
         }
     }
 
-    private void drawTextWithShadow(String text, int x, int y) {
-        g2.setColor(Color.BLACK);
-        g2.drawString(text, x + 5, y + 5);
-
-        g2.setColor(Color.WHITE);
-        g2.drawString(text, x, y);
-    }
-
     private void drawPlayerHealth() {
         int x = gamePanel.tileSize / 2;
         int y = gamePanel.tileSize / 2;
@@ -376,6 +368,17 @@ public class UI {
             }
 
             g2.drawImage(entity.inventory.get(item).down1, slotX, slotY, null);
+
+            if(entity.inventory.get(item).amount > 1) {
+                g2.setFont(g2.getFont().deriveFont(32f));
+                int amountX = 0;
+                int amountY = slotY + gamePanel.tileSize;
+                String s = Integer.toString(entity.inventory.get(item).amount);
+                amountX = getXforAlignToRightText(s, slotX + 44);
+
+                drawTextWithShadow(s, amountX, amountY);
+            }
+
             slotX += slotSize;
 
             if (item == 5 || item == 11 || item == 17) {
@@ -868,14 +871,18 @@ public class UI {
                 addMessage("Not enough space in inventory!");
             } else {
                 if (buyer == gamePanel.player) {
-                    buyer.inventory.add(seller.inventory.get(itemIndex));
+                    gamePanel.player.canObtainItem(seller.inventory.get(itemIndex));
                     gamePanel.playSoundEfect(16);
                     buyer.coin -= price;
                     seller.coin += price;
                 } else if (seller == gamePanel.player) {
                     if (seller.inventory.get(itemIndex) != seller.currentMeleeWeapon
                             && seller.inventory.get(itemIndex) != seller.currentShield) {
-                        seller.inventory.remove(itemIndex);
+                                if(seller.inventory.get(itemIndex).amount > 1) {
+                                    seller.inventory.get(itemIndex).amount -= 1;
+                                } else {
+                                    seller.inventory.remove(itemIndex);
+                                }
                         buyer.coin -= price;
                         seller.coin += price;
                         gamePanel.playSoundEfect(16);
@@ -961,14 +968,13 @@ public class UI {
 
     private void storageItemTransition(Entity dispenser, Entity receiver, int itemIndex) {
         if (itemIndex < dispenser.inventory.size()) {
-
             if (receiver.inventoryMaxSize == receiver.inventory.size()) {
                 gamePanel.playSoundEfect(17);
                 addMessage("Not enough space in inventory!");
             } else {
                 if (dispenser == gamePanel.player) {
                     if (dispenser.inventory.get(itemIndex) != dispenser.currentMeleeWeapon && dispenser.inventory.get(itemIndex) != dispenser.currentShield) {
-                        receiver.inventory.add(dispenser.inventory.get(itemIndex));
+                        receiver.canObtainItem(dispenser.inventory.get(itemIndex));
                         dispenser.inventory.remove(itemIndex);
                     } else {
                         gamePanel.playSoundEfect(17);
@@ -976,7 +982,7 @@ public class UI {
                     }
 
                 } else {
-                    receiver.inventory.add(dispenser.inventory.get(itemIndex));
+                    receiver.canObtainItem(dispenser.inventory.get(itemIndex));
                     dispenser.inventory.remove(itemIndex);
                 }
             }
@@ -1002,5 +1008,12 @@ public class UI {
         int lenght = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         return tailX - lenght;
     }
+    
+    private void drawTextWithShadow(String text, int x, int y) {
+        g2.setColor(Color.BLACK);
+        g2.drawString(text, x + 5, y + 5);
 
+        g2.setColor(Color.WHITE);
+        g2.drawString(text, x, y);
+    }
 }

@@ -348,8 +348,7 @@ public class Player extends Entity {
             } else {
                 String information;
 
-                if (inventory.size() < inventoryMaxSize) {
-                    inventory.add(gamePanel.obj[gamePanel.currentMap][index]);
+                if (canObtainItem(gamePanel.obj[gamePanel.currentMap][index])) {
                     gamePanel.playSoundEfect(1);
                     information = "Got a " + gamePanel.obj[gamePanel.currentMap][index].name + ".";
                 } else {
@@ -581,7 +580,11 @@ public class Player extends Entity {
                 defense = getDefense();
             } else if (selectedItem.type == CONSUMABLE_TYPE) {
                 if(selectedItem.use(this)) {
-                    inventory.remove(itemIndex);
+                    if(inventory.get(itemIndex).amount > 1) {
+                        inventory.get(itemIndex).amount--;
+                    } else {
+                        inventory.remove(itemIndex);
+                    }
                 }
             }
         }

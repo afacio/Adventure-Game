@@ -17,6 +17,7 @@ public class OBJ_Key extends Entity {
         down1 = setup("/objects/key", gamePanel.tileSize, gamePanel.tileSize);
         description = "[" + name + "]\nIt open the door";
         itemPrice = 50;
+        stackable = true;
     }
 
     @Override

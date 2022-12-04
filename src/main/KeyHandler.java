@@ -55,6 +55,10 @@ public class KeyHandler implements KeyListener {
         else if (gamePanel.gameState == gamePanel.TRADE_STATE) {
             tradeState(code);
         }
+
+        else if (gamePanel.gameState == gamePanel.STORAGE_STATE) {
+            storageScreen(code);
+        }
     }
 
     @Override
@@ -151,10 +155,15 @@ public class KeyHandler implements KeyListener {
             checkDrawTime = !checkDrawTime;
         }
         if (code == KeyEvent.VK_R) {
-            switch(gamePanel.currentMap) {
-                case 0: gamePanel.tileManager.loadMap("res/maps/worldV3.txt", 0); break;
-                case 1: gamePanel.tileManager.loadMap("res/maps/interior01.txt", 1); break;
-                default: break;
+            switch (gamePanel.currentMap) {
+                case 0:
+                    gamePanel.tileManager.loadMap("res/maps/worldV3.txt", 0);
+                    break;
+                case 1:
+                    gamePanel.tileManager.loadMap("res/maps/interior01.txt", 1);
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -176,8 +185,56 @@ public class KeyHandler implements KeyListener {
             gamePanel.gameState = gamePanel.PLAY_STATE;
         } else if (code == KeyEvent.VK_ENTER) {
             gamePanel.player.selectItem();
-        } 
+        }
         playerInventory(code);
+    }
+
+    private void playerInventory(int code) {
+        if (code == KeyEvent.VK_W) {
+            if (gamePanel.ui.playerCurrentSlotRow > 0) {
+                gamePanel.ui.playerCurrentSlotRow--;
+                gamePanel.playSoundEfect(11);
+            } else {
+                if (gamePanel.ui.playerCurrentSlotCol > 0) {
+                    gamePanel.ui.playerCurrentSlotCol--;
+                    gamePanel.ui.playerCurrentSlotRow = gamePanel.ui.SLOT_MAX_ROW - 1;
+                    gamePanel.playSoundEfect(11);
+                }
+            }
+        } else if (code == KeyEvent.VK_S) {
+            if (gamePanel.ui.playerCurrentSlotRow < gamePanel.ui.SLOT_MAX_ROW - 1) {
+                gamePanel.ui.playerCurrentSlotRow++;
+                gamePanel.playSoundEfect(11);
+            } else {
+                if (gamePanel.ui.playerCurrentSlotCol < gamePanel.ui.SLOT_MAX_COL - 1) {
+                    gamePanel.ui.playerCurrentSlotCol++;
+                    gamePanel.ui.playerCurrentSlotRow = 0;
+                    gamePanel.playSoundEfect(11);
+                }
+            }
+        } else if (code == KeyEvent.VK_A) {
+            if (gamePanel.ui.playerCurrentSlotCol > 0) {
+                gamePanel.ui.playerCurrentSlotCol--;
+                gamePanel.playSoundEfect(11);
+            } else {
+                if (gamePanel.ui.playerCurrentSlotRow > 0) {
+                    gamePanel.ui.playerCurrentSlotRow--;
+                    gamePanel.ui.playerCurrentSlotCol = gamePanel.ui.SLOT_MAX_COL - 1;
+                    gamePanel.playSoundEfect(11);
+                }
+            }
+        } else if (code == KeyEvent.VK_D) {
+            if (gamePanel.ui.playerCurrentSlotCol < gamePanel.ui.SLOT_MAX_COL - 1) {
+                gamePanel.ui.playerCurrentSlotCol++;
+                gamePanel.playSoundEfect(11);
+            } else {
+                if (gamePanel.ui.playerCurrentSlotRow < gamePanel.ui.SLOT_MAX_ROW - 1) {
+                    gamePanel.ui.playerCurrentSlotRow++;
+                    gamePanel.ui.playerCurrentSlotCol = 0;
+                    gamePanel.playSoundEfect(11);
+                }
+            }
+        }
     }
 
     private void optionsState(int code) {
@@ -248,12 +305,12 @@ public class KeyHandler implements KeyListener {
 
     private void gameOverState(int code) {
         if (code == KeyEvent.VK_ENTER) {
-            if(gamePanel.ui.commandNum == 0) {
+            if (gamePanel.ui.commandNum == 0) {
                 gamePanel.gameState = gamePanel.PLAY_STATE;
                 gamePanel.restart();
                 gamePanel.playMusic(0);
                 gamePanel.keyHandler.enterPressed = false;
-            } else if(gamePanel.ui.commandNum == 1) {
+            } else if (gamePanel.ui.commandNum == 1) {
                 gamePanel.gameState = gamePanel.TITLE_STATE;
                 gamePanel.restart();
                 gamePanel.ui.commandNum = 0;
@@ -264,7 +321,7 @@ public class KeyHandler implements KeyListener {
 
         int maxCommandNumber = 1;
         if (code == KeyEvent.VK_W) {
-            if(gamePanel.ui.commandNum == -1) {
+            if (gamePanel.ui.commandNum == -1) {
                 gamePanel.ui.commandNum = maxCommandNumber;
             } else if (gamePanel.ui.commandNum != 0) {
                 gamePanel.ui.commandNum--;
@@ -274,7 +331,7 @@ public class KeyHandler implements KeyListener {
             gamePanel.playSoundEfect(11);
         }
         if (code == KeyEvent.VK_S) {
-            if(gamePanel.ui.commandNum == -1) {
+            if (gamePanel.ui.commandNum == -1) {
                 gamePanel.ui.commandNum = 0;
             } else if (gamePanel.ui.commandNum != maxCommandNumber) {
                 gamePanel.ui.commandNum++;
@@ -295,14 +352,14 @@ public class KeyHandler implements KeyListener {
             enterPressed = true;
             gamePanel.playSoundEfect(13);
         }
-        if(gamePanel.ui.subState == 1) {
-            npcInventory(code);
+        if (gamePanel.ui.subState == 1) {
+            twoInventoryScreensHandler(code);
             if (code == KeyEvent.VK_ESCAPE) {
                 gamePanel.ui.subState = 0;
                 gamePanel.ui.commandNum = 0;
             }
-        } else if(gamePanel.ui.subState == 2) {
-            playerInventory(code);
+        } else if (gamePanel.ui.subState == 2) {
+            twoInventoryScreensHandler(code);
             if (code == KeyEvent.VK_ESCAPE) {
                 gamePanel.ui.subState = 0;
                 gamePanel.ui.commandNum = 1;
@@ -329,100 +386,76 @@ public class KeyHandler implements KeyListener {
         }
     }
 
-    private void playerInventory(int code) {
-        if (code == KeyEvent.VK_W) {
-            if (gamePanel.ui.playerCurrentSlotRow > 0) {
-                gamePanel.ui.playerCurrentSlotRow--;
-                gamePanel.playSoundEfect(11);
-            } else {
-                if (gamePanel.ui.playerCurrentSlotCol > 0) {
-                    gamePanel.ui.playerCurrentSlotCol--;
-                    gamePanel.ui.playerCurrentSlotRow = gamePanel.ui.SLOT_MAX_ROW - 1;
+    private void storageScreen(int code) {
+        if (code == KeyEvent.VK_ESCAPE) {
+            gamePanel.gameState = gamePanel.PLAY_STATE;
+            gamePanel.ui.subState = 0;
+            gamePanel.ui.commandNum = 0;
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+            gamePanel.playSoundEfect(13);
+        }
+
+        twoInventoryScreensHandler(code);
+    }
+
+    private void twoInventoryScreensHandler(int code) {
+        if(gamePanel.ui.subState == 1) {
+            if (code == KeyEvent.VK_W) {
+                if (gamePanel.ui.entityCurrentSlotRow > 0) {
+                    gamePanel.ui.entityCurrentSlotRow--;
                     gamePanel.playSoundEfect(11);
                 }
-            }
-        } else if (code == KeyEvent.VK_S) {
-            if (gamePanel.ui.playerCurrentSlotRow < gamePanel.ui.SLOT_MAX_ROW - 1) {
-                gamePanel.ui.playerCurrentSlotRow++;
-                gamePanel.playSoundEfect(11);
-            } else {
-                if (gamePanel.ui.playerCurrentSlotCol < gamePanel.ui.SLOT_MAX_COL - 1) {
-                    gamePanel.ui.playerCurrentSlotCol++;
-                    gamePanel.ui.playerCurrentSlotRow = 0;
+            } else if (code == KeyEvent.VK_S) {
+                if (gamePanel.ui.entityCurrentSlotRow < gamePanel.ui.SLOT_MAX_ROW - 1) {
+                    gamePanel.ui.entityCurrentSlotRow++;
                     gamePanel.playSoundEfect(11);
                 }
+            } else if (code == KeyEvent.VK_A) {
+                if (gamePanel.ui.entityCurrentSlotCol > 0) {
+                    gamePanel.ui.entityCurrentSlotCol--;
+                    gamePanel.playSoundEfect(11);
+                }
+            } else if (code == KeyEvent.VK_D) {
+                if (gamePanel.ui.entityCurrentSlotCol < gamePanel.ui.SLOT_MAX_COL - 1) {
+                    gamePanel.ui.entityCurrentSlotCol++;
+                    gamePanel.playSoundEfect(11);
+                } else {
+                    gamePanel.ui.subState = 2;
+                    gamePanel.ui.playerCurrentSlotCol = 0;
+                    gamePanel.ui.playerCurrentSlotRow = gamePanel.ui.entityCurrentSlotRow;
+                }
             }
-        } else if (code == KeyEvent.VK_A) {
-            if (gamePanel.ui.playerCurrentSlotCol > 0) {
-                gamePanel.ui.playerCurrentSlotCol--;
-                gamePanel.playSoundEfect(11);
-            } else {
+            
+        }else if(gamePanel.ui.subState == 2) {
+            if (code == KeyEvent.VK_W) {
                 if (gamePanel.ui.playerCurrentSlotRow > 0) {
                     gamePanel.ui.playerCurrentSlotRow--;
-                    gamePanel.ui.playerCurrentSlotCol = gamePanel.ui.SLOT_MAX_COL - 1;
                     gamePanel.playSoundEfect(11);
                 }
-            }
-        } else if (code == KeyEvent.VK_D) {
-            if (gamePanel.ui.playerCurrentSlotCol < gamePanel.ui.SLOT_MAX_COL - 1) {
-                gamePanel.ui.playerCurrentSlotCol++;
-                gamePanel.playSoundEfect(11);
-            } else {
+            } else if (code == KeyEvent.VK_S) {
                 if (gamePanel.ui.playerCurrentSlotRow < gamePanel.ui.SLOT_MAX_ROW - 1) {
                     gamePanel.ui.playerCurrentSlotRow++;
-                    gamePanel.ui.playerCurrentSlotCol = 0;
+                    gamePanel.playSoundEfect(11);
+                }
+            } else if (code == KeyEvent.VK_A) {
+                if (gamePanel.ui.playerCurrentSlotCol > 0) {
+                    gamePanel.ui.playerCurrentSlotCol--;
+                    gamePanel.playSoundEfect(11);
+                } else {
+                    gamePanel.ui.subState = 1;
+                    gamePanel.ui.playerCurrentSlotCol = gamePanel.ui.SLOT_MAX_COL - 1;
+                    gamePanel.ui.entityCurrentSlotRow = gamePanel.ui.playerCurrentSlotRow;
+                }
+            } else if (code == KeyEvent.VK_D) {
+                if (gamePanel.ui.playerCurrentSlotCol < gamePanel.ui.SLOT_MAX_COL - 1) {
+                    gamePanel.ui.playerCurrentSlotCol++;
                     gamePanel.playSoundEfect(11);
                 }
             }
         }
     }
 
-    private void npcInventory(int code) {
-        if (code == KeyEvent.VK_W) {
-            if (gamePanel.ui.npcCurrentSlotRow > 0) {
-                gamePanel.ui.npcCurrentSlotRow--;
-                gamePanel.playSoundEfect(11);
-            } else {
-                if (gamePanel.ui.npcCurrentSlotCol > 0) {
-                    gamePanel.ui.npcCurrentSlotCol--;
-                    gamePanel.ui.npcCurrentSlotRow = gamePanel.ui.SLOT_MAX_ROW - 1;
-                    gamePanel.playSoundEfect(11);
-                }
-            }
-        } else if (code == KeyEvent.VK_S) {
-            if (gamePanel.ui.npcCurrentSlotRow < gamePanel.ui.SLOT_MAX_ROW - 1) {
-                gamePanel.ui.npcCurrentSlotRow++;
-                gamePanel.playSoundEfect(11);
-            } else {
-                if (gamePanel.ui.npcCurrentSlotCol < gamePanel.ui.SLOT_MAX_COL - 1) {
-                    gamePanel.ui.npcCurrentSlotCol++;
-                    gamePanel.ui.npcCurrentSlotRow = 0;
-                    gamePanel.playSoundEfect(11);
-                }
-            }
-        } else if (code == KeyEvent.VK_A) {
-            if (gamePanel.ui.npcCurrentSlotCol > 0) {
-                gamePanel.ui.npcCurrentSlotCol--;
-                gamePanel.playSoundEfect(11);
-            } else {
-                if (gamePanel.ui.npcCurrentSlotRow > 0) {
-                    gamePanel.ui.npcCurrentSlotRow--;
-                    gamePanel.ui.npcCurrentSlotCol = gamePanel.ui.SLOT_MAX_COL - 1;
-                    gamePanel.playSoundEfect(11);
-                }
-            }
-        } else if (code == KeyEvent.VK_D) {
-            if (gamePanel.ui.npcCurrentSlotCol < gamePanel.ui.SLOT_MAX_COL - 1) {
-                gamePanel.ui.npcCurrentSlotCol++;
-                gamePanel.playSoundEfect(11);
-            } else {
-                if (gamePanel.ui.npcCurrentSlotRow < gamePanel.ui.SLOT_MAX_ROW - 1) {
-                    gamePanel.ui.npcCurrentSlotRow++;
-                    gamePanel.ui.npcCurrentSlotCol = 0;
-                    gamePanel.playSoundEfect(11);
-                }
-            }
-        }
-    }
 
 }

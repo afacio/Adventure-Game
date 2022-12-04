@@ -66,6 +66,7 @@ public class Entity {
     public static final int SHIELD_TYPE = 6;
     public static final int CONSUMABLE_TYPE = 7;
     public static final int PICKUP_ONLY_TYPE = 8;
+    public static final int OBSTACLE_TYPE = 9;
 
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1,
             attackRight2;
@@ -147,7 +148,11 @@ public class Entity {
     public void checkDrop() {
     }
 
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
+        return false;
+    }
+
+    public void interact() {
     }
 
     public void dropItem(Entity droppedItmen) {
@@ -424,8 +429,8 @@ public class Entity {
     }
 
     public void searchPath(int goalCol, int goalRow) {
-        int startCol = (int) ((worldX + solidArea.x) / gamePanel.tileSize);
-        int startRow = (int) ((worldY + solidArea.y) / gamePanel.tileSize);
+        int startCol = (int) (getLeftX() / gamePanel.tileSize);
+        int startRow = (int) (getTopY() / gamePanel.tileSize);
 
         gamePanel.pathFinder.setNodes(startCol, startRow, goalCol, goalRow);
 
@@ -433,10 +438,10 @@ public class Entity {
             int nextX = gamePanel.pathFinder.pathList.get(0).col * gamePanel.tileSize;
             int nextY = gamePanel.pathFinder.pathList.get(0).row * gamePanel.tileSize;
 
-            int entityLeftX = (int) (worldX + solidArea.x);
-            int entityRightX = (int) (worldX + solidArea.x + solidArea.width);
-            int entityTopY = (int) (worldY + solidArea.y);
-            int entityBottomY = (int) (worldY + solidArea.y + solidArea.height);
+            int entityLeftX = getLeftX();
+            int entityRightX = getRightX();
+            int entityTopY = getTopY();
+            int entityBottomY = getBottomY();
 
             if (entityTopY > nextY && entityLeftX >= nextX && entityRightX < nextX + gamePanel.tileSize) {
                 direction = "up";
@@ -495,6 +500,70 @@ public class Entity {
         if (this.type == MONSTER_TYPE && contactPlayer) {
             damagePlayer(attack);
         }
+    }
+
+    public int getDetected(Entity entity, Entity[][] target, String targetName) {
+        int index = 999;
+
+        int nextWorldX = entity.getLeftX();
+        int nextWorldY = entity.getTopY();
+
+        switch (entity.direction) {
+            case "up":
+                nextWorldY = entity.getTopY() - 1;
+                break;
+            case "down":
+                nextWorldY = entity.getBottomY() + 1;
+                break;
+            case "left":
+                nextWorldX = entity.getLeftX() - 1;
+                break;
+            case "right":
+                nextWorldX = entity.getRightX() + 1;
+                break;
+            default:
+                break;
+        }
+
+        int col = nextWorldX/gamePanel.tileSize;
+        int row = nextWorldY/gamePanel.tileSize;
+
+        for(int i = 0; i < target[1].length; i++) {
+            if(target[gamePanel.currentMap][i] != null) {
+                if(target[gamePanel.currentMap][i].getCol() == col && 
+                target[gamePanel.currentMap][i].getRow() == row && 
+                target[gamePanel.currentMap][i].name.equals(targetName)) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        return index;
+    }
+
+    public int getLeftX() {
+        return (int) worldX + solidArea.x;
+    }
+
+    public int getRightX() {
+        return (int) worldX + solidArea.x + solidArea.width;
+    }
+
+    public int getTopY() {
+        return (int) worldY + solidArea.y;
+    }
+
+    public int getBottomY() {
+        return (int) worldY + solidArea.y + solidArea.height;
+    }
+
+    public int getCol() {
+        return getLeftX() / gamePanel.tileSize;
+    }
+
+    public int getRow() {
+        return getTopY() / gamePanel.tileSize;
     }
 
 }

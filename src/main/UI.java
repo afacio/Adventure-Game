@@ -31,13 +31,13 @@ public class UI {
     public int commandNum = 0;
     public int playerCurrentSlotCol = 0;
     public int playerCurrentSlotRow = 0;
-    public int npcCurrentSlotCol = 0;
-    public int npcCurrentSlotRow = 0;
+    public int entityCurrentSlotCol = 0;
+    public int entityCurrentSlotRow = 0;
     public static final int SLOT_MAX_COL = 6;
     public static final int SLOT_MAX_ROW = 4;
     public int subState = 0;
     int counter = 0;
-    public Entity npc;
+    public Entity entity;
 
     public UI(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -86,6 +86,8 @@ public class UI {
             transitionStateScreen();
         } else if (gamePanel.gameState == GamePanel.TRADE_STATE) {
             tradeScreen();
+        } else if (gamePanel.gameState == GamePanel.STORAGE_STATE) {
+            storageScreen();
         } else if (gamePanel.gameState == GamePanel.CREATING_STATE) {
             // drawCreatingScreen();
         }
@@ -353,8 +355,8 @@ public class UI {
             slotRow = playerCurrentSlotRow;
         } else {
             frameX = gamePanel.tileSize;
-            slotCol = npcCurrentSlotCol;
-            slotRow = npcCurrentSlotRow;
+            slotCol = entityCurrentSlotCol;
+            slotRow = entityCurrentSlotRow;
         }
 
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
@@ -778,7 +780,7 @@ public class UI {
 
     private void trade_buy() {
         drawInventoryScreen(gamePanel.player, false);
-        drawInventoryScreen(npc, true);
+        drawInventoryScreen(entity, true);
 
         drawPlayersCoins();
 
@@ -787,23 +789,23 @@ public class UI {
         int width = gamePanel.tileSize * 7;
         int height = gamePanel.tileSize;
 
-        int itemIndex = getCurrentItemInventoryIndex(npcCurrentSlotCol, npcCurrentSlotRow);
-        if (itemIndex < npc.inventory.size()) {
+        int itemIndex = getCurrentItemInventoryIndex(entityCurrentSlotCol, entityCurrentSlotRow);
+        if (itemIndex < entity.inventory.size()) {
 
             drawSubWindow(x, y, width, height);
-            g2.drawImage(getCoinImage(npc.inventory.get(itemIndex).itemPrice), x + 10, y + 8, 32, 32, null);
-            g2.drawString("Cost: " + npc.inventory.get(itemIndex).itemPrice, x + 40, y + 33);
+            g2.drawImage(getCoinImage(entity.inventory.get(itemIndex).itemPrice), x + 10, y + 8, 32, 32, null);
+            g2.drawString("Cost: " + entity.inventory.get(itemIndex).itemPrice, x + 40, y + 33);
         }
 
         if (gamePanel.keyHandler.enterPressed) {
-            tradeAction(npc, gamePanel.player, itemIndex);
+            tradeAction(entity, gamePanel.player, itemIndex);
         }
         drawTradeMessage("right");
     }
 
     private void trade_sell() {
         drawInventoryScreen(gamePanel.player, true);
-        drawInventoryScreen(npc, false);
+        drawInventoryScreen(entity, false);
 
         drawPlayersCoins();
 
@@ -813,8 +815,8 @@ public class UI {
         int height = gamePanel.tileSize;
 
         drawSubWindow(x, y, width, height);
-        g2.drawImage(getCoinImage(npc.coin), x + 10, y + 8, 32, 32, null);
-        g2.drawString("Merchant coins: " + npc.coin, x + 40, y + 33);
+        g2.drawImage(getCoinImage(entity.coin), x + 10, y + 8, 32, 32, null);
+        g2.drawString("Merchant coins: " + entity.coin, x + 40, y + 33);
 
         int itemIndex = getCurrentItemInventoryIndex(playerCurrentSlotCol, playerCurrentSlotRow);
         if (itemIndex < gamePanel.player.inventory.size()) {
@@ -823,11 +825,12 @@ public class UI {
             drawSubWindow(x, y, width, height);
             g2.drawImage(getCoinImage(gamePanel.player.inventory.get(itemIndex).itemPrice), x + 10, y + 8, 32, 32,
                     null);
-            g2.drawString("Selling price: " + (int) (gamePanel.player.inventory.get(itemIndex).itemPrice * 0.7), x + 40, y + 33);
+            g2.drawString("Selling price: " + (int) (gamePanel.player.inventory.get(itemIndex).itemPrice * 0.7), x + 40,
+                    y + 33);
         }
 
         if (gamePanel.keyHandler.enterPressed) {
-            tradeAction(gamePanel.player, npc, itemIndex);
+            tradeAction(gamePanel.player, entity, itemIndex);
         }
         drawTradeMessage("left");
     }
@@ -870,7 +873,8 @@ public class UI {
                     buyer.coin -= price;
                     seller.coin += price;
                 } else if (seller == gamePanel.player) {
-                    if (seller.inventory.get(itemIndex) != seller.currentMeleeWeapon && seller.inventory.get(itemIndex) != seller.currentShield) {
+                    if (seller.inventory.get(itemIndex) != seller.currentMeleeWeapon
+                            && seller.inventory.get(itemIndex) != seller.currentShield) {
                         seller.inventory.remove(itemIndex);
                         buyer.coin -= price;
                         seller.coin += price;
@@ -879,8 +883,7 @@ public class UI {
                         gamePanel.playSoundEfect(17);
                         addMessage("You can't sell holding items!");
                     }
-                }
-                else {
+                } else {
                     buyer.coin -= price;
                     seller.coin += price;
                     gamePanel.playSoundEfect(16);
@@ -931,6 +934,54 @@ public class UI {
                 }
             }
         }
+    }
+
+    private void storageScreen() {
+        int itemIndex = 999;
+
+        if (subState == 1) {
+            drawInventoryScreen(entity, true);
+            drawInventoryScreen(gamePanel.player, false);
+            if (gamePanel.keyHandler.enterPressed) {
+                itemIndex = getCurrentItemInventoryIndex(entityCurrentSlotCol, entityCurrentSlotRow);
+                storageItemTransition(entity, gamePanel.player, itemIndex);
+                drawTradeMessage("right");
+            }
+
+        } else if (subState == 2) {
+            drawInventoryScreen(entity, false);
+            drawInventoryScreen(gamePanel.player, true);
+            if (gamePanel.keyHandler.enterPressed) {
+                itemIndex = getCurrentItemInventoryIndex(playerCurrentSlotCol, playerCurrentSlotRow);
+                storageItemTransition(gamePanel.player, entity, itemIndex);
+                drawTradeMessage("left");
+            }
+        }
+    }
+
+    private void storageItemTransition(Entity dispenser, Entity receiver, int itemIndex) {
+        if (itemIndex < dispenser.inventory.size()) {
+
+            if (receiver.inventoryMaxSize == receiver.inventory.size()) {
+                gamePanel.playSoundEfect(17);
+                addMessage("Not enough space in inventory!");
+            } else {
+                if (dispenser == gamePanel.player) {
+                    if (dispenser.inventory.get(itemIndex) != dispenser.currentMeleeWeapon && dispenser.inventory.get(itemIndex) != dispenser.currentShield) {
+                        receiver.inventory.add(dispenser.inventory.get(itemIndex));
+                        dispenser.inventory.remove(itemIndex);
+                    } else {
+                        gamePanel.playSoundEfect(17);
+                        addMessage("You can't move holding items!");
+                    }
+
+                } else {
+                    receiver.inventory.add(dispenser.inventory.get(itemIndex));
+                    dispenser.inventory.remove(itemIndex);
+                }
+            }
+        }
+        gamePanel.keyHandler.enterPressed = false;
     }
 
     private void drawSubWindow(int x, int y, int width, int height) {

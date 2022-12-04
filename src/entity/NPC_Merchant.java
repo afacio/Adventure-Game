@@ -52,7 +52,7 @@ public class NPC_Merchant extends Entity {
     public void speak(){
         super.speak();
         gamePanel.gameState = gamePanel.TRADE_STATE;
-        gamePanel.ui.npc = this;
+        gamePanel.ui.entity = this;
     }
     
 }

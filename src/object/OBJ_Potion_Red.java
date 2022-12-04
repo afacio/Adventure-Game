@@ -20,8 +20,9 @@ public class OBJ_Potion_Red extends Entity {
         itemPrice = 25;
     }
 
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
         gamePanel.player.health += healingValue;
         gamePanel.playSoundEfect(2);
+        return true;
     }
 }

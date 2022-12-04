@@ -38,10 +38,10 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = (double) gamePanel.tileSize * 23;
-        worldY = (double) gamePanel.tileSize * 21;
-        // worldX = (double) gamePanel.tileSize * 12;
-        // worldY = (double) gamePanel.tileSize * 12;
+        // worldX = (double) gamePanel.tileSize * 23;
+        // worldY = (double) gamePanel.tileSize * 21;
+        worldX = (double) gamePanel.tileSize * 12;
+        worldY = (double) gamePanel.tileSize * 12;
         speed = 4;
         defaultSpeed = speed;
         direction = "down";
@@ -340,6 +340,11 @@ public class Player extends Entity {
                 gamePanel.obj[gamePanel.currentMap][index].use(this);
                 gamePanel.obj[gamePanel.currentMap][index] = null;
 
+            } else if(gamePanel.obj[gamePanel.currentMap][index].type == OBSTACLE_TYPE) {
+                if(keyHandler.enterPressed) {
+                    attackCanceled = true;
+                    gamePanel.obj[gamePanel.currentMap][index].interact();
+                }
             } else {
                 String information;
 
@@ -575,8 +580,9 @@ public class Player extends Entity {
                 currentShield = selectedItem;
                 defense = getDefense();
             } else if (selectedItem.type == CONSUMABLE_TYPE) {
-                selectedItem.use(this);
-                inventory.remove(itemIndex);
+                if(selectedItem.use(this)) {
+                    inventory.remove(itemIndex);
+                }
             }
         }
     }

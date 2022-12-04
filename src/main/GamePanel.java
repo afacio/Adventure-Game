@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldWidth = tileSize * MAX_WORLD_COLUMN;
     public final int worldHeight = tileSize * MAX_WORLD_ROW;
     public final int maxMap = 10;
-    public int currentMap = 0;
+    public int currentMap = 1;
     // FPS
     static final int FPS = 60;
 
@@ -82,7 +82,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int GAME_OVER_STATE = 6;
     public static final int MAP_TRANSITION_STATE = 7;
     public static final int TRADE_STATE = 8;
-    public static final int CREATING_STATE = 9;
+    public static final int STORAGE_STATE = 9;
+    public static final int CREATING_STATE = 999;
 
     public int gameState = TITLE_STATE;
 

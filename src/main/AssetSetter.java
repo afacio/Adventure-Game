@@ -3,17 +3,9 @@ package main;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import monster.MON_Slime;
-import monster.MON_Stranger;
 import object.OBJ_Axe;
-import object.OBJ_Blue_Book;
-import object.OBJ_Coin_Bronze;
-import object.OBJ_Coin_Gold;
-import object.OBJ_Coin_Silver;
-import object.OBJ_Green_Book;
-import object.OBJ_Red_Book;
-import object.OBJ_Key;
-import object.OBJ_Potion_Red;
-import object.OBJ_Shield_Iron;
+import object.OBJ_Chest;
+import object.OBJ_Door;
 import tiles_interactive.IT_DryTree;
 
 public class AssetSetter {
@@ -30,6 +22,20 @@ public class AssetSetter {
         gamePanel.obj[mapNum][i] = new OBJ_Axe(gamePanel);
         gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 26;
         gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 21;
+        i++;
+        gamePanel.obj[mapNum][i] = new OBJ_Door(gamePanel);
+        gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 14;
+        gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 28;
+        i++;
+        gamePanel.obj[mapNum][i] = new OBJ_Door(gamePanel);
+        gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 12;
+        gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 12;
+
+        i = 0;
+        mapNum = 1;
+        gamePanel.obj[mapNum][i] = new OBJ_Chest(gamePanel);
+        gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 10;
+        gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 7;
 
     }
     public void setNPC(){

@@ -362,7 +362,7 @@ public class UI {
         for (int item = 0; item < entity.inventory.size(); item++) {
 
             if (entity.inventory.get(item) == entity.currentMeleeWeapon
-                    || entity.inventory.get(item) == entity.currentShield) {
+            || entity.inventory.get(item) == entity.currentShield || entity.inventory.get(item) == entity.currentLightSource) {
                 g2.setColor(new Color(240, 190, 90));
                 g2.fillRoundRect(slotX, slotY, gamePanel.tileSize, gamePanel.tileSize, 10, 10);
             }

@@ -6,6 +6,7 @@ import monster.MON_Slime;
 import object.OBJ_Axe;
 import object.OBJ_Chest;
 import object.OBJ_Door;
+import object.OBJ_Lantern;
 import tiles_interactive.IT_DryTree;
 
 public class AssetSetter {
@@ -32,6 +33,10 @@ public class AssetSetter {
         gamePanel.obj[mapNum][i] = new OBJ_Chest(gamePanel);
         gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 10;
         gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 7;
+        i++;
+        gamePanel.obj[mapNum][i] = new OBJ_Lantern(gamePanel);
+        gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 10;
+        gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 8;
 
     }
     public void setNPC(){

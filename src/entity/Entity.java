@@ -67,6 +67,7 @@ public class Entity {
     public static final int CONSUMABLE_TYPE = 7;
     public static final int PICKUP_ONLY_TYPE = 8;
     public static final int OBSTACLE_TYPE = 9;
+    public static final int LIGHT_TYPE = 10;
 
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1,
             attackRight2;
@@ -97,6 +98,7 @@ public class Entity {
     public Entity currentMeleeWeapon;
     public Entity currentMagicWeapon;
     public Entity currentShield;
+    public Entity currentLightSource;
     public Projectile projectile;
 
     // ITEM ATTRIBUTES
@@ -108,6 +110,7 @@ public class Entity {
     public int knockBackPower = 0;
     public boolean stackable = false;
     public int amount = 1;
+    public int lightRadius;
 
     public ArrayList<Entity> inventory = new ArrayList<>();
     public int inventoryMaxSize;

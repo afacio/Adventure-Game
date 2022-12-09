@@ -88,6 +88,8 @@ public class UI {
             tradeScreen();
         } else if (gamePanel.gameState == GamePanel.STORAGE_STATE) {
             storageScreen();
+        } else if (gamePanel.gameState == GamePanel.SLEEP_STATE) {
+            sleepScreen();
         } else if (gamePanel.gameState == GamePanel.CREATING_STATE) {
             // drawCreatingScreen();
         }
@@ -362,14 +364,15 @@ public class UI {
         for (int item = 0; item < entity.inventory.size(); item++) {
 
             if (entity.inventory.get(item) == entity.currentMeleeWeapon
-            || entity.inventory.get(item) == entity.currentShield || entity.inventory.get(item) == entity.currentLightSource) {
+                    || entity.inventory.get(item) == entity.currentShield
+                    || entity.inventory.get(item) == entity.currentLightSource) {
                 g2.setColor(new Color(240, 190, 90));
                 g2.fillRoundRect(slotX, slotY, gamePanel.tileSize, gamePanel.tileSize, 10, 10);
             }
 
             g2.drawImage(entity.inventory.get(item).down1, slotX, slotY, null);
 
-            if(entity.inventory.get(item).amount > 1) {
+            if (entity.inventory.get(item).amount > 1) {
                 g2.setFont(g2.getFont().deriveFont(32f));
                 int amountX = 0;
                 int amountY = slotY + gamePanel.tileSize;
@@ -877,12 +880,12 @@ public class UI {
                     seller.coin += price;
                 } else if (seller == gamePanel.player) {
                     if (seller.inventory.get(itemIndex) != seller.currentMeleeWeapon
-                            && seller.inventory.get(itemIndex) != seller.currentShield) {
-                                if(seller.inventory.get(itemIndex).amount > 1) {
-                                    seller.inventory.get(itemIndex).amount -= 1;
-                                } else {
-                                    seller.inventory.remove(itemIndex);
-                                }
+                            && seller.inventory.get(itemIndex) != seller.currentShield && seller.inventory.get(itemIndex) != seller.currentLightSource) {
+                        if (seller.inventory.get(itemIndex).amount > 1) {
+                            seller.inventory.get(itemIndex).amount -= 1;
+                        } else {
+                            seller.inventory.remove(itemIndex);
+                        }
                         buyer.coin -= price;
                         seller.coin += price;
                         gamePanel.playSoundEfect(16);
@@ -973,7 +976,8 @@ public class UI {
                 addMessage("Not enough space in inventory!");
             } else {
                 if (dispenser == gamePanel.player) {
-                    if (dispenser.inventory.get(itemIndex) != dispenser.currentMeleeWeapon && dispenser.inventory.get(itemIndex) != dispenser.currentShield) {
+                    if (dispenser.inventory.get(itemIndex) != dispenser.currentMeleeWeapon
+                    && dispenser.inventory.get(itemIndex) != dispenser.currentShield && dispenser.inventory.get(itemIndex) != dispenser.currentLightSource) {
                         receiver.canObtainItem(dispenser.inventory.get(itemIndex));
                         dispenser.inventory.remove(itemIndex);
                     } else {
@@ -988,6 +992,27 @@ public class UI {
             }
         }
         gamePanel.keyHandler.enterPressed = false;
+    }
+
+    private void sleepScreen() {
+        counter++;
+
+        if (counter < 120) {
+            gamePanel.environmentManager.lighting.filterAlpha += 0.01f;
+            if (gamePanel.environmentManager.lighting.filterAlpha >= 1f) {
+                gamePanel.environmentManager.lighting.filterAlpha = 1f;
+            }
+        } else if (counter >= 120) {
+            gamePanel.environmentManager.lighting.filterAlpha -= 0.01f;
+            if (gamePanel.environmentManager.lighting.filterAlpha <= 0f) {
+                gamePanel.environmentManager.lighting.filterAlpha = 0f;
+                counter = 0;
+                gamePanel.environmentManager.lighting.dayState = gamePanel.environmentManager.lighting.DAY;
+                gamePanel.environmentManager.lighting.dayCounter = 0;
+                gamePanel.gameState = gamePanel.PLAY_STATE;
+                gamePanel.player.getPlayerImage();
+            }
+        }
     }
 
     private void drawSubWindow(int x, int y, int width, int height) {
@@ -1008,7 +1033,7 @@ public class UI {
         int lenght = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         return tailX - lenght;
     }
-    
+
     private void drawTextWithShadow(String text, int x, int y) {
         g2.setColor(Color.BLACK);
         g2.drawString(text, x + 5, y + 5);

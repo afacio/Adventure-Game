@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 public class EnvironmentManager {
     
     GamePanel gamePanel;
-    Lighting lighting;
+    public Lighting lighting;
 
     public EnvironmentManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;

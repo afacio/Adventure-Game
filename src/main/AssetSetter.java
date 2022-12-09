@@ -7,6 +7,7 @@ import object.OBJ_Axe;
 import object.OBJ_Chest;
 import object.OBJ_Door;
 import object.OBJ_Lantern;
+import object.OBJ_Tent;
 import tiles_interactive.IT_DryTree;
 
 public class AssetSetter {
@@ -27,6 +28,14 @@ public class AssetSetter {
         gamePanel.obj[mapNum][i] = new OBJ_Door(gamePanel);
         gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 12;
         gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 12;
+        i++;
+        gamePanel.obj[mapNum][i] = new OBJ_Lantern(gamePanel);
+        gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 18;
+        gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 20;
+        i++;
+        gamePanel.obj[mapNum][i] = new OBJ_Tent(gamePanel);
+        gamePanel.obj[mapNum][i].worldX = (double)gamePanel.tileSize * 19;
+        gamePanel.obj[mapNum][i].worldY = (double)gamePanel.tileSize * 20;
 
         i = 0;
         mapNum = 1;

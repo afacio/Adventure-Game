@@ -35,6 +35,7 @@ public class Sound {
         soundPath[15] = "res/sound/stairs.wav";
         soundPath[16] = "res/sound/trade.wav";
         soundPath[17] = "res/sound/noMany.wav";
+        soundPath[18] = "res/sound/sleep.wav";
     }
 
     public void setFile(int index) {

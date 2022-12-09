@@ -96,7 +96,7 @@ public class Player extends Entity {
         return defense;
     }
 
-    private void getPlayerImage() {
+    public void getPlayerImage() {
         up1 = setup("/player/old_player/Walking sprites/boy_up_1", gamePanel.tileSize, gamePanel.tileSize);
         up2 = setup("/player/old_player/Walking sprites/boy_up_2", gamePanel.tileSize, gamePanel.tileSize);
         down1 = setup("/player/old_player/Walking sprites/boy_down_1", gamePanel.tileSize, gamePanel.tileSize);
@@ -597,10 +597,20 @@ public class Player extends Entity {
             }
         }
     }
-
     private void knockBack(Entity entity, int knockBackPower) {
         entity.direction = direction;
         entity.speed = knockBackPower;
         entity.knockBack = true;
+    }
+
+    public void getSleepingImage(BufferedImage image) {
+        up1 = image;
+        up2 = image;
+        down1 = image;
+        down2 = image;
+        left1 = image;
+        left2 = image;
+        right1 = image;
+        right2 = image; 
     }
 }

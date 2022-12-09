@@ -61,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
     public EventHandler eventHandler = new EventHandler(this);
     public Config config = new Config(this);
     public PathFinder pathFinder = new PathFinder(this);
-    EnvironmentManager environmentManager = new EnvironmentManager(this);
+    public EnvironmentManager environmentManager = new EnvironmentManager(this);
     Map map = new Map(this);
     Thread gameThread;
 
@@ -88,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int TRADE_STATE = 8;
     public static final int STORAGE_STATE = 9;
     public static final int MAP_STATE = 10;
+    public static final int SLEEP_STATE = 11;
     public static final int CREATING_STATE = 999;
 
     public int gameState = TITLE_STATE;

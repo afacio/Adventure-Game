@@ -11,14 +11,14 @@ public class Lighting {
 
     GamePanel gamePanel;
     BufferedImage darknessFilter;
-    int dayCounter;
-    float filterAlpha = 0f;
+    public int dayCounter;
+    public float filterAlpha = 0f;
 
-    final int DAY = 0;
-    final int DUSK = 1;
-    final int NIGHT = 2;
-    final int DAWN = 3;
-    int dayState = DAY;
+    public final int DAY = 0;
+    public final int DUSK = 1;
+    public final int NIGHT = 2;
+    public final int DAWN = 3;
+    public int dayState = DAY;
 
     public Lighting(GamePanel gamePanel) {
         this.gamePanel = gamePanel;

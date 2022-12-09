@@ -59,6 +59,10 @@ public class KeyHandler implements KeyListener {
         else if (gamePanel.gameState == gamePanel.STORAGE_STATE) {
             storageScreen(code);
         }
+
+        else if (gamePanel.gameState == gamePanel.MAP_STATE) {
+            mapScreen(code);
+        }
     }
 
     @Override
@@ -148,6 +152,12 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_ESCAPE) {
             gamePanel.gameState = gamePanel.OPTIONS_STATE;
+        }
+        if (code == KeyEvent.VK_M) {
+            gamePanel.gameState = gamePanel.MAP_STATE;
+        }
+        if (code == KeyEvent.VK_X) {
+            gamePanel.map.miniMapOn = !gamePanel.map.miniMapOn;
         }
 
         // DEBUG
@@ -457,5 +467,9 @@ public class KeyHandler implements KeyListener {
         }
     }
 
-
+    private void mapScreen(int code) {
+        if(code == KeyEvent.VK_M) {
+            gamePanel.gameState = gamePanel.PLAY_STATE;
+        }
+    }
 }

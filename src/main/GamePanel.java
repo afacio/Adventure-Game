@@ -6,6 +6,7 @@ import AI.PathFinder;
 import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManager;
+import tile.Map;
 import tile.TileManager;
 import tiles_interactive.InteractiveTile;
 
@@ -45,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldWidth = tileSize * MAX_WORLD_COLUMN;
     public final int worldHeight = tileSize * MAX_WORLD_ROW;
     public final int maxMap = 10;
-    public int currentMap = 1;
+    public int currentMap = 0;
     // FPS
     static final int FPS = 60;
 
@@ -61,6 +62,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Config config = new Config(this);
     public PathFinder pathFinder = new PathFinder(this);
     EnvironmentManager environmentManager = new EnvironmentManager(this);
+    Map map = new Map(this);
     Thread gameThread;
 
     // ENTITY AND OBJECT
@@ -85,6 +87,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int MAP_TRANSITION_STATE = 7;
     public static final int TRADE_STATE = 8;
     public static final int STORAGE_STATE = 9;
+    public static final int MAP_STATE = 10;
     public static final int CREATING_STATE = 999;
 
     public int gameState = TITLE_STATE;
@@ -144,7 +147,6 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        long drawCount = 0;
 
         if(fullScreenOn) {
             setFullScreen();
@@ -165,8 +167,6 @@ public class GamePanel extends JPanel implements Runnable {
                 delta--;
             }
             if(timer >= 1000000000) {
-                // System.out.println("FPS: " + drawCount);
-                drawCount = 0;
                 timer = 0;
             }
         }
@@ -224,8 +224,6 @@ public class GamePanel extends JPanel implements Runnable {
 
             environmentManager.update();
         }
-        // if (gameState == PAUSE_STATE) {
-        // }
     }
 
     public void drawToTempScreen() {
@@ -238,6 +236,11 @@ public class GamePanel extends JPanel implements Runnable {
         // TITLE SCREEN
         if (gameState == TITLE_STATE) {
             ui.draw(g2);
+        }
+
+        // MAP SCREEN
+        else if (gameState == MAP_STATE) {
+           map.drawFullMapScreen(g2);
         }
 
         // GAME SCREEN
@@ -299,6 +302,8 @@ public class GamePanel extends JPanel implements Runnable {
             entityList.clear();
 
             environmentManager.draw(g2);
+
+            map.drawMiniMap(g2);
 
             // UI
             ui.draw(g2);

@@ -364,9 +364,9 @@ public class Entity {
             }
 
             g2.drawImage(image, (int) screenX, (int) screenY, null);
-            g2.setColor(Color.red);
-            g2.drawRect((int) (screenX + solidArea.x), (int) (screenY + solidArea.y),
-            solidArea.width, solidArea.height);
+            // g2.setColor(Color.red);
+            // g2.drawRect((int) (screenX + solidArea.x), (int) (screenY + solidArea.y),
+            // solidArea.width, solidArea.height);
 
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }

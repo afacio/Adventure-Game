@@ -29,7 +29,7 @@ public class Config {
             bw.write(String.valueOf(gamePanel.music.volumeScale));
             bw.newLine();
 
-            bw.write(String.valueOf(gamePanel.soundEfect.volumeScale));
+            bw.write(String.valueOf(gamePanel.soundEffect.volumeScale));
             bw.newLine();
 
             bw.close();
@@ -55,7 +55,7 @@ public class Config {
             gamePanel.music.volumeScale = Integer.parseInt(line);
 
             line = br.readLine();
-            gamePanel.soundEfect.volumeScale = Integer.parseInt(line);
+            gamePanel.soundEffect.volumeScale = Integer.parseInt(line);
 
             br.close();
 

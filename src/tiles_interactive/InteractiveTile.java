@@ -25,7 +25,7 @@ public class InteractiveTile extends Entity {
         }
     }
 
-    public void playSoundEfect() {
+    public void playSoundEffect() {
     }
 
     public boolean isCorrectItem(Entity entity) {

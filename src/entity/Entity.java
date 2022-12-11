@@ -83,7 +83,7 @@ public class Entity {
     public boolean hpBarOn = false;
     public int hpBarCounter;
 
-    int animationRefresh = 8;
+    public int animationRefresh = 8;
 
     public int level;
     public int strenght;
@@ -258,14 +258,7 @@ public class Entity {
                 }
 
                 spriteCounter++;
-                if (spriteCounter > animationRefresh) {
-                    if (spriteNumber == 1) {
-                        spriteNumber = 2;
-                    } else if (spriteNumber == 2) {
-                        spriteNumber = 1;
-                    }
-                    spriteCounter = 0;
-                }
+                updateSprites();
                 if (invincible) {
                     invincibleCounter++;
                     if (invincibleCounter > invincibleTime) {
@@ -280,9 +273,20 @@ public class Entity {
         }
     }
 
+    public void updateSprites() {
+        if (spriteCounter > animationRefresh) {
+            if (spriteNumber == 1) {
+                spriteNumber = 2;
+            } else if (spriteNumber == 2) {
+                spriteNumber = 1;
+            }
+            spriteCounter = 0;
+        }
+    }
+
     public void damagePlayer(int attackPower) {
         if (!gamePanel.player.invincible) {
-            gamePanel.playSoundEfect(6);
+            gamePanel.playSoundEffect(6);
             int damage = attackPower - gamePanel.player.defense;
             if (damage < 0) {
                 damage = 0;
@@ -303,38 +307,7 @@ public class Entity {
                 && worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY
                 && worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY) {
 
-            switch (direction) {
-                case "up":
-                    if (spriteNumber == 1) {
-                        image = up1;
-                    } else if (spriteNumber == 2) {
-                        image = up2;
-                    }
-                    break;
-                case "down":
-                    if (spriteNumber == 1) {
-                        image = down1;
-                    } else if (spriteNumber == 2) {
-                        image = down2;
-                    }
-                    break;
-                case "left":
-                    if (spriteNumber == 1) {
-                        image = left1;
-                    } else if (spriteNumber == 2) {
-                        image = left2;
-                    }
-                    break;
-                case "right":
-                    if (spriteNumber == 1) {
-                        image = right1;
-                    } else if (spriteNumber == 2) {
-                        image = right2;
-                    }
-                    break;
-                default:
-                    break;
-            }
+            image = drawSprites();
 
             // MONSTER HP BAR
             if (type == MONSTER_TYPE && hpBarOn) {
@@ -370,6 +343,42 @@ public class Entity {
 
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
+    }
+    public BufferedImage drawSprites() {
+        BufferedImage image = null;
+        switch (direction) {
+            case "up":
+                if (spriteNumber == 1) {
+                    image = up1;
+                } else if (spriteNumber == 2) {
+                    image = up2;
+                }
+                break;
+            case "down":
+                if (spriteNumber == 1) {
+                    image = down1;
+                } else if (spriteNumber == 2) {
+                    image = down2;
+                }
+                break;
+            case "left":
+                if (spriteNumber == 1) {
+                    image = left1;
+                } else if (spriteNumber == 2) {
+                    image = left2;
+                }
+                break;
+            case "right":
+                if (spriteNumber == 1) {
+                    image = right1;
+                } else if (spriteNumber == 2) {
+                    image = right2;
+                }
+                break;
+            default:
+                break;
+        }
+        return image;
     }
 
     private void dyingAnimation(Graphics2D g2) {

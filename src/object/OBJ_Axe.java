@@ -17,7 +17,7 @@ public class OBJ_Axe extends Entity {
         attackArea.width = 30;
         attackArea.height = 30;
         knockBackPower = 10;
-        description = "[" + name + "]\nAttack: " + attackValue + "\nEfects: No special efects";
+        description = "[" + name + "]\nAttack: " + attackValue + "\nEffects: No special effects";
 
         itemPrice = 105;
 

@@ -22,7 +22,7 @@ public class IT_DryTree extends InteractiveTile{
         this.worldX = (double)gamePanel.tileSize * col;
         this.worldY = (double)gamePanel.tileSize * row;
 
-        down1 = setup("/tiles_interactive/drytree", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = setup("/tiles_interactive/drytreev2", gamePanel.tileSize, gamePanel.tileSize);
 
         
 
@@ -45,8 +45,8 @@ public class IT_DryTree extends InteractiveTile{
     }
 
     @Override
-    public void playSoundEfect() {
-        gamePanel.playSoundEfect(13);
+    public void playSoundEffect() {
+        gamePanel.playSoundEffect(13);
     }
 
     @Override

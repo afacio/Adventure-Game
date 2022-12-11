@@ -9,17 +9,15 @@ public class OBJ_Chest extends Entity {
 
     GamePanel gamePanel;
     boolean opened = false;
+    ArrayList<Entity> inv = new ArrayList<>();
 
-    public OBJ_Chest(GamePanel gamePanel) {
+    public OBJ_Chest(GamePanel gamePanel, ArrayList<Entity> inv) {
         super(gamePanel);
         this.gamePanel = gamePanel;
-        // ArrayList<Entity> inv
-        // if(inv.size() <= inventoryMaxSize) {
-        //     inventory = inv;
-        // }
-        inventory.add(new OBJ_Key(gamePanel));
-        inventory.add(new OBJ_Potion_Red(gamePanel));
-
+       
+        if(inv.size() <= inventoryMaxSize && inv.size() != 0) {
+            inventory = inv;
+        }
         name = "Chest";
         type = OBSTACLE_TYPE;
         image1 = setup("/objects/chest", gamePanel.tileSize, gamePanel.tileSize);

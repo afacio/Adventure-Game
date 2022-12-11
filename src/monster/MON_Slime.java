@@ -1,6 +1,7 @@
 package monster;
 
 import java.util.Random;
+import java.awt.image.BufferedImage;
 
 import entity.Entity;
 import main.GamePanel;
@@ -21,9 +22,9 @@ public class MON_Slime extends Entity {
         name = "Slime";
         speed = 1;
         defaultSpeed = speed;
-        maxHealth = 7;
+        maxHealth = 5;
         health = maxHealth;
-        attack = 3;
+        attack = 2;
         defense = 0;
         exp = 6;
         projectile = new Rock(gamePanel);
@@ -52,72 +53,127 @@ public class MON_Slime extends Entity {
         right2 = setup("/monster/slime/right_2", gamePanel.tileSize, gamePanel.tileSize);
         right3 = setup("/monster/slime/right_3", gamePanel.tileSize, gamePanel.tileSize);
     }
-    @Override
-    public void update() {
-        super.update();
-
-        int xDistance = (int)Math.abs(worldX - gamePanel.player.worldX);
-        int yDistance = (int)Math.abs(worldY - gamePanel.player.worldY);
-        int tileDistance = (int)(xDistance + yDistance)/gamePanel.tileSize;
-
-        if(!onPath && tileDistance < 5) {
-            int i = new Random().nextInt(100)+1;
-            if(i > 50) {
-                onPath = true;
-            }
-        }
-        if(onPath && tileDistance > 10) {
-            onPath = false;
-        }
-    }
 
     @Override
     public void setAction() {
-        Random random = new Random();
-        if(onPath) {
-            int goalCol = (int)(gamePanel.player.worldX + gamePanel.player.solidArea.x) / gamePanel.tileSize;
-            int goalRow = (int)(gamePanel.player.worldY + gamePanel.player.solidArea.y) / gamePanel.tileSize;
+
+        int xDistance = (int) Math.abs(worldX - gamePanel.player.worldX);
+        int yDistance = (int) Math.abs(worldY - gamePanel.player.worldY);
+        int tileDistance = (int) (xDistance + yDistance) / gamePanel.tileSize;
+
+        if (onPath) {
+            if (tileDistance > 10) {
+                onPath = false;
+            }
+
+            int goalCol = (int) (gamePanel.player.worldX + gamePanel.player.solidArea.x) / gamePanel.tileSize;
+            int goalRow = (int) (gamePanel.player.worldY + gamePanel.player.solidArea.y) / gamePanel.tileSize;
 
             searchPath(goalCol, goalRow);
 
-            int i = new Random().nextInt(100)+1;
-            if(i > 99 && !projectile.alive && shotAvelibleCounter == 30) {
+            int i = new Random().nextInt(100) + 1;
+            if (i > 99 && !projectile.alive && shotAvelibleCounter == 30) {
                 projectile.set(worldX, worldY, direction, true, this);
 
-                for(int index = 0; index < gamePanel.projectileList[1].length; index++) {
-                    if(gamePanel.projectileList[gamePanel.currentMap][index] == null) {
+                for (int index = 0; index < gamePanel.projectileList[1].length; index++) {
+                    if (gamePanel.projectileList[gamePanel.currentMap][index] == null) {
                         gamePanel.projectileList[gamePanel.currentMap][index] = projectile;
                         break;
                     }
                 }
 
-                projectile.playSoundEfect();
+                projectile.playSoundEffect();
                 shotAvelibleCounter = 0;
             }
         } else {
-            actionLockCounter ++;
-    
-            if(actionLockCounter == 120 || collisionOn){
-                int i = random.nextInt(100) + 1;
-        
+            if (tileDistance < 5) {
+                int random = new Random().nextInt(100) + 1;
+                if (random > 50) {
+                    onPath = true;
+                }
+            }
+
+            actionLockCounter++;
+
+            if (actionLockCounter == 120 || collisionOn) {
+                int i = new Random().nextInt(100) + 1;
+
                 if (i <= 25) {
                     direction = "up";
-                }
-                else if (i > 25 && i <= 50) {
+                } else if (i > 25 && i <= 50) {
                     direction = "down";
-                }
-                else if (i > 50 && i <= 75) {
+                } else if (i > 50 && i <= 75) {
                     direction = "left";
-                }
-                else if (i > 55 && i <= 100) {
+                } else if (i > 55 && i <= 100) {
                     direction = "right";
                 }
                 actionLockCounter = 0;
             }
         }
-
     }
 
+    // @Override
+    // public void updateSprites() {
+    //     super.updateSprites();
+    //     if (spriteCounter > animationRefresh) {
+    //         if (spriteNumber == 1) {
+    //             spriteNumber = 2;
+    //         } else if (spriteNumber == 2) {
+    //             spriteNumber = 3;
+    //         }
+    //     } else if (spriteNumber == 3) {
+    //         spriteNumber = 1;
+    //     }
+    //     spriteCounter = 0;
+    // }
+
+    // @Override
+    // public BufferedImage drawSprites() {
+    //     super.drawSprites();
+    //     BufferedImage image = null;
+    //     switch (direction) {
+    //         case "up":
+    //             if (spriteNumber == 1) {
+    //                 image = up1;
+    //             } else if (spriteNumber == 2) {
+    //                 image = up2;
+    //             }
+    //             else if (spriteNumber == 3) {
+    //                 image = up3;
+    //             }
+    //             break;
+    //         case "down":
+    //             if (spriteNumber == 1) {
+    //                 image = down1;
+    //             } else if (spriteNumber == 2) {
+    //                 image = down2;
+    //             } else if (spriteNumber == 3) {
+    //                 image = down3;
+    //             }
+    //             break;
+    //         case "left":
+    //             if (spriteNumber == 1) {
+    //                 image = left1;
+    //             } else if (spriteNumber == 2) {
+    //                 image = left2;
+    //             } else if (spriteNumber == 3) {
+    //                 image = left3;
+    //             }
+    //             break;
+    //         case "right":
+    //             if (spriteNumber == 1) {
+    //                 image = right1;
+    //             } else if (spriteNumber == 2) {
+    //                 image = right2;
+    //             } else if (spriteNumber == 3) {
+    //                 image = right3;
+    //             }
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    //     return image;
+    // }
     public void demageReaction() {
 
         actionLockCounter = 0;
@@ -138,6 +194,6 @@ public class MON_Slime extends Entity {
         if (i > 75 && i <= 100) {
             dropItem(new OBJ_Mana_Crystal(gamePanel));
         }
-        
+
     }
 }

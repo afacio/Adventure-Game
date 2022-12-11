@@ -35,8 +35,8 @@ public class Spell_Fireball extends Projectile {
         right2 = setup("/objects/fireball/fireball_right_2", gamePanel.tileSize, gamePanel.tileSize);
     }
 
-    public void playSoundEfect() {
-        gamePanel.playSoundEfect(12);
+    public void playSoundEffect() {
+        gamePanel.playSoundEffect(12);
     }
 
     public boolean haveResource(Entity entity) {

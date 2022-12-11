@@ -23,12 +23,12 @@ public class OBJ_Tent extends Entity {
     public boolean use(Entity entity) {
         if(gamePanel.environmentManager.lighting.dayState != gamePanel.environmentManager.lighting.DAY) {
             gamePanel.gameState = gamePanel.SLEEP_STATE;
-            gamePanel.playSoundEfect(18);
+            gamePanel.playSoundEffect(18);
             gamePanel.player.health = gamePanel.player.maxHealth;
             gamePanel.player.mana = gamePanel.player.maxMana;
             gamePanel.player.getSleepingImage(down1);
         } else {
-            gamePanel.playSoundEfect(17);
+            gamePanel.playSoundEffect(17);
             gamePanel.gameState = gamePanel.DIALOGUE_STATE;
             gamePanel.ui.currentDialogue = "You can't sleep during the day";
         }

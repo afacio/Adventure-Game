@@ -486,7 +486,7 @@ public class UI {
 
         // SE
         textY += gamePanel.tileSize;
-        g2.drawString("Sound Efect", textX, textY);
+        g2.drawString("Sound Effect", textX, textY);
         if (commandNum == 2) {
             g2.drawString(">", textX - 25, textY);
         }
@@ -542,7 +542,7 @@ public class UI {
         // SE VOLUME SLIDER
         textY += gamePanel.tileSize;
         g2.drawRect(textX, textY, 120, 24);
-        g2.fillRect(textX, textY, 24 * gamePanel.soundEfect.volumeScale, 24);
+        g2.fillRect(textX, textY, 24 * gamePanel.soundEffect.volumeScale, 24);
 
         gamePanel.config.saveConfig();
     }
@@ -595,7 +595,7 @@ public class UI {
         g2.drawString("Player Screen", textX, textY);
         textY += gamePanel.tileSize;
 
-        g2.drawString("Pouse", textX, textY);
+        g2.drawString("Pause", textX, textY);
         textY += gamePanel.tileSize;
 
         g2.drawString("Options", textX, textY);
@@ -867,15 +867,15 @@ public class UI {
             }
 
             if (price > buyer.coin) {
-                gamePanel.playSoundEfect(17);
+                gamePanel.playSoundEffect(17);
                 addMessage("Not enough coins!");
             } else if (buyer.inventoryMaxSize == buyer.inventory.size()) {
-                gamePanel.playSoundEfect(17);
+                gamePanel.playSoundEffect(17);
                 addMessage("Not enough space in inventory!");
             } else {
                 if (buyer == gamePanel.player) {
                     gamePanel.player.canObtainItem(seller.inventory.get(itemIndex));
-                    gamePanel.playSoundEfect(16);
+                    gamePanel.playSoundEffect(16);
                     buyer.coin -= price;
                     seller.coin += price;
                 } else if (seller == gamePanel.player) {
@@ -888,15 +888,15 @@ public class UI {
                         }
                         buyer.coin -= price;
                         seller.coin += price;
-                        gamePanel.playSoundEfect(16);
+                        gamePanel.playSoundEffect(16);
                     } else {
-                        gamePanel.playSoundEfect(17);
+                        gamePanel.playSoundEffect(17);
                         addMessage("You can't sell holding items!");
                     }
                 } else {
                     buyer.coin -= price;
                     seller.coin += price;
-                    gamePanel.playSoundEfect(16);
+                    gamePanel.playSoundEffect(16);
                 }
             }
         }
@@ -972,7 +972,7 @@ public class UI {
     private void storageItemTransition(Entity dispenser, Entity receiver, int itemIndex) {
         if (itemIndex < dispenser.inventory.size()) {
             if (receiver.inventoryMaxSize == receiver.inventory.size()) {
-                gamePanel.playSoundEfect(17);
+                gamePanel.playSoundEffect(17);
                 addMessage("Not enough space in inventory!");
             } else {
                 if (dispenser == gamePanel.player) {
@@ -981,7 +981,7 @@ public class UI {
                         receiver.canObtainItem(dispenser.inventory.get(itemIndex));
                         dispenser.inventory.remove(itemIndex);
                     } else {
-                        gamePanel.playSoundEfect(17);
+                        gamePanel.playSoundEffect(17);
                         addMessage("You can't move holding items!");
                     }
 

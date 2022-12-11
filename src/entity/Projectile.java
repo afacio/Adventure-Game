@@ -67,7 +67,7 @@ public class Projectile extends Entity {
 
     }
 
-    public void playSoundEfect() {}
+    public void playSoundEffect() {}
     public boolean haveResource(Entity entity) {
         return entity.mana >= useManaCost;
     }

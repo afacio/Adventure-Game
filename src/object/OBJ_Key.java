@@ -28,7 +28,7 @@ public class OBJ_Key extends Entity {
 
         if(objIndex != 999) {
             gamePanel.ui.currentDialogue = "Key was use to open the lock.";
-            gamePanel.playSoundEfect(3);
+            gamePanel.playSoundEffect(3);
             gamePanel.obj[gamePanel.currentMap][objIndex] = null;
             return true;
         } else {

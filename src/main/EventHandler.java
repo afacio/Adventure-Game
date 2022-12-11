@@ -109,7 +109,7 @@ public class EventHandler {
 
     private void damagePit(int gameState) {
         gamePanel.gameState = gameState;
-        gamePanel.playSoundEfect(6);
+        gamePanel.playSoundEffect(6);
         gamePanel.ui.currentDialogue = "You fall into a pit!";
         gamePanel.player.health--;
         canTouchEvent = false;
@@ -120,7 +120,7 @@ public class EventHandler {
         if (gamePanel.keyHandler.enterPressed) {
             gamePanel.gameState = gameState;
             gamePanel.player.attackCanceled = true;
-            gamePanel.playSoundEfect(2);
+            gamePanel.playSoundEffect(2);
             gamePanel.ui.currentDialogue = "You drink the water.\nYout life and mana has been recovered.";
             gamePanel.player.health = gamePanel.player.maxHealth;
             gamePanel.player.mana = gamePanel.player.maxMana;
@@ -134,7 +134,7 @@ public class EventHandler {
         tempRow = row;
         tempMap = map;
         canTouchEvent = false;
-        gamePanel.playSoundEfect(15);
+        gamePanel.playSoundEffect(15);
     }
 
     private void trade(Entity entity){

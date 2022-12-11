@@ -2,8 +2,10 @@ package entity;
 
 import main.KeyHandler;
 import object.OBJ_Key;
+import object.OBJ_Lantern;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
+import object.OBJ_Tent;
 import projectile.Spell_Fireball;
 import main.GamePanel;
 
@@ -39,10 +41,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = (double) gamePanel.tileSize * 23;
-        worldY = (double) gamePanel.tileSize * 21;
-        // worldX = (double) gamePanel.tileSize * 12;
-        // worldY = (double) gamePanel.tileSize * 12;
+        worldX = (double) gamePanel.tileSize * 12;
+        worldY = (double) gamePanel.tileSize * 12;
         speed = 4;
         defaultSpeed = speed;
         direction = "down";
@@ -65,6 +65,7 @@ public class Player extends Entity {
 
         currentMeleeWeapon = new OBJ_Sword_Normal(gamePanel);
         currentShield = new OBJ_Shield_Wood(gamePanel);
+        currentLightSource = new OBJ_Lantern(gamePanel);
         projectile = new Spell_Fireball(gamePanel);
         attack = getMeleAttackPower();
         defense = getDefense();
@@ -76,7 +77,8 @@ public class Player extends Entity {
         inventory.clear();
         inventory.add(currentMeleeWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Key(gamePanel));
+        inventory.add(currentLightSource);
+        inventory.add(new OBJ_Tent(gamePanel));
     }
 
     private int getMeleAttackPower() {
@@ -211,7 +213,7 @@ public class Player extends Entity {
             }
 
             if (keyHandler.enterPressed && !attackCanceled) {
-                gamePanel.playSoundEfect(7);
+                gamePanel.playSoundEffect(7);
                 attacking = true;
                 spriteCounter = 0;
             }
@@ -247,7 +249,7 @@ public class Player extends Entity {
                 }
             }
 
-            projectile.playSoundEfect();
+            projectile.playSoundEffect();
             shotAvelibleCounter = 0;
             projectile.subtractResource(this);
         }
@@ -273,7 +275,7 @@ public class Player extends Entity {
             gamePanel.ui.commandNum = -1;
             gamePanel.keyHandler.enterPressed = false;
             gamePanel.stopMusic();
-            gamePanel.playSoundEfect(14);
+            gamePanel.playSoundEffect(14);
         }
 
     }
@@ -350,7 +352,7 @@ public class Player extends Entity {
                 String information;
 
                 if (canObtainItem(gamePanel.obj[gamePanel.currentMap][index])) {
-                    gamePanel.playSoundEfect(1);
+                    gamePanel.playSoundEffect(1);
                     information = "Got a " + gamePanel.obj[gamePanel.currentMap][index].name + ".";
                 } else {
                     information = "You cannot carry any more.";
@@ -374,7 +376,7 @@ public class Player extends Entity {
     public void monsterContact(int index) {
         if (index != 999) {
             if (!invincible && !gamePanel.monster[gamePanel.currentMap][index].dying) {
-                gamePanel.playSoundEfect(9);
+                gamePanel.playSoundEffect(9);
                 int damage = gamePanel.monster[gamePanel.currentMap][index].attack - defense;
                 if (damage <= 0) {
                     damage = 1;
@@ -388,7 +390,7 @@ public class Player extends Entity {
     public void damageMonster(int index, int attackPower, int knockBackPower) {
         if (index != 999) {
             if (!gamePanel.monster[gamePanel.currentMap][index].invincible) {
-                gamePanel.playSoundEfect(5);
+                gamePanel.playSoundEffect(5);
 
                 if(knockBackPower > 0) {
                     knockBack(gamePanel.monster[gamePanel.currentMap][index], knockBackPower);
@@ -404,7 +406,7 @@ public class Player extends Entity {
                 gamePanel.monster[gamePanel.currentMap][index].demageReaction();
 
                 if (gamePanel.monster[gamePanel.currentMap][index].health <= 0) {
-                    gamePanel.playSoundEfect(8);
+                    gamePanel.playSoundEffect(8);
                     gamePanel.monster[gamePanel.currentMap][index].dying = true;
                     exp += gamePanel.monster[gamePanel.currentMap][index].exp;
                     gamePanel.ui.addMessage("+ Exp: " + gamePanel.monster[gamePanel.currentMap][index].exp);
@@ -422,7 +424,7 @@ public class Player extends Entity {
 
             gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].health--;
             gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].invincible = true;
-            gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].playSoundEfect();
+            gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].playSoundEffect();
             gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].generateParticle(gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex], gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex]);
             if(gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].health <= 0) {
                 gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex] = gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].getDestroyedForm();
@@ -454,7 +456,7 @@ public class Player extends Entity {
             attack = getMeleAttackPower();
             defense = getDefense();
 
-            gamePanel.playSoundEfect(10);
+            gamePanel.playSoundEffect(10);
             gamePanel.ui.addMessage("Level up!");
         }
     }

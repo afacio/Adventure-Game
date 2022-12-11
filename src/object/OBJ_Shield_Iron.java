@@ -12,7 +12,7 @@ public class OBJ_Shield_Iron extends Entity{
         type = SHIELD_TYPE;
         down1 = setup("/objects/shield_blue", gamePanel.tileSize, gamePanel.tileSize);
         defenseValue = 2;
-        description = "[" + name + "]\nDefense: " + defenseValue + "\nEfects: No special efects";
+        description = "[" + name + "]\nDefense: " + defenseValue + "\nEffects: No special effects";
         itemPrice = 200;
     }
     

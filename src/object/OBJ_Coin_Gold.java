@@ -25,7 +25,7 @@ public class OBJ_Coin_Gold extends Entity {
 
     @Override
     public boolean use(Entity entity) {
-        gamePanel.playSoundEfect(1);
+        gamePanel.playSoundEffect(1);
         gamePanel.ui.addMessage("Coin +" + value);
         gamePanel.player.coin += value;
         return true;

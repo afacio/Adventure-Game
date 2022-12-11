@@ -31,7 +31,7 @@ public class TileManager {
     public TileManager(GamePanel gamePanel){
         this.gamePanel = gamePanel;
 
-        try( FileReader fr = new FileReader("res/maps/tiledata.txt");) {
+        try( FileReader fr = new FileReader("res/tiles/tiles-v2/tiledata.txt");) {
             BufferedReader br = new BufferedReader(fr);
             String line;
             while((line = br.readLine()) != null) {
@@ -61,10 +61,10 @@ public class TileManager {
 
         mapTileNumber = new int[gamePanel.maxMap][gamePanel.MAX_WORLD_COLUMN][gamePanel.MAX_WORLD_ROW];
 
-        loadMap("res/maps/worldmap.txt", 0);
-        loadMap("res/maps/indoor01.txt", 1);
-        loadMap("res/maps/dungeon01.txt", 2);
-        loadMap("res/maps/dungeon02.txt", 3);
+        loadMap("res/tiles/tiles-v2/worldmap.txt", 0);
+        // loadMap("res/maps/indoor01.txt", 1);
+        // loadMap("res/maps/dungeon01.txt", 2);
+        // loadMap("res/maps/dungeon02.txt", 3);
     }
 
     private void getTileImage(){
@@ -85,7 +85,7 @@ public class TileManager {
 
         try {
             tiles[index] = new Tile();
-            tiles[index].image = ImageIO.read(new File("res/tiles/" + imageName));
+            tiles[index].image = ImageIO.read(new File("res/tiles/tiles-v2/" + imageName));
             tiles[index].image = uTool.scaleImage(tiles[index].image, gamePanel.tileSize, gamePanel.tileSize);
             tiles[index].collision = collision;
         } catch (IOException e) {

@@ -19,7 +19,7 @@ public class OBJ_Mana_Crystal extends Entity {
     }
 
     public boolean use(Entity entity) {
-        gamePanel.playSoundEfect(2);
+        gamePanel.playSoundEffect(2);
         gamePanel.ui.addMessage("Mana +" + value);
         entity.mana += value;
         return true;

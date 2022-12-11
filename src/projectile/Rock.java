@@ -38,8 +38,8 @@ public class Rock extends Projectile {
         right2 = setup("/objects/rock", gamePanel.tileSize, gamePanel.tileSize);
     }
 
-    public void playSoundEfect() {
-        gamePanel.playSoundEfect(7);
+    public void playSoundEffect() {
+        gamePanel.playSoundEffect(7);
     }
     
     @Override

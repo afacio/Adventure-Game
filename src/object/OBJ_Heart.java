@@ -22,7 +22,7 @@ public class OBJ_Heart extends Entity {
     }
 
     public boolean use(Entity entity) {
-        gamePanel.playSoundEfect(2);
+        gamePanel.playSoundEffect(2);
         gamePanel.ui.addMessage("Life +" + value);
         entity.health += value;
         return true;

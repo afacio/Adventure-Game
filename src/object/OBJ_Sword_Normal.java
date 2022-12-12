@@ -17,6 +17,8 @@ public class OBJ_Sword_Normal extends Entity {
         description = "[" + name + "]\nAttack: " + attackValue + "\nEffects: No special effects";
         itemPrice = 50;
         knockBackPower = 2;
+        motion1_duration = 5;
+        motion2_duration = 20;
     }
     
 }

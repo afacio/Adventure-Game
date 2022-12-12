@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import entity.Entity;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
+import monster.MON_Orc;
 import monster.MON_Slime;
 import object.OBJ_Axe;
 import object.OBJ_Chest;
@@ -85,7 +86,7 @@ public class AssetSetter {
         gamePanel.monster[mapNum][i].worldX = (double)gamePanel.tileSize * 31;
         gamePanel.monster[mapNum][i].worldY = (double)gamePanel.tileSize * 37;
         i++; 
-        gamePanel.monster[mapNum][i] = new MON_Slime(gamePanel);
+        gamePanel.monster[mapNum][i] = new MON_Orc(gamePanel);
         gamePanel.monster[mapNum][i].worldX = (double)gamePanel.tileSize * 34;
         gamePanel.monster[mapNum][i].worldY = (double)gamePanel.tileSize * 27;
 

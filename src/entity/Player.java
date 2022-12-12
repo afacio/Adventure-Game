@@ -83,6 +83,8 @@ public class Player extends Entity {
 
     private int getMeleAttackPower() {
         attackArea = currentMeleeWeapon.attackArea;
+        motion1_duration = currentMeleeWeapon.motion1_duration;
+        motion2_duration = currentMeleeWeapon.motion2_duration;
         attack = strenght * currentMeleeWeapon.attackValue;
         return attack;
     }
@@ -280,61 +282,6 @@ public class Player extends Entity {
 
     }
 
-    private void attacking() {
-
-        spriteCounter++;
-        if (spriteCounter <= 5) {
-            spriteNumber = 1;
-        }
-        if (spriteCounter > 5 && spriteCounter <= 15) {
-            spriteNumber = 2;
-
-            int currentWorldX = (int) worldX;
-            int currentWorldY = (int) worldY;
-            int solidAreaWidth = solidArea.width;
-            int solidAreaHeight = solidArea.height;
-
-            switch (direction) {
-                case "up":
-                    worldY -= attackArea.height;
-                    break;
-                case "down":
-                    worldY += attackArea.height;
-                    break;
-                case "left":
-                    worldX -= attackArea.width;
-                    break;
-                case "right":
-                    worldX += attackArea.width;
-                    break;
-                default:
-                    break;
-            }
-
-            solidArea.width = attackArea.width;
-            solidArea.height = attackArea.height;
-
-            int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
-            damageMonster(monsterIndex, attack, currentMeleeWeapon.knockBackPower);
-
-            int interactiveTileIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
-            damageInteractiveTile(interactiveTileIndex);
-
-            int projectileIdnex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.projectileList);
-            damageProjectile(projectileIdnex);
-
-            worldX = currentWorldX;
-            worldY = currentWorldY;
-            solidArea.width = solidAreaWidth;
-            solidArea.height = solidAreaHeight;
-        }
-        if (spriteCounter > 15) {
-            spriteNumber = 1;
-            spriteCounter = 0;
-            attacking = false;
-        }
-    }
-
     private void pickUpObject(int index) {
         if (index != 999) {
 
@@ -387,13 +334,13 @@ public class Player extends Entity {
         }
     }
 
-    public void damageMonster(int index, int attackPower, int knockBackPower) {
+    public void damageMonster(int index, Entity attacker, int attackPower, int knockBackPower) {
         if (index != 999) {
             if (!gamePanel.monster[gamePanel.currentMap][index].invincible) {
                 gamePanel.playSoundEffect(5);
 
                 if(knockBackPower > 0) {
-                    knockBack(gamePanel.monster[gamePanel.currentMap][index], knockBackPower);
+                    setKnockback(gamePanel.monster[gamePanel.currentMap][index], attacker, knockBackPower);
                 }
 
                 int damage = attackPower - gamePanel.monster[gamePanel.currentMap][index].defense;
@@ -416,7 +363,7 @@ public class Player extends Entity {
         }
     }
 
-    private void damageInteractiveTile(int interactiveTileIndex) {
+    public void damageInteractiveTile(int interactiveTileIndex) {
         if(interactiveTileIndex != 999 && 
         gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].destrucible && 
         gamePanel.interactiveTile[gamePanel.currentMap][interactiveTileIndex].isCorrectItem(this) && 
@@ -432,7 +379,7 @@ public class Player extends Entity {
         }
     } 
 
-    private void damageProjectile(int i) {
+    public void damageProjectile(int i) {
         if(i != 999) {
             generateParticle(gamePanel.projectileList[gamePanel.currentMap][i], gamePanel.projectileList[gamePanel.currentMap][i]);
             gamePanel.projectileList[gamePanel.currentMap][i].alive = false;
@@ -598,11 +545,6 @@ public class Player extends Entity {
                 lightUpdated = true;
             }
         }
-    }
-    private void knockBack(Entity entity, int knockBackPower) {
-        entity.direction = direction;
-        entity.speed = knockBackPower;
-        entity.knockBack = true;
     }
 
     public void getSleepingImage(BufferedImage image) {

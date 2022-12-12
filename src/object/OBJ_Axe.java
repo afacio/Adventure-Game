@@ -24,5 +24,8 @@ public class OBJ_Axe extends Entity {
         solidArea = new Rectangle(17,4, 22, 42);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+
+        motion1_duration = 20;
+        motion2_duration = 40;
     }
 }

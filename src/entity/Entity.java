@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -613,5 +614,79 @@ public class Entity {
             }
         } 
         return canObtain;       
+    }
+
+    public int getXdistance(Entity target) {
+        return (int)Math.abs(worldX - target.worldX);
+    }
+
+    public int getYdistance(Entity target) {
+        return (int)Math.abs(worldY - target.worldY);
+    }
+
+    public int getTileDistance(Entity target) {
+        return (int)(getXdistance(target) + getYdistance(target))/gamePanel.tileSize;
+    }
+
+    public int getGoalCol(Entity target) {
+        return (int)(target.worldX + target.solidArea.x)/gamePanel.tileSize;
+    }
+
+    public int getGoalRow(Entity target) {
+        return (int)(target.worldY + target.solidArea.y)/gamePanel.tileSize;
+    }
+
+    public void checkChasingOff(Entity target, int distance, int rate) {
+        if(getTileDistance(target) > distance) {
+            int i = new Random().nextInt(rate);
+            if(i == 0) {
+                onPath = false;
+            } 
+        }
+    }
+
+    public void checkChasingOn(Entity target, int distance, int rate) {
+        if(getTileDistance(target) < distance) {
+            int i = new Random().nextInt(rate);
+            if(i == 0) {
+                onPath = true;
+            } 
+        }
+    }
+
+    public void checkShoot(int rate, int shotInterval) {
+        int i = new Random().nextInt(rate);
+            if (i == 0 && !projectile.alive && shotAvelibleCounter == shotInterval) {
+                projectile.set(worldX, worldY, direction, true, this);
+
+                for (int index = 0; index < gamePanel.projectileList[1].length; index++) {
+                    if (gamePanel.projectileList[gamePanel.currentMap][index] == null) {
+                        gamePanel.projectileList[gamePanel.currentMap][index] = projectile;
+                        break;
+                    }
+                }
+
+                projectile.playSoundEffect();
+                shotAvelibleCounter = 0;
+            }
+    }
+
+    public void getRandomDirection() {
+        actionLockCounter++;
+
+            if (actionLockCounter == 120 || collisionOn) {
+                int i = new Random().nextInt(100) + 1;
+
+                if (i <= 25) {
+                    direction = "up";
+                } else if (i > 25 && i <= 50) {
+                    direction = "down";
+                } else if (i > 50 && i <= 75) {
+                    direction = "left";
+                } else if (i > 55 && i <= 100) {
+                    direction = "right";
+                }
+                actionLockCounter = 0;
+            }
     }
 }

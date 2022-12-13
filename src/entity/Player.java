@@ -36,8 +36,9 @@ public class Player extends Entity {
         screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
 
         setDefaultValues();
-        getPlayerImage();
-        getPlayerAttackImage();
+        getImage();
+        getAttackImage();
+        getGuardImage();
     }
 
     public void setDefaultValues() {
@@ -100,7 +101,7 @@ public class Player extends Entity {
         return defense;
     }
 
-    public void getPlayerImage() {
+    public void getImage() {
         up1 = setup("/player/old_player/Walking sprites/boy_up_1", gamePanel.tileSize, gamePanel.tileSize);
         up2 = setup("/player/old_player/Walking sprites/boy_up_2", gamePanel.tileSize, gamePanel.tileSize);
         down1 = setup("/player/old_player/Walking sprites/boy_down_1", gamePanel.tileSize, gamePanel.tileSize);
@@ -111,7 +112,7 @@ public class Player extends Entity {
         right2 = setup("/player/old_player/Walking sprites/boy_right_2", gamePanel.tileSize, gamePanel.tileSize);
     }
 
-    private void getPlayerAttackImage() {
+    private void getAttackImage() {
         if (currentMeleeWeapon.type == MELEE_WEAPON_TYPE) {
             attackUp1 = setup("/player/old_player/Attacking sprites/boy_attack_up_1", gamePanel.tileSize,
                     2 * gamePanel.tileSize);
@@ -150,10 +151,55 @@ public class Player extends Entity {
         }
     }
 
-    public void update() {
+    private void getGuardImage() {
+        guardUp = setup("/player/old_player/Guarding sprites/boy_guard_up", gamePanel.tileSize, gamePanel.tileSize);
+        guardDown = setup("/player/old_player/Guarding sprites/boy_guard_down", gamePanel.tileSize, gamePanel.tileSize);
+        guardLeft = setup("/player/old_player/Guarding sprites/boy_guard_left", gamePanel.tileSize, gamePanel.tileSize);
+        guardRight = setup("/player/old_player/Guarding sprites/boy_guard_right", gamePanel.tileSize, gamePanel.tileSize);
+    }
 
-        if (attacking) {
+    public void update() {
+        if (knockBack) {
+            collisionOn = false;
+
+            // CHECK TILE COLLISION
+            gamePanel.collisionChecker.checkTile(this);
+            gamePanel.collisionChecker.checkObject(this, true);
+            gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+            gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
+            gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
+            if (collisionOn) {
+                knockBack = false;
+                knockBackCounter = 0;
+                speed = defaultSpeed;
+            } else if (!collisionOn) {
+                switch (knockbackDirection) {
+                    case "up":
+                        worldY -= speed;
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                    default:
+                        break;
+                }
+                knockBackCounter++;
+                if (knockBackCounter == 4) {
+                    knockBack = false;
+                    knockBackCounter = 0;
+                    speed = defaultSpeed;
+                }
+            }
+        } else if (attacking) {
             attacking();
+        } else if(gamePanel.keyHandler.spacePressed) {
+            guarding = true;
         } else if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed
                 || keyHandler.enterPressed) {
             if (keyHandler.upPressed) {
@@ -169,26 +215,7 @@ public class Player extends Entity {
                 direction = "right";
             }
 
-            collisionOn = false;
-
-            // CHECK TILE COLLISION
-            gamePanel.collisionChecker.checkTile(this);
-
-            // CHECK OBJECTS COLLISION
-            int objIndex = gamePanel.collisionChecker.checkObject(this, true);
-            pickUpObject(objIndex);
-
-            // // CHECK NPC COLLISION
-            int npcIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
-            interactNPC(npcIndex);
-
-            // // CHECK MONSTER COLLISION
-            int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
-            monsterContact(monsterIndex);
-
-            // // CHECK INTERACTIVE TAIL COLLISION
-            int interactiveTileIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
-
+            checkPlayerCollision();
 
             // CHECK EVENT
             gamePanel.eventHandler.checkEvent();
@@ -221,6 +248,7 @@ public class Player extends Entity {
             }
 
             attackCanceled = false;
+            guarding = false;
             gamePanel.keyHandler.enterPressed = false;
 
             spriteCounter++;
@@ -238,6 +266,7 @@ public class Player extends Entity {
                 spriteNumber = 1;
                 standCounter = 0;
             }
+            guarding = false;
         }
 
         if (gamePanel.keyHandler.shotKeyPressed && !projectile.alive && shotAvelibleCounter == 30
@@ -260,6 +289,7 @@ public class Player extends Entity {
             invincibleCounter++;
             if (invincibleCounter > 60) {
                 invincible = false;
+                transparent = false;
                 invincibleCounter = 0;
             }
         }
@@ -280,6 +310,28 @@ public class Player extends Entity {
             gamePanel.playSoundEffect(14);
         }
 
+    }
+
+    private void checkPlayerCollision() {
+        collisionOn = false;
+
+        // CHECK TILE COLLISION
+        gamePanel.collisionChecker.checkTile(this);
+
+        // CHECK OBJECTS COLLISION
+        int objIndex = gamePanel.collisionChecker.checkObject(this, true);
+        pickUpObject(objIndex);
+
+        // // CHECK NPC COLLISION
+        int npcIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.npc);
+        interactNPC(npcIndex);
+
+        // // CHECK MONSTER COLLISION
+        int monsterIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.monster);
+        monsterContact(monsterIndex);
+
+        // // CHECK INTERACTIVE TAIL COLLISION
+        int interactiveTileIndex = gamePanel.collisionChecker.checkEntityCollision(this, gamePanel.interactiveTile);
     }
 
     private void pickUpObject(int index) {
@@ -325,11 +377,12 @@ public class Player extends Entity {
             if (!invincible && !gamePanel.monster[gamePanel.currentMap][index].dying) {
                 gamePanel.playSoundEffect(9);
                 int damage = gamePanel.monster[gamePanel.currentMap][index].attack - defense;
-                if (damage <= 0) {
+                if (damage <= 1) {
                     damage = 1;
                 }
                 health -= damage;
                 invincible = true;
+                transparent = true;
             }
         }
     }
@@ -422,14 +475,15 @@ public class Player extends Entity {
                     } else if (spriteNumber == 2) {
                         image = up2;
                     }
-                }
-                if (attacking) {
+                } if (attacking) {
                     if (spriteNumber == 1) {
                         image = attackUp1;
                     } else if (spriteNumber == 2) {
                         image = attackUp2;
                     }
                     tempScreenY -= gamePanel.tileSize;
+                } if (guarding) {
+                    image = guardUp;
                 }
                 break;
             case "down":
@@ -439,13 +493,14 @@ public class Player extends Entity {
                     } else if (spriteNumber == 2) {
                         image = down2;
                     }
-                }
-                if (attacking) {
+                } if (attacking) {
                     if (spriteNumber == 1) {
                         image = attackDown1;
                     } else if (spriteNumber == 2) {
                         image = attackDown2;
                     }
+                } if (guarding) {
+                    image = guardDown;
                 }
                 break;
             case "left":
@@ -455,14 +510,15 @@ public class Player extends Entity {
                     } else if (spriteNumber == 2) {
                         image = left2;
                     }
-                }
-                if (attacking) {
+                } if (attacking) {
                     if (spriteNumber == 1) {
                         image = attackLeft1;
                     } else if (spriteNumber == 2) {
                         image = attackLeft2;
                     }
                     tempScreenX -= gamePanel.tileSize;
+                } if (guarding) {
+                    image = guardLeft;
                 }
                 break;
             case "right":
@@ -472,13 +528,14 @@ public class Player extends Entity {
                     } else if (spriteNumber == 2) {
                         image = right2;
                     }
-                }
-                if (attacking) {
+                } if (attacking) {
                     if (spriteNumber == 1) {
                         image = attackRight1;
                     } else if (spriteNumber == 2) {
                         image = attackRight2;
                     }
+                } if (guarding) {
+                    image = guardRight;
                 }
                 break;
             default:
@@ -503,7 +560,7 @@ public class Player extends Entity {
             y = (int) (gamePanel.screenHeight - (gamePanel.worldHeight - worldY));
         }
 
-        if (invincible) {
+        if (transparent) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
         }
 
@@ -524,7 +581,7 @@ public class Player extends Entity {
             if (selectedItem.type == MELEE_WEAPON_TYPE || selectedItem.type == AXE_TYPE) {
                 currentMeleeWeapon = selectedItem;
                 attack = getMeleAttackPower();
-                getPlayerAttackImage();
+                getAttackImage();
             } else if (selectedItem.type == SHIELD_TYPE) {
                 currentShield = selectedItem;
                 defense = getDefense();

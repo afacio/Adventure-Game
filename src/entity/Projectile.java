@@ -31,7 +31,7 @@ public class Projectile extends Entity {
             boolean contactPlayer = gamePanel.collisionChecker.checkPlayerCollision(this);
             if (contactPlayer && !invincible) {
                 damagePlayer(entity.attack);
-                generateParticle(entity.projectile, gamePanel.player);
+                generateParticle(entity.projectile, entity.projectile);
                 alive = false;
                 }
             }

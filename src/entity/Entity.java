@@ -74,10 +74,13 @@ public class Entity {
 
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1,
             attackRight2;
+    public BufferedImage guardUp, guardDown, guardLeft, guardRight;
     public boolean attacking = false;
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 
     public boolean onPath = false;
+    public boolean guarding = false;
+    public boolean transparent = false;
 
     public boolean alive = true;
     public boolean dying = false;
@@ -297,7 +300,7 @@ public class Entity {
                     }
                 }
 
-            } else if(attacking) {
+            } else if (attacking) {
                 attacking();
             } else {
 
@@ -354,14 +357,48 @@ public class Entity {
 
     public void damagePlayer(int attackPower) {
         if (!gamePanel.player.invincible) {
-            gamePanel.playSoundEffect(6);
             int damage = attackPower - gamePanel.player.defense;
-            if (damage < 0) {
-                damage = 0;
+            if(gamePanel.player.direction.equals(getOppositeDirection(direction)) && gamePanel.player.guarding) {
+                System.out.println("guard");
+                gamePanel.playSoundEffect(19);
+                damage /= 3;
+            } else {
+                gamePanel.playSoundEffect(6);
+                if (damage < 1) {
+                    damage = 1;
+                }
             }
+
+            if(damage != 0) {
+                gamePanel.player.transparent = true;
+                setKnockback(gamePanel.player, this, knockBackPower);
+            }
+            
             gamePanel.player.health -= damage;
             gamePanel.player.invincible = true;
         }
+    }
+
+    public String getOppositeDirection(String direction) {
+        String oppositeDirection = "";
+
+        switch (direction) {
+            case "up":
+                oppositeDirection = "down";
+                break;
+            case "down":
+                oppositeDirection = "up";
+                break;
+            case "left":
+                oppositeDirection = "right";
+                break;
+            case "right":
+                oppositeDirection = "left";
+                break;
+            default:
+                break;
+        }
+        return oppositeDirection;
     }
 
     public void draw(Graphics2D g2) {
@@ -375,79 +412,79 @@ public class Entity {
                 && worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY
                 && worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY) {
 
-                    int tempScreenX = (int)screenX;
-                    int tempScreenY = (int)screenY;
-            
-                    switch (direction) {
-                        case "up":
-                            if (!attacking) {
-                                if (spriteNumber == 1) {
-                                    image = up1;
-                                } else if (spriteNumber == 2) {
-                                    image = up2;
-                                }
-                            }
-                            if (attacking) {
-                                if (spriteNumber == 1) {
-                                    image = attackUp1;
-                                } else if (spriteNumber == 2) {
-                                    image = attackUp2;
-                                }
-                                tempScreenY -= gamePanel.tileSize;
-                            }
-                            break;
-                        case "down":
-                            if (!attacking) {
-                                if (spriteNumber == 1) {
-                                    image = down1;
-                                } else if (spriteNumber == 2) {
-                                    image = down2;
-                                }
-                            }
-                            if (attacking) {
-                                if (spriteNumber == 1) {
-                                    image = attackDown1;
-                                } else if (spriteNumber == 2) {
-                                    image = attackDown2;
-                                }
-                            }
-                            break;
-                        case "left":
-                            if (!attacking) {
-                                if (spriteNumber == 1) {
-                                    image = left1;
-                                } else if (spriteNumber == 2) {
-                                    image = left2;
-                                }
-                            }
-                            if (attacking) {
-                                if (spriteNumber == 1) {
-                                    image = attackLeft1;
-                                } else if (spriteNumber == 2) {
-                                    image = attackLeft2;
-                                }
-                                tempScreenX -= gamePanel.tileSize;
-                            }
-                            break;
-                        case "right":
-                            if (!attacking) {
-                                if (spriteNumber == 1) {
-                                    image = right1;
-                                } else if (spriteNumber == 2) {
-                                    image = right2;
-                                }
-                            }
-                            if (attacking) {
-                                if (spriteNumber == 1) {
-                                    image = attackRight1;
-                                } else if (spriteNumber == 2) {
-                                    image = attackRight2;
-                                }
-                            }
-                            break;
-                        default:
-                            break;
+            int tempScreenX = (int) screenX;
+            int tempScreenY = (int) screenY;
+
+            switch (direction) {
+                case "up":
+                    if (!attacking) {
+                        if (spriteNumber == 1) {
+                            image = up1;
+                        } else if (spriteNumber == 2) {
+                            image = up2;
+                        }
                     }
+                    if (attacking) {
+                        if (spriteNumber == 1) {
+                            image = attackUp1;
+                        } else if (spriteNumber == 2) {
+                            image = attackUp2;
+                        }
+                        tempScreenY -= gamePanel.tileSize;
+                    }
+                    break;
+                case "down":
+                    if (!attacking) {
+                        if (spriteNumber == 1) {
+                            image = down1;
+                        } else if (spriteNumber == 2) {
+                            image = down2;
+                        }
+                    }
+                    if (attacking) {
+                        if (spriteNumber == 1) {
+                            image = attackDown1;
+                        } else if (spriteNumber == 2) {
+                            image = attackDown2;
+                        }
+                    }
+                    break;
+                case "left":
+                    if (!attacking) {
+                        if (spriteNumber == 1) {
+                            image = left1;
+                        } else if (spriteNumber == 2) {
+                            image = left2;
+                        }
+                    }
+                    if (attacking) {
+                        if (spriteNumber == 1) {
+                            image = attackLeft1;
+                        } else if (spriteNumber == 2) {
+                            image = attackLeft2;
+                        }
+                        tempScreenX -= gamePanel.tileSize;
+                    }
+                    break;
+                case "right":
+                    if (!attacking) {
+                        if (spriteNumber == 1) {
+                            image = right1;
+                        } else if (spriteNumber == 2) {
+                            image = right2;
+                        }
+                    }
+                    if (attacking) {
+                        if (spriteNumber == 1) {
+                            image = attackRight1;
+                        } else if (spriteNumber == 2) {
+                            image = attackRight2;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
 
             // MONSTER HP BAR
             if (type == MONSTER_TYPE && hpBarOn) {
@@ -606,7 +643,7 @@ public class Entity {
         }
     }
 
-    private void checkCollision() {
+    public void checkCollision() {
         collisionOn = false;
         gamePanel.collisionChecker.checkTile(this);
         gamePanel.collisionChecker.checkObject(this, false);
@@ -831,9 +868,9 @@ public class Entity {
                 break;
         }
 
-        if(targetInRange) {
+        if (targetInRange) {
             int i = new Random().nextInt(rate);
-            if(i == 0) {
+            if (i == 0) {
                 attacking = true;
                 spriteNumber = 1;
                 spriteCounter = 0;

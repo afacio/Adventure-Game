@@ -34,6 +34,10 @@ public class Entity {
     public int shotAvelibleCounter = 0;
     public int invincibleCounter = 0;
     public int knockBackCounter = 0;
+    public int dyingCounter;
+    public int hpBarCounter;
+    public int guardCounter = 0;
+    public int offBalanceCounter = 0;
 
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
 
@@ -51,10 +55,19 @@ public class Entity {
 
     public BufferedImage image1, image2, image3;
     public String name;
-    public boolean collision = false;
 
+    public boolean collision = false;
+    public boolean alive = true;
+    public boolean dying = false;
+    public boolean onPath = false;
+    public boolean guarding = false;
+    public boolean transparent = false;
     public boolean knockBack = false;
     public boolean invincible = false;
+    public boolean hpBarOn = false;
+    public boolean attacking = false;
+    public boolean offBalance = false;
+
     public int invincibleTime = 30;
     public Entity attacker;
     public String knockbackDirection;
@@ -75,19 +88,8 @@ public class Entity {
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1,
             attackRight2;
     public BufferedImage guardUp, guardDown, guardLeft, guardRight;
-    public boolean attacking = false;
+    
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
-
-    public boolean onPath = false;
-    public boolean guarding = false;
-    public boolean transparent = false;
-
-    public boolean alive = true;
-    public boolean dying = false;
-    public int dyingCounter;
-
-    public boolean hpBarOn = false;
-    public int hpBarCounter;
 
     public int animationRefresh = 8;
     public int motion1_duration = 5;
@@ -340,6 +342,13 @@ public class Entity {
             if (shotAvelibleCounter < 30) {
                 shotAvelibleCounter++;
             }
+            if (offBalance) {
+                offBalanceCounter++;
+                if(offBalanceCounter > 60) {
+                    offBalance = false;
+                    offBalanceCounter = 0;
+                }
+            }
         }
     }
 
@@ -359,7 +368,15 @@ public class Entity {
         if (!gamePanel.player.invincible) {
             int damage = attackPower - gamePanel.player.defense;
             if(gamePanel.player.direction.equals(getOppositeDirection(direction)) && gamePanel.player.guarding) {
-                System.out.println("guard");
+                
+                if(gamePanel.player.guardCounter < 10) {
+                    damage = 0;
+                    gamePanel.playSoundEffect(20);
+                    setKnockback(this, gamePanel.player, gamePanel.player.knockBackPower);
+                    offBalance = true;
+                    spriteCounter =- 60;
+                }
+                
                 gamePanel.playSoundEffect(19);
                 damage /= 3;
             } else {

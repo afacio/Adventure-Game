@@ -64,6 +64,9 @@ public class Player extends Entity {
         nextLevelExp = 5;
         coin = 200;
 
+        invincible = false;
+        transparent = false;
+
         currentMeleeWeapon = new OBJ_Sword_Normal(gamePanel);
         currentShield = new OBJ_Shield_Wood(gamePanel);
         currentLightSource = new OBJ_Lantern(gamePanel);
@@ -200,6 +203,7 @@ public class Player extends Entity {
             attacking();
         } else if(gamePanel.keyHandler.spacePressed) {
             guarding = true;
+            guardCounter++;
         } else if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed
                 || keyHandler.enterPressed) {
             if (keyHandler.upPressed) {
@@ -249,6 +253,7 @@ public class Player extends Entity {
 
             attackCanceled = false;
             guarding = false;
+            guardCounter = 0;
             gamePanel.keyHandler.enterPressed = false;
 
             spriteCounter++;
@@ -267,6 +272,7 @@ public class Player extends Entity {
                 standCounter = 0;
             }
             guarding = false;
+            guardCounter = 0;
         }
 
         if (gamePanel.keyHandler.shotKeyPressed && !projectile.alive && shotAvelibleCounter == 30
@@ -394,6 +400,10 @@ public class Player extends Entity {
 
                 if(knockBackPower > 0) {
                     setKnockback(gamePanel.monster[gamePanel.currentMap][index], attacker, knockBackPower);
+                }
+
+                if(gamePanel.monster[gamePanel.currentMap][index].offBalance) {
+                    attack *= 2;
                 }
 
                 int damage = attackPower - gamePanel.monster[gamePanel.currentMap][index].defense;

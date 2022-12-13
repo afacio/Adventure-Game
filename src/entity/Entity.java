@@ -375,10 +375,11 @@ public class Entity {
                     setKnockback(this, gamePanel.player, gamePanel.player.knockBackPower);
                     offBalance = true;
                     spriteCounter =- 60;
+                } else {
+                    gamePanel.playSoundEffect(19);
+                    damage /= 3;
                 }
                 
-                gamePanel.playSoundEffect(19);
-                damage /= 3;
             } else {
                 gamePanel.playSoundEffect(6);
                 if (damage < 1) {
@@ -682,23 +683,23 @@ public class Entity {
 
         switch (entity.direction) {
             case "up":
-                nextWorldY = entity.getTopY() - 1;
+                nextWorldY = entity.getTopY() - (int)gamePanel.player.speed;
                 break;
             case "down":
-                nextWorldY = entity.getBottomY() + 1;
+                nextWorldY = entity.getBottomY() + (int)gamePanel.player.speed;
                 break;
             case "left":
-                nextWorldX = entity.getLeftX() - 1;
+                nextWorldX = entity.getLeftX() - (int)gamePanel.player.speed;
                 break;
             case "right":
-                nextWorldX = entity.getRightX() + 1;
+                nextWorldX = entity.getRightX() + (int)gamePanel.player.speed;
                 break;
             default:
                 break;
         }
 
-        int col = nextWorldX / gamePanel.tileSize;
-        int row = nextWorldY / gamePanel.tileSize;
+        int col = (int)(nextWorldX / gamePanel.tileSize);
+        int row = (int)(nextWorldY / gamePanel.tileSize);
 
         for (int i = 0; i < target[1].length; i++) {
             if (target[gamePanel.currentMap][i] != null) {
